@@ -1,9 +1,11 @@
-import { Text, View } from "react-native";
+import { Text, View } from 'react-native'
 
 export default function Index() {
   return (
-    <View className="w-full h-full flex justify-center items-center">
-      <Text className="text-red-500 text-2xl">FRONTAS DO APP ROLE</Text>
+    <View className="flex h-full w-full items-center justify-center bg-blue-100">
+      <Text className="text-2xl font-bold text-red-500">
+        EH FRONTAS DO APP ROLE
+      </Text>
     </View>
-  );
+  )
 }
