@@ -8,6 +8,7 @@ export default function Index() {
         EH FRONTAS DO APP ROLE
       </Text>
       <Link href={'/sign-in'}>Sign In</Link>
+      <Link href={'/almost-there'}>Almost there</Link>
     </View>
   )
 }
