@@ -133,6 +133,7 @@ export default function Index() {
             <Link href={'/'} className="text-sm text-blue-500">
               Criar conta
             </Link>
+            <Link href={'/almost-there'} className='text-white'>Sign In</Link>
           </View>
         </View>
       </View>
