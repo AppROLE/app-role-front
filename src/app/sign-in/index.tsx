@@ -80,7 +80,7 @@ export default function Index() {
                 <Entypo name="mail" size={24} color="white" />
                 <TextInput
                   placeholder="E-mail"
-                  className="text-white placeholder:text-white"
+                  className="w-[80%] text-white placeholder:text-white"
                 />
               </View>
               <TextInput />
@@ -90,7 +90,8 @@ export default function Index() {
                 <Ionicons name="key" size={24} color="white" />
                 <TextInput
                   placeholder="Senha"
-                  className="text-white placeholder:text-white"
+                  className="w-[80%] text-white placeholder:text-white"
+                  secureTextEntry
                 />
               </View>
               <TextInput />
