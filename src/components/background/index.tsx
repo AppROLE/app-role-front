@@ -37,7 +37,7 @@ export default function Background({ children }: any) {
                     className="ml-6 mt-4"
                 />
                 <View className="flex h-[89%] flex-col items-center gap-16 rounded-t-[54px] bg-background pt-12">
-
+                    {children}
                 </View>
             </View>
         </LinearGradient >
