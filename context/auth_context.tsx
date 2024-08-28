@@ -1,4 +1,4 @@
-import { signUpRequestDTO } from '@/api/dto/auth_dto'
+import { signUpRequestDTO } from '@/api/types/auth_dto'
 import { createContext, PropsWithChildren } from 'react'
 import { AuthRepositoryHttp } from '@/api/repositories/auth_repository_http'
 
