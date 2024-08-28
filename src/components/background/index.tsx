@@ -36,7 +36,7 @@ export default function Background({ children }: any) {
                     source={require('../../../assets/images/ROLE.png')}
                     className="ml-6 mt-4"
                 />
-                <View className="flex h-[89%] flex-col items-center gap-16 rounded-t-[54px] bg-background pt-12">
+                <View className="flex h-[89%] flex-col items-center  rounded-t-[54px] bg-background pt-12">
                     {children}
                 </View>
             </View>
