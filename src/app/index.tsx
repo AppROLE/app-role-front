@@ -9,6 +9,7 @@ export default function Index() {
       </Text>
       <Link href={'/sign-in'}>Sign In</Link>
       <Link href={'/almost-there'}>Almost there</Link>
+      <Link href={'/confirm-forgot-password'}>Confirm Forgot Password</Link>
     </View>
   )
 }
