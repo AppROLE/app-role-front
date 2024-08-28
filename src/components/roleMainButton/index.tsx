@@ -1,14 +1,17 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { TouchableOpacity, Text } from "react-native";
+import { ReactNode } from "react";
+import { TouchableOpacity, Text, View } from "react-native";
 
-interface GradientButtonProps {
-    texto: string;
+interface RoleMainButtonProps {
+    type: string;
+    children: ReactNode;
     buttonFunction?: () => void;
 }
 
-export default function GradientButton ({ texto, buttonFunction }: GradientButtonProps) {
+export default function RoleMainButton ({ children, buttonFunction, type }: RoleMainButtonProps) {
     return (
-      <TouchableOpacity className="drop-shadow-2xl shadow-[#9C4EDC4D]" onPress={buttonFunction}>
+      <TouchableOpacity className="drop-shadow-2xl shadow-[#9C4EDC4D] text-white text-[16px]" onPress={buttonFunction}>
+        {type === 'gradient' ? (
         <LinearGradient
           colors={['#5A189A', '#9C4EDC']}
           start={{ x: 0, y: 0 }}
@@ -26,10 +29,13 @@ export default function GradientButton ({ texto, buttonFunction }: GradientButto
             elevation: 10
           }}
         >
-          <Text style={{ color: 'white', fontSize: 16, fontWeight: '400' }}>
-            {texto}
-          </Text>
+          {children}
         </LinearGradient>
+        ) : (
+          <View className="bg-[#1C1C1C] items-center flex flex-row gap-4 justify-center" style={{paddingVertical: 12, paddingHorizontal: 30, borderRadius: 20}}>
+            {children}
+          </View>
+        )}
       </TouchableOpacity>
     )
 }
