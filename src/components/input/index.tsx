@@ -35,6 +35,8 @@ export default function RoleInput({ type, value, onChangeText, error }: RoleInpu
                 ? <FontAwesome6 name="key" size={24} color={error ? "#F87171" : "#BDBDBD"} />
                 : type === 'hidden-confirm-password'
                 ? <FontAwesome6 name="key" size={24} color={error ? "#F87171" : "#BDBDBD"} />
+                : type === 'nickname'
+                ? <FontAwesome6 name="user" size={24} color={error ? "#F87171" : "#BDBDBD"} /> 
                 : null
                 }
                 <TextInput
@@ -46,6 +48,7 @@ export default function RoleInput({ type, value, onChangeText, error }: RoleInpu
                         : type === 'at' ? 'Nome de usuário' 
                         : type === 'hidden-password' ? 'Senha' 
                         : type === 'hidden-confirm-password' ? 'Confirme a senha' 
+                        : type === 'nickname' ? 'Apelido'
                         : ''
                     }
                     className={`w-[80%] ${!error ? 'text-white placeholder:text-[#BDBDBD]' : 'text-red-400 opacity-80 placeholder:text-red-400]'} text-[16px] outline-none`}
