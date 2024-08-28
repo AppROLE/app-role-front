@@ -15,6 +15,15 @@ module.exports = {
         'DARK-BLUE': '#10002B',
         background: '#121212',
         'button-color': '#1C1C1C'
+      },
+      fontFamily: {
+        sans: ['Inter', 'sans-serif']
+      },
+      screens: {
+        'big-cellphone': '1px'
+      },
+      backgroundImage: {
+        'gradient-role': 'linear-gradient(90deg, #5A189A 0%, #9C4EDC 100%)',
       }
     }
   },
