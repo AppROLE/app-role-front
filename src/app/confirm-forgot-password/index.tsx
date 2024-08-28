@@ -1,12 +1,12 @@
 import Background from "@/src/components/background";
 import { Text, View } from "react-native";
 import RoleInput from "@/src/components/input";
-import GradientButton from "@/src/components/gradientButton";
+import RoleMainButton from "@/src/components/roleMainButton";
 import { useState } from "react";
 
 export default function ConfirmForgotPassword() {
     const [password, setPassword] = useState('');
-    const [passordError, setPasswordError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
@@ -41,7 +41,7 @@ export default function ConfirmForgotPassword() {
 
     function handlePasswordChange(text: string) {
         setPassword(text);
-        if (passordError) setPasswordError(''); // Reseta o erro ao digitar
+        if (passwordError) setPasswordError(''); // Reseta o erro ao digitar
     }
 
     function handleConfirmPasswordChange(text: string) {
@@ -57,11 +57,13 @@ export default function ConfirmForgotPassword() {
                         <Text className="text-white font-bold text-[22px] text-center">Crie sua nova senha</Text>
                     </View>
                     <View className="px-[15%] my-12 gap-4">
-                        <RoleInput type="password" value={password} onChangeText={handlePasswordChange} error={passordError} />
+                        <RoleInput type="password" value={password} onChangeText={handlePasswordChange} error={passwordError} />
                         <RoleInput type='confirm-password' value={confirmPassword} onChangeText={handleConfirmPasswordChange} error={confirmPasswordError} />
                     </View>
                     <View className="px-[8%]">
-                        <GradientButton texto='Trocar Senha' buttonFunction={changePassword} />
+                        <RoleMainButton type="gradient" buttonFunction={changePassword}>
+                            Trocar Senha
+                        </RoleMainButton>
                     </View>
                 </View>
             </Background>
