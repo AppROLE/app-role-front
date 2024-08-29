@@ -10,6 +10,7 @@ export type RoleInputType =
   | 'at'
   | 'hidden-password'
   | 'hidden-confirm-password'
+  | 'nickname'
 
 interface RoleInputProps {
   type: RoleInputType
