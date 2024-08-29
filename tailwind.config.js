@@ -9,12 +9,12 @@ module.exports = {
         WHITE: '#F2E3FC',
         LILAC: '#DFA9FD',
         VIOLET: '#9C4EDC',
-        'LIGHT-PURPLE': '#5A189A',
+        LIGHT_PURPLE: '#5A189A',
         PURPLE: '#3C096C',
-        'DARK-PURPLE': '#240046',
-        'DARK-BLUE': '#10002B',
+        DARK_PURPLE: '#240046',
+        DARK_BLUE: '#10002B',
         background: '#121212',
-        'button-color': '#1C1C1C'
+        button_color: '#1C1C1C'
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif']
