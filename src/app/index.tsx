@@ -10,7 +10,12 @@ export default function Index() {
       <Link href={'/sign-in'}>Sign In</Link>
       <Link href={'/almost-there'}>Almost there</Link>
       <Link href={'/confirm-forgot-password'}>Confirm Forgot Password</Link>
+<<<<<<< HEAD
+      <Link href={'/OTPscreen'}>OTPInput</Link>
+      <Link href={'/sign-up'}>Sign Up</Link>
+=======
       <Link href={'/recovery-code'}>Recovery Code</Link>
+>>>>>>> dev
     </View>
   )
 }
