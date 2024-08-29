@@ -3,9 +3,10 @@ import { ReactNode, useState } from "react";
 import { TouchableOpacity, Text, View } from "react-native";
 
 interface RoleMainButtonProps {
-    type: string;
-    children: ReactNode;
-    buttonFunction?: () => void;
+  type: string
+  children: ReactNode
+  buttonFunction?: () => void
+  style?: object
 }
 
 export default function RoleMainButton ({ children, buttonFunction, type }: RoleMainButtonProps) {
