@@ -1,5 +1,10 @@
 import { RefObject } from 'react'
-import { TextInput, View, StyleSheet, TextInputKeyPressEventData } from 'react-native'
+import {
+  TextInput,
+  View,
+  StyleSheet,
+  TextInputKeyPressEventData
+} from 'react-native'
 
 interface OTPInputProps {
   codes: string[]
@@ -7,18 +12,25 @@ interface OTPInputProps {
   onChangeCode: (text: string, index: number) => void
 }
 
-export function OTPInput({ codes, refs, onChangeCode }: OTPInputProps) {
+export function RecoveryCodeInput({
+  codes,
+  refs,
+  onChangeCode
+}: OTPInputProps) {
   const handleChange = (text: string, index: number) => {
     const filteredText = text.replace(/[^0-9]/g, '')
 
-    onChangeCode(filteredText, index);
+    onChangeCode(filteredText, index)
 
     if (filteredText && index < refs.length - 1) {
       refs[index + 1]?.current?.focus()
     }
-  };
+  }
 
-  const handleKeyPress = (nativeEvent: TextInputKeyPressEventData, index: number) => {
+  const handleKeyPress = (
+    nativeEvent: TextInputKeyPressEventData,
+    index: number
+  ) => {
     if (nativeEvent.key === 'Backspace') {
       if (!codes[index] && index > 0) {
         refs[index - 1]?.current?.focus()
@@ -26,7 +38,7 @@ export function OTPInput({ codes, refs, onChangeCode }: OTPInputProps) {
         onChangeCode('', index)
       }
     }
-  };
+  }
 
   return (
     <View style={styles.container}>

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Link } from "expo-router";
 import RoleInput from "@/src/components/input";
 import Toast from 'react-native-toast-message';
-import GradientButton from "@/src/components/gradientButton";
+import RoleMainButton from "@/src/components/roleMainButton";
 
 export default function ForgotPassword() {
     const [email, setEmail] = useState("");
@@ -54,7 +54,7 @@ export default function ForgotPassword() {
                         />
                     </View>
                     <View className="pt-16">
-                        <GradientButton texto="Enviar" buttonFunction={handlePress}/>
+                        <RoleMainButton  buttonFunction={handlePress}></RoleMainButton>
                         <Link href={'/sign-in'} className="mt-8" asChild>
                             <TouchableOpacity className=" bg-[#1C1C1C] w-96 rounded-2xl h-10 justify-center items-center">
                                 <Text className="text-[#BDBDBD] text-center text-base">Voltar</Text>
