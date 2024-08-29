@@ -1,5 +1,5 @@
 import axios from 'axios'
 
 export const http = axios.create({
-  baseURL: ''
+  baseURL: process.env.EXPO_PUBLIC_API_URL
 })

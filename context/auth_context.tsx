@@ -25,7 +25,7 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
     try {
       const response = await authRepository.signIn(email, password)
       return response
-    } catch (error) {
+    } catch (error: any) {
       return error
     }
   }
@@ -34,7 +34,7 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
     try {
       const response = await authRepository.signUp(data)
       return response
-    } catch (error) {
+    } catch (error: any) {
       return error
     }
   }

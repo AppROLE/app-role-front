@@ -13,8 +13,8 @@ export class AuthRepositoryHttp {
         password
       })
       return response.data
-    } catch (error) {
-      return error
+    } catch (error: any) {
+      return error.response.data
     }
   }
 
@@ -22,8 +22,8 @@ export class AuthRepositoryHttp {
     try {
       const response = await http.post('', data)
       return response.data
-    } catch (error) {
-      return error
+    } catch (error: any) {
+      return error.response.data
     }
   }
 }
