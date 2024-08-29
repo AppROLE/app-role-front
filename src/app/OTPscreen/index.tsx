@@ -10,7 +10,7 @@ import {
 import Constants from 'expo-constants'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Link, useNavigation, useRouter } from 'expo-router'
-import { OTPInput } from '@/src/components/OTPInput'
+import { RecoveryCodeInput } from '@/src/components/OTPInput'
 import { useRef, useState } from 'react'
 import Background from '@/src/components/background'
 
@@ -64,7 +64,7 @@ export default function Index() {
             </View>
             <View className="flex w-full gap-6">
               <View className="flex w-full flex-row justify-center">
-                <OTPInput
+                <RecoveryCodeInput
                   codes={codes!}
                   onChangeCode={onChangeCode}
                   refs={refs}

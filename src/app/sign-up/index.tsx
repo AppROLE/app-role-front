@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import Background from '@/src/components/background'
 import Entypo from '@expo/vector-icons/Entypo'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
@@ -187,4 +188,8 @@ export default function SignUp() {
       </View>
     </Background>
   )
+=======
+export default function SignUp() {
+  return <></>
+>>>>>>> dev
 }
