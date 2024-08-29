@@ -1,12 +1,3 @@
-
-
-
-
-
 export default function SignUp() {
-    return (
-        <>
-        
-        </>
-    )
-} 
+  return <></>
+}
