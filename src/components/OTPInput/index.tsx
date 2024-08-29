@@ -7,7 +7,7 @@ interface OTPInputProps {
   onChangeCode: (text: string, index: number) => void
 }
 
-export function OTPInput({ codes, refs, onChangeCode }: OTPInputProps) {
+export function RecoveryCodeInput({ codes, refs, onChangeCode }: OTPInputProps) {
   const handleChange = (text: string, index: number) => {
     const filteredText = text.replace(/[^0-9]/g, '')
 

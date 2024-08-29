@@ -6,6 +6,7 @@ interface RoleMainButtonProps {
     type: string;
     children: ReactNode;
     buttonFunction?: () => void;
+    style?: object;
 }
 
 export default function RoleMainButton ({ children, buttonFunction, type }: RoleMainButtonProps) {
