@@ -20,48 +20,64 @@ export default function Index() {
   const [passwordError, setPasswordError] = useState('')
 
   function handleEmailChange(text: string) {
-    setEmail(text);
-    if (emailError) setEmailError(''); // Reseta o erro ao digitar
+    setEmail(text)
+    if (emailError) setEmailError('') // Reseta o erro ao digitar
   }
-  
+
   function handlePasswordChange(text: string) {
-    setPassword(text);
-    if (passwordError) setPasswordError(''); // Reseta o erro ao digitar
-}
+    setPassword(text)
+    if (passwordError) setPasswordError('') // Reseta o erro ao digitar
+  }
 
   return (
     <Background>
-      <View className='flex-1 w-full'>
-        <View className='px-[8%] flex flex-col justify-center'>
-          <Text className='text-white text-center text-xl'>Já está com saudade de um <Text className='font-bold'>ROLE</Text>?</Text>
-          <Text className='text-white text-xl font-bold text-center'>Bem vindo(a) de volta!</Text>
+      <View className="w-full flex-1">
+        <View className="flex flex-col justify-center px-[8%]">
+          <Text className="text-center text-xl text-white">
+            Já está com saudade de um <Text className="font-bold">ROLE</Text>?
+          </Text>
+          <Text className="text-center text-xl font-bold text-white">
+            Bem vindo(a) de volta!
+          </Text>
         </View>
-        <View className='px-[15%] my-12 gap-8'>
-          <RoleInput type='email' value={email} onChangeText={handleEmailChange} error={emailError}/>
-          <View className='gap-2'>
-            <RoleInput type='hidden-password' value={password} onChangeText={handlePasswordChange} error={passwordError}/>
-            <View className='text-xs gap-4 flex flex-row'>
-              <Text className='text-white'>Esqueceu sua senha?</Text>
-              <Link className='text-[#D8A9FF]' href='/forgot-password'>
+        <View className="my-12 gap-8 px-[15%]">
+          <RoleInput
+            type="email"
+            value={email}
+            onChangeText={handleEmailChange}
+            error={emailError}
+          />
+          <View className="gap-2">
+            <RoleInput
+              type="hidden-password"
+              value={password}
+              onChangeText={handlePasswordChange}
+              error={passwordError}
+            />
+            <View className="flex flex-row gap-4 text-xs">
+              <Text className="text-white">Esqueceu sua senha?</Text>
+              <Link className="text-[#D8A9FF]" href="/forgot-password">
                 Recuperar senha
               </Link>
             </View>
           </View>
         </View>
-        <View className='px-[8%] gap-12'>
+        <View className="gap-12 px-[8%]">
           <RoleMainButton type="gradient">
-            Entrar
+            <Text className="text-white">Entrar</Text>
           </RoleMainButton>
           <RoleMainButton type="simple">
             <FontAwesome6 name="google" size={24} color="white" />
-            Entrar via Google
+            <Text className="text-white">Entrar via Google</Text>
           </RoleMainButton>
         </View>
-        <View className='flex-grow' />
-        <View className='py-4 mb-12'>
-          <View className='flex flex-row justify-center mx-auto gap-2'>
-            <Text className='text-[#BDBDBD]'>Não possui uma conta?</Text>
-            <Link className='text-[#D8A9FF]' href='/'>Criar Conta</Link>
+        <View className="flex-grow" />
+        <View className="mb-12 py-4">
+          <View className="mx-auto flex flex-row justify-center gap-2">
+            <Text className="text-[#BDBDBD]">Não possui uma conta?</Text>
+            <Link className="text-[#D8A9FF]" href="/">
+              Criar Conta
+            </Link>
           </View>
         </View>
       </View>
