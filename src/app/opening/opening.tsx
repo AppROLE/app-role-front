@@ -16,7 +16,7 @@ import l from "@/assets/images/l.png";
 import {LinearGradient} from "expo-linear-gradient";
 
 export default function Opening() {
-    const { width, height } = Dimensions.get('window');
+    const { width} = Dimensions.get('window');
 
     const logoWidth = width/2
     const geralHeight = logoWidth * 0.2864184008762322;
