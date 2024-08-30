@@ -26,4 +26,13 @@ export class AuthRepositoryHttp {
       return error.response.data
     }
   }
+
+  async forgotPassword(data: object) {
+    try {
+      const response = await http.post('', data)
+      return response.data
+    } catch (error: any) {
+      return error.response.data
+    }
+  }
 }

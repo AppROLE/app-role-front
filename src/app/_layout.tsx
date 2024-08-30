@@ -1,5 +1,6 @@
 import { Slot, Stack } from 'expo-router'
 import '../styles/global.css'
+import { AuthContextProvider } from '@/context/auth_context'
 
 export default function RootLayout() {
   return (
