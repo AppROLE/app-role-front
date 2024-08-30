@@ -10,6 +10,7 @@ export default function RootLayout() {
       <Stack.Screen name="forgot-password/index" options={{ headerShown: false }}/>
       <Stack.Screen name="recovery-code/index" options={{ headerShown: false }}/>
       <Stack.Screen name="confirm-forgot-password/index" options={{ headerShown: false }}/>
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
     </Stack>
   )
 }
