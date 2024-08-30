@@ -19,6 +19,7 @@ export default function Index() {
       <Link href={'/confirm-forgot-password'}>Confirm Forgot Password</Link>
       <Link href={'/sign-up'}>Sign Up</Link>
       <Link href={'/recovery-code'}>Recovery Code</Link>
+      <Link href={'/forgot-password'}>Forgot Password</Link>
       {/* View para testar os components */}
       <View className='my-5 bg-[#121212] w-full'>
         {/* <RoleMainButton type='gradient' buttonFunction={teste}>

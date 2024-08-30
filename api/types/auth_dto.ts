@@ -4,3 +4,14 @@ export type signUpRequestDTO = {
   password: string
   acceptedTerms: boolean
 }
+
+
+export type forgotPasswordRequestDTO = {
+  email: string
+}
+
+export type forgotPaaswordResponseDTO = { 
+  message: string 
+}
+
+
