@@ -14,6 +14,7 @@ export default function Index() {
       <Text className="text-2xl font-bold text-red-500">
         EH FRONTAS DO APP ROLE
       </Text>
+      <Link href={'/first-page'}>First Page</Link>
       <Link href={'/opening'}>Opening</Link>
       <Link href={'/sign-in'}>Sign In</Link>
       <Link href={'/almost-there'}>Almost there</Link>
@@ -22,6 +23,7 @@ export default function Index() {
       <Link href={'/recovery-code'}>Recovery Code</Link>
       <Link href={'/forgot-password'}>Forgot Password</Link>
       <Link href={'/home'}>Home</Link>
+      
       {/* View para testar os components */}
       <View className="my-5 w-full bg-[#121212]">
         {/* <RoleMainButton type='gradient' buttonFunction={teste}>
