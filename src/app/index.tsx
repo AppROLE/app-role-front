@@ -3,10 +3,17 @@ import { Link } from 'expo-router'
 import RoleCard from '../components/roleCard'
 import CategoryCard from '../components/category-musicalCard'
 import RoleMainButton from '../components/roleMainButton'
+import { useState } from 'react'
 
 export default function Index() {
+  const [buttonDisabled, setButtonDisabled] = useState(false)
+
   function teste () {
     console.log('teste')
+    // setButtonDisabled(true)
+    // setTimeout(() => {
+    //   setButtonDisabled(false)
+    // }, 3000)
   }
 
   return (
@@ -26,7 +33,7 @@ export default function Index() {
       
       {/* View para testar os components */}
       <View className="my-5 w-full bg-[#121212]">
-        {/* <RoleMainButton type='gradient' buttonFunction={teste}>
+        {/* <RoleMainButton type='gradient' buttonFunction={teste} disabled={buttonDisabled}>
           <Text className='text-white text-base'>AAA</Text>
         </RoleMainButton> */}
         {/* <RoleCard data={'16 DEZ'} image={'https://placehold.co/600x400'} title={'São Conrado'} type={'Bar'} stars={4.5} local={'Itaim'} idRole={'1'}/> */}
