@@ -152,12 +152,7 @@ export default function SearchingFilters() {
   }
 
   function handleVoltar() {
-    console.log('voltar')
-    if (navigation.canGoBack()) {
-      navigation.back()
-    } else {
-      navigation.push({ pathname: '/' })
-    }
+    navigation.back()
   }
 
   return (
@@ -172,7 +167,7 @@ export default function SearchingFilters() {
           <SearchingBarInput search={search} setSearch={setSearch} />
         </View>
         <View className="flex-1">
-          <ScrollView className="mb-24 mt-12 flex-1">
+          <ScrollView className="mt-12 flex-1">
             {filters.map((filter, index) => (
               <View
                 key={index}
@@ -236,7 +231,7 @@ export default function SearchingFilters() {
             ))}
           </ScrollView>
         </View>
-        <View className="fixed bottom-0 z-40 flex h-24 w-full flex-row items-center justify-evenly border-t-2 border-t-[#2C2B2B] bg-background pb-6">
+        <View className="fixed bottom-0 z-40 flex h-32 w-full flex-row items-center justify-evenly border-t-2 border-t-[#2C2B2B] bg-background pb-6">
           <View className="flex w-[40%]">
             <RoleMainButton type="simple" buttonFunction={handleClearFilters}>
               <Text className="text-white">Limpar Filtros</Text>

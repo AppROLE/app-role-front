@@ -3,20 +3,19 @@ import { ReactNode, useState } from "react";
 import { TouchableOpacity, Text, View } from "react-native";
 
 interface RoleMainButtonProps {
-  type: string
-  children: ReactNode
-  buttonFunction?: () => void
-  style?: object
+    type: string;
+    children: ReactNode;
+    buttonFunction?: () => void;
+    disabled?: boolean;
 }
 
-export default function RoleMainButton ({ children, buttonFunction, type }: RoleMainButtonProps) {
-    const [disabled, setDisabled] = useState(false);
+export default function RoleMainButton ({ children, buttonFunction, type, disabled }: RoleMainButtonProps) {
+    const [state, setState] = useState(disabled);
 
     function executeFunction() {
         if (disabled) return;
         if (buttonFunction) {
             buttonFunction();
-            setDisabled(true);
         }
     }
 
@@ -29,6 +28,7 @@ export default function RoleMainButton ({ children, buttonFunction, type }: Role
             disabled={disabled} 
             className="drop-shadow-2xl shadow-[#9C4EDC4D] text-white text-[16px]" 
             onPress={executeFunction}
+            activeOpacity={0.9}
         >
             {type === 'gradient' ? (
                 <LinearGradient
@@ -41,7 +41,7 @@ export default function RoleMainButton ({ children, buttonFunction, type }: Role
                         borderRadius: 20, // Bordas arredondadas
                         alignItems: 'center',
 
-                        shadowColor: 'rgba(156, 78, 220, 0.3)', // Cor da sombra
+                        shadowColor: 'rgba(156, 78, 220, 1)', // Cor da sombra
                         shadowOffset: { width: 0, height: 7 }, // Deslocamento da sombra
                         shadowOpacity: 1, // Opacidade da sombra
                         shadowRadius: 11, // Raio de desfoque

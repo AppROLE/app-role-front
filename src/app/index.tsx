@@ -3,10 +3,17 @@ import { Link } from 'expo-router'
 import RoleCard from '../components/roleCard'
 import CategoryCard from '../components/category-musicalCard'
 import RoleMainButton from '../components/roleMainButton'
+import { useState } from 'react'
 
 export default function Index() {
+  const [buttonDisabled, setButtonDisabled] = useState(false)
+
   function teste () {
     console.log('teste')
+    // setButtonDisabled(true)
+    // setTimeout(() => {
+    //   setButtonDisabled(false)
+    // }, 3000)
   }
 
   return (
@@ -14,14 +21,18 @@ export default function Index() {
       <Text className="text-2xl font-bold text-red-500">
         EH FRONTAS DO APP ROLE
       </Text>
+      <Link href={'/opening'}>Opening</Link>
       <Link href={'/sign-in'}>Sign In</Link>
       <Link href={'/almost-there'}>Almost there</Link>
       <Link href={'/confirm-forgot-password'}>Confirm Forgot Password</Link>
       <Link href={'/sign-up'}>Sign Up</Link>
       <Link href={'/recovery-code'}>Recovery Code</Link>
+      <Link href={'/forgot-password'}>Forgot Password</Link>
+      <Link href={'/home'}>Home</Link>
+      <Link href={'/searching-filters'}>Searching Filters</Link>
       {/* View para testar os components */}
-      <View className='my-5 bg-[#121212] w-full'>
-        {/* <RoleMainButton type='gradient' buttonFunction={teste}>
+      <View className="my-5 w-full bg-[#121212]">
+        {/* <RoleMainButton type='gradient' buttonFunction={teste} disabled={buttonDisabled}>
           <Text className='text-white text-base'>AAA</Text>
         </RoleMainButton> */}
         {/* <RoleCard data={'16 DEZ'} image={'https://placehold.co/600x400'} title={'São Conrado'} type={'Bar'} stars={4.5} local={'Itaim'} idRole={'1'}/> */}
