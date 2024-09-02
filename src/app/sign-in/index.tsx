@@ -72,7 +72,7 @@ export default function Index() {
           </RoleMainButton>
         </View>
         <View className="flex-grow" />
-        <View className="mb-12 py-4">
+        <View className="mb-16 py-4">
           <View className="mx-auto flex flex-row justify-center gap-2">
             <Text className="text-[#BDBDBD]">Não possui uma conta?</Text>
             <Link className="text-[#D8A9FF]" href="/">
