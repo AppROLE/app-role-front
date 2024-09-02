@@ -28,6 +28,7 @@ export default function RoleMainButton ({ children, buttonFunction, type, disabl
             disabled={disabled} 
             className="drop-shadow-2xl shadow-[#9C4EDC4D] text-white text-[16px]" 
             onPress={executeFunction}
+            activeOpacity={0.9}
         >
             {type === 'gradient' ? (
                 <LinearGradient
@@ -40,7 +41,7 @@ export default function RoleMainButton ({ children, buttonFunction, type, disabl
                         borderRadius: 20, // Bordas arredondadas
                         alignItems: 'center',
 
-                        shadowColor: 'rgba(156, 78, 220, 0.3)', // Cor da sombra
+                        shadowColor: 'rgba(156, 78, 220, 1)', // Cor da sombra
                         shadowOffset: { width: 0, height: 7 }, // Deslocamento da sombra
                         shadowOpacity: 1, // Opacidade da sombra
                         shadowRadius: 11, // Raio de desfoque
