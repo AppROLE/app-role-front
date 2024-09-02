@@ -33,12 +33,13 @@ export default function RoleInput({
 
   return (
     <View className="w-full">
-      <View className="flex w-full flex-row items-baseline gap-2 border-b-[1px] border-[#BDBDBD] pb-1">
+      <View className="flex w-full flex-row items-baseline gap-2 border-b-[1px] border-[#BDBDBD] pb-1" style={{alignItems: 'flex-end'}}>
         {type === 'email' ? (
           <FontAwesome6
             name="envelope"
             size={24}
             color={error ? '#F87171' : '#BDBDBD'}
+            solid
           />
         ) : type === 'password' ? (
           <FontAwesome6
@@ -57,6 +58,7 @@ export default function RoleInput({
             name="user"
             size={24}
             color={error ? '#F87171' : '#BDBDBD'}
+            solid
           />
         ) : type === 'at' ? (
           <FontAwesome6
@@ -103,7 +105,7 @@ export default function RoleInput({
                             ? 'Apelido'
                             : ''
           }
-          className={`w-[80%] ${!error ? 'text-white placeholder:text-[#BDBDBD]' : 'placeholder:text-red-400] text-red-400 opacity-80'} text-[16px] outline-none`}
+          className={`w-[75%] ${!error ? 'text-white placeholder:text-[#BDBDBD]' : 'placeholder:text-red-400] text-red-400 opacity-80'} text-[16px] outline-none`}
           value={value}
           onChangeText={onChangeText}
           secureTextEntry={
@@ -118,6 +120,7 @@ export default function RoleInput({
               size={24}
               color="#BDBDBD"
               onPress={hiddenToggle}
+              solid
             />
           ) : (
             <FontAwesome6
@@ -125,6 +128,7 @@ export default function RoleInput({
               size={24}
               color="#BDBDBD"
               onPress={hiddenToggle}
+              solid
             />
           ))}
       </View>
