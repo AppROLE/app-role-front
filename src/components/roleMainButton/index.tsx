@@ -6,16 +6,16 @@ interface RoleMainButtonProps {
     type: string;
     children: ReactNode;
     buttonFunction?: () => void;
+    disabled?: boolean;
 }
 
-export default function RoleMainButton ({ children, buttonFunction, type }: RoleMainButtonProps) {
-    const [disabled, setDisabled] = useState(false);
+export default function RoleMainButton ({ children, buttonFunction, type, disabled }: RoleMainButtonProps) {
+    const [state, setState] = useState(disabled);
 
     function executeFunction() {
         if (disabled) return;
         if (buttonFunction) {
             buttonFunction();
-            setDisabled(true);
         }
     }
 
