@@ -1,5 +1,6 @@
 import Background from "@/src/components/background";
 import RoleMainButton from "@/src/components/roleMainButton";
+import { FontAwesome6 } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
@@ -58,7 +59,7 @@ export default function Packages() {
     return (
         <Background>
             <SafeAreaView className="flex-1 justify-center items-center">
-                <ScrollView className="flex-1 w-full mx-14" contentContainerStyle={{ paddingBottom: 100 }}>
+                <ScrollView className="flex-1 w-full mx-14" contentContainerStyle={{ paddingBottom: 90 }}>
                     <View>
                         <Text className="text-3xl text-center text-white">Pacotes</Text>
                     </View>
@@ -73,7 +74,7 @@ export default function Packages() {
                             <TouchableOpacity onPress={() => handleSelect(item.id)} className="h-[20%]">
                                 <View key={item.id} className="flex gap-2 items-center">
                                     <View className={`flex items-center p-2 bg-button_color rounded-xl w-32 h-[190px]`}>
-                                        <Image source={selected === item.id ?  item.imageSource : item.grayImageSource} className={` h-[175px] w-28 `} />
+                                        <Image source={selected === item.id ? item.imageSource : item.grayImageSource} className={` h-[175px] w-28 `} />
                                     </View>
                                     {selected === item.id ? (
                                         <View className="rounded-full mt-3">
@@ -106,7 +107,7 @@ export default function Packages() {
                         <Text className="text-2xl text-white">Estabelecimento</Text>
                     </View>
                     <ScrollView className="w-full flex flex-1 mt-5 ">
-                        <View className="flex flex-wrap flex-row justify-start">
+                        <View className="flex flex-wrap flex-row justify-start ml-10">
                             {cards.map((card) => (
                                 <TouchableOpacity className="flex h-[76px]" onPress={() => handleSelectCard(card.id)}>
                                     {selectedCard === card.id ? (
@@ -164,7 +165,10 @@ export default function Packages() {
                     </View>
                     <View className="w-[85%] mx-10 mt-10">
                         <RoleMainButton type="gradient">
-                            <Text className="text-white">Fale com o estabelecimento</Text>
+                            <View className="flex flex-row items-center gap-3">
+                                <FontAwesome6 name="whatsapp" size={24} color="white" />
+                                <Text className="text-white">Fale com o estabelecimento</Text>
+                            </View>
                         </RoleMainButton>
                     </View>
                 </ScrollView>
