@@ -5,7 +5,8 @@ import {
   StyleSheet,
   Image,
   Pressable,
-  TouchableOpacity
+  TouchableOpacity,
+  Dimensions
 } from 'react-native'
 import Constants from 'expo-constants'
 import { LinearGradient } from 'expo-linear-gradient'
@@ -38,6 +39,7 @@ const statusBarHeight = Constants.statusBarHeight
 export default function RecoveryCode() {
   const navigation = useRouter()
   const [codes, setCodes] = useState<string[]>(Array(6).fill(''))
+  const windowWidth = Dimensions.get('window').width
   const refs = Array(6)
     .fill(null)
     .map(() => useRef<TextInput>(null))
@@ -53,11 +55,7 @@ export default function RecoveryCode() {
   }
 
   function handleVoltar() {
-    if (navigation.canGoBack()) {
-      navigation.back()
-    } else {
-      navigation.push({ pathname: '/sign-in' })
-    }
+    navigation.push({ pathname: '/home' })
   }
 
   return (
@@ -65,32 +63,34 @@ export default function RecoveryCode() {
       <View className="flex h-[89%] flex-col items-center gap-16 rounded-t-[54px] bg-background pt-12">
         <View className="flex items-center">
           <View className="flex flex-row justify-center">
-            <Text className="w-[89%] text-center text-2xl font-normal text-white max-[320px]:text-xl">
+            <Text className="w-[60%] text-center text-2xl font-normal text-white max-[320px]:text-xl">
               Escreva o código de 6 dígitos enviado ao seu e-mail
             </Text>
           </View>
         </View>
-        <View className="flex w-full gap-6">
-          <View className="flex w-full flex-row justify-center">
-            <RecoveryCodeInput
-              codes={codes!}
-              onChangeCode={onChangeCode}
-              refs={refs}
-            />
-          </View>
-          <View className="ml-[10%] flex flex-col gap-4">
-            <View className="-mt-2 flex w-full flex-row gap-4">
-              <Text className="text-[10px] text-white">
-                Não recebeu um código?
-              </Text>
-              <Link href={'/'} className="text-[10px] text-[#D8A9FF]">
-                Reenviar
-              </Link>
+        <View className="flex w-full justify-center items-center gap-6">
+          <View className='flex flex-col gap-6'>
+            <View className="flex w-[84%] flex-row justify-center ">
+              <RecoveryCodeInput
+                codes={codes!}
+                onChangeCode={onChangeCode}
+                refs={refs}
+              />
+            </View>
+            <View className="ml-[2%] flex flex-col gap-4">
+              <View className="-mt-2 flex w-full flex-row gap-4">
+                <Text className="text-[10px] text-white">
+                  Não recebeu um código?
+                </Text>
+                <Link href={'/'} className="text-[10px] text-[#D8A9FF]">
+                  Reenviar
+                </Link>
+              </View>
             </View>
           </View>
         </View>
 
-        <View className="w-full gap-12 px-[8%]">
+        <View className='w-[100vw] gap-12 px-[8%]'>
           <RoleMainButton type="gradient">
             <Text className="text-white">Entrar</Text>
           </RoleMainButton>

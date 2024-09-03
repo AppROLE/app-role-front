@@ -23,6 +23,7 @@ export default function Index() {
       </Text>
       <Link href={'/opening'}>Opening</Link>
       <Link href={'/sign-in'}>Sign In</Link>
+      <Link href={'/sign-up'}>Sign Up</Link>
       <Link href={'/almost-there'}>Almost there</Link>
       <Link href={'/confirm-forgot-password'}>Confirm Forgot Password</Link>
       <Link href={'/sign-up'}>Sign Up</Link>

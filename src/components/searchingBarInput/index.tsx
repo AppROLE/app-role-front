@@ -19,7 +19,7 @@ export default function SearchingBarInput({
         onChangeText={setSearch}
         placeholder="Encontre o seu ROLE!"
         placeholderTextColor="#BDBDBD"
-        className="h-full w-full text-white"
+        className="w-[90%] text-xl text-white outline-none"
       />
     </View>
   )

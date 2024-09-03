@@ -5,7 +5,13 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useRouter } from 'expo-router'
 import React, { useState } from 'react'
-import { View, Text, ScrollView, Pressable } from 'react-native'
+import {
+  View,
+  Text,
+  ScrollView,
+  Pressable,
+  TouchableOpacity
+} from 'react-native'
 
 interface Filter {
   icon: string
@@ -159,11 +165,12 @@ export default function SearchingFilters() {
     <Background>
       <View className="relative w-full flex-1">
         <View className="absolute top-0 flex h-12 w-full flex-row items-center gap-3 border-b-2 border-b-[#2C2B2B] pb-8">
-          <Pressable onPress={() => handleVoltar()}>
-            <View className="ml-5 flex h-12 w-12 items-center justify-center rounded-full bg-[#1C1C1C]">
-              <FontAwesome6 name="arrow-left" size={20} color="white" />
-            </View>
-          </Pressable>
+          <TouchableOpacity
+            onPress={() => handleVoltar()}
+            className="ml-5 flex h-12 w-12 items-center justify-center rounded-full bg-[#1C1C1C]"
+          >
+            <FontAwesome6 name="arrow-left" size={20} color="white" />
+          </TouchableOpacity>
           <SearchingBarInput search={search} setSearch={setSearch} />
         </View>
         <View className="flex-1">
@@ -231,7 +238,7 @@ export default function SearchingFilters() {
             ))}
           </ScrollView>
         </View>
-        <View className="fixed bottom-0 z-40 flex h-32 w-full flex-row items-center justify-evenly border-t-2 border-t-[#2C2B2B] bg-background pb-6">
+        <View className="fixed bottom-0 z-40 flex h-[16%] w-full flex-row items-center justify-evenly border-t-2 border-t-[#2C2B2B] bg-background pb-6">
           <View className="flex w-[40%]">
             <RoleMainButton type="simple" buttonFunction={handleClearFilters}>
               <Text className="text-white">Limpar Filtros</Text>

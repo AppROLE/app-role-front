@@ -5,6 +5,15 @@ export type signUpRequestDTO = {
   acceptedTerms: boolean
 }
 
+export type signUpResponseDTO = {
+    name: string,
+    email: string,
+    roleType: string,
+    nickname: string,
+    username: string,
+    message: string
+  }
+
 
 export type forgotPasswordRequestDTO = {
   email: string

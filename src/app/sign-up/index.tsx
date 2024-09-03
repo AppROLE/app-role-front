@@ -1,3 +1,5 @@
+import { signUpRequestDTO } from '@/api/types/auth_dto'
+import { AuthContext } from '@/context/auth_context'
 import TermsAndConditionsModal from '@/src/components/TermsAndConditionsModal'
 import Background from '@/src/components/background'
 import RoleInput from '@/src/components/input'
@@ -6,7 +8,8 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { Link } from 'expo-router'
 import React from 'react'
-import { View, Pressable, Text } from 'react-native'
+import { View, Pressable, Text, TouchableOpacity } from 'react-native'
+import Toast from 'react-native-toast-message'
 
 export default function SignUp() {
   const [isVisible, setIsVisible] = React.useState(false)
@@ -19,6 +22,7 @@ export default function SignUp() {
   const [passwordError, setPasswordError] = React.useState('')
   const [confirmPassword, setConfirmPassword] = React.useState('')
   const [confirmPasswordError, setConfirmPasswordError] = React.useState('')
+  const { signUp } = React.useContext(AuthContext)
 
   function verifyPassword() {
     const specialCharacterRegex = /[!@#$%^&*(),.?":{}|<>]/
@@ -45,8 +49,38 @@ export default function SignUp() {
     }
   }
 
-  function changePassword() {
-    verifyPassword()
+  interface SignUpResponse {
+    message?: string;
+  }
+
+  async function changePassword() {
+    verifyPassword();
+  
+    const data = {
+      name: user,
+      email: email,
+      password: password,
+      acceptedTerms: isChecked,
+    };
+  
+    try {
+      const response: SignUpResponse = await signUp(data);
+      Toast.show({
+        type: 'success',
+        text1: 'Sucesso',
+        text2: response.message || 'Cadastro realizado com sucesso!',
+        visibilityTime: 3000,
+        topOffset: 0,
+      });
+    } catch (error: any) {
+      Toast.show({
+        type: 'error',
+        text1: 'Erro',
+        text2: error.message || 'Ocorreu um erro ao realizar o cadastro.',
+        visibilityTime: 3000,
+        topOffset: 0,
+      });
+    }
   }
 
   function handleIsVisible() {
@@ -134,9 +168,9 @@ export default function SignUp() {
               </Pressable>
               <Text className="w-3/4 text-xs text-white">
                 Eu li e concordo com os {''}
-                <Pressable onPress={handleIsVisible()}>
-                  <Text className="text-[#D8A9FF]">termos de uso</Text>
-                </Pressable>{' '}
+                <TouchableOpacity onPress={handleIsVisible()}>
+                  <Text className="text-[#D8A9FF] text-xs">termos de uso</Text>
+                </TouchableOpacity>{' '}
                 e política de privacidade
               </Text>
             </View>
