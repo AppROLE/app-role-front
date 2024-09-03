@@ -25,7 +25,7 @@ export default function Packages() {
     };
 
     const handleSelectCard = (id: number) => {
-        setSelectedCard(prevSelected => (prevSelected === id ? null : id));
+        setSelectedCard(prevSelectedCard => (prevSelectedCard === id ? null : id));
     }
 
     const cards = [
@@ -57,7 +57,7 @@ export default function Packages() {
 
     return (
         <Background>
-            <SafeAreaView className="flex-1 justify-center items-center">
+            <SafeAreaView className="flex-1 justify-center items-center mx-5">
                 <ScrollView className="flex-1 w-full mx-10" contentContainerStyle={{ paddingBottom: 100 }}>
                     <View>
                         <Text className="text-3xl text-center text-white">Pacotes</Text>
@@ -110,7 +110,6 @@ export default function Packages() {
                             {cards.map((card) => (
                                 <TouchableOpacity className="flex h-[76px]" onPress={() => handleSelectCard(card.id)}>
                                     {selectedCard === card.id ? (
-
                                         <View
                                             className="flex-row  bg-button_color m-2 h-[75%] justify-center items-center rounded-full"
                                         >
@@ -118,7 +117,7 @@ export default function Packages() {
                                                 <LinearGradient
                                                     key={card.id}
                                                     colors={["#5A189A", "#9C4EDC"]}
-                                                    style={{ borderRadius: 999, flexDirection: 'row', alignItems: 'center', height: '100%', width: 155 }}
+                                                    style={{ borderRadius: 999, flexDirection: 'row', alignItems: 'center', height: '100%', width: 157 }}
                                                 >
                                                     <View className="mx-1">
                                                         <Image source={card.image} />
@@ -130,7 +129,7 @@ export default function Packages() {
                                     ) : (
                                         <View
                                             key={card.id}
-                                            className="flex-row w-[155px] bg-button_color m-2 h-[75%] justify-center items-center rounded-full"
+                                            className="flex-row w-[157px] bg-button_color m-2 h-[75%] justify-center items-center rounded-full"
                                         >
                                             <View className="mx-1">
                                                 <Image source={card.image} />
