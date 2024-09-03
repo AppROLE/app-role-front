@@ -57,8 +57,8 @@ export default function Packages() {
 
     return (
         <Background>
-            <SafeAreaView className="flex-1 justify-center items-center mx-5">
-                <ScrollView className="flex-1 w-full mx-10" contentContainerStyle={{ paddingBottom: 100 }}>
+            <SafeAreaView className="flex-1 justify-center items-center">
+                <ScrollView className="flex-1 w-full mx-14" contentContainerStyle={{ paddingBottom: 100 }}>
                     <View>
                         <Text className="text-3xl text-center text-white">Pacotes</Text>
                     </View>
@@ -105,7 +105,7 @@ export default function Packages() {
                     <View className="w-full mt-10 ml-10">
                         <Text className="text-2xl text-white">Estabelecimento</Text>
                     </View>
-                    <ScrollView className="w-full flex flex-1 ml-5 mt-5 ">
+                    <ScrollView className="w-full flex flex-1 mt-5 ">
                         <View className="flex flex-wrap flex-row justify-start">
                             {cards.map((card) => (
                                 <TouchableOpacity className="flex h-[76px]" onPress={() => handleSelectCard(card.id)}>
