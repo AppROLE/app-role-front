@@ -31,6 +31,7 @@ export default function Index() {
       <Link href={'/forgot-password'}>Forgot Password</Link>
       <Link href={'/home'}>Home</Link>
       <Link href={'/searching-filters'}>Searching Filters</Link>
+      <Link href={'/packages'}>Packages</Link>
       {/* View para testar os components */}
       <View className="my-5 w-full bg-[#121212]">
         {/* <RoleMainButton type='gradient' buttonFunction={teste} disabled={buttonDisabled}>
