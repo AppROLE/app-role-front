@@ -34,7 +34,6 @@ export default function RootLayout() {
           name="searching-filters/index"
           options={{ headerShown: false }}
         />
-        <Stack.Screen name="packages/index" options={{ headerShown: false }} />
       </Stack>
     </AuthContextProvider>
   )
