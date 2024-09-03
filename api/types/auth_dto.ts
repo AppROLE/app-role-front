@@ -23,4 +23,11 @@ export type forgotPaaswordResponseDTO = {
   message: string 
 }
 
+export type confirmCodeRequestDTO = {
+  email: string
+  code: string
+}
 
+export type confirmCodeResponseDTO = {
+  message: string
+}
