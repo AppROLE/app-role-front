@@ -14,4 +14,12 @@ export type forgotPaaswordResponseDTO = {
   message: string 
 }
 
+export type confirmForgotPasswordRequestDTO = {
+  newPassword: string
+  email: string
+}
+
+export type confirmForgotPasswordResponseDTO = {
+  message: string
+}
 
