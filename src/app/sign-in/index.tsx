@@ -40,23 +40,23 @@ export default function Index() {
             Bem vindo(a) de volta!
           </Text>
         </View>
-        <View className="my-12 gap-8 px-[15%]">
+        <View className="my-12 gap-1 px-[15%]">
           <RoleInput
             type="email"
             value={email}
             onChangeText={handleEmailChange}
             error={emailError}
           />
-          <View className="gap-2">
+          <View className="gap-0">
             <RoleInput
               type="hidden-password"
               value={password}
               onChangeText={handlePasswordChange}
               error={passwordError}
             />
-            <View className="flex flex-row gap-4 text-xs">
-              <Text className="text-white">Esqueceu sua senha?</Text>
-              <Link className="text-[#D8A9FF]" href="/forgot-password">
+            <View className="flex flex-row gap-2">
+              <Text className="text-white text-xs">Esqueceu sua senha?</Text>
+              <Link className="text-[#D8A9FF] text-xs" href="/forgot-password">
                 Recuperar senha
               </Link>
             </View>
@@ -72,7 +72,7 @@ export default function Index() {
           </RoleMainButton>
         </View>
         <View className="flex-grow" />
-        <View className="mb-12 py-4">
+        <View className="mb-16 py-4">
           <View className="mx-auto flex flex-row justify-center gap-2">
             <Text className="text-[#BDBDBD]">Não possui uma conta?</Text>
             <Link className="text-[#D8A9FF]" href="/">

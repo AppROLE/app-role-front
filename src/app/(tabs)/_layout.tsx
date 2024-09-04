@@ -1,4 +1,5 @@
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import { Foundation, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 import { Image, View, Text } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -10,9 +11,11 @@ export default function TabLayout() {
         tabBarActiveTintColor: 'blue',
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: '#121212',
-          borderTopWidth: 0,
+          backgroundColor: '#1C1C1C',
+          borderTopWidth: 2,
+          borderTopColor: '#2C2B2B',
           height: 60,
+          flexDirection: 'row',
           justifyContent: 'center',
         },
       }}
@@ -23,18 +26,7 @@ export default function TabLayout() {
           tabBarLabel: '', // Oculta o nome da aba
           tabBarIcon: ({ focused }) => (
             <View className='flex flex-col items-center gap-1'>
-                <FontAwesome6 name="house" size={24} className={`${focused ? 'bg-clip-text text-transparent bg-gradient-to-r from-[#5A189A] to-[#9C4EDC]' : 'text-white'}`} />
-                {focused ? (
-                  <View 
-                    className='w-full h-[1.5px] bg-gradient-to-r from-[#5A189A] to-[#9C4EDC] rounded-full'
-                    style={{
-                      shadowColor: '#9C4EDC', // Cor da sombra
-                      shadowOpacity: 1, // Opacidade da sombra
-                      shadowRadius: 10, // Raio de desfoque da sombra
-                      shadowOffset: { width: 0, height: 0 }, // Deslocamento da sombra
-                    }}
-                  ></View>
-                ) : <></>}
+                <FontAwesome6 name="house" size={24} color={`${focused ? '#9C4EDC' : '#FFFFFF'}`} />
             </View>
           ),
         }}
@@ -45,18 +37,7 @@ export default function TabLayout() {
           tabBarLabel: '', // Oculta o nome da aba
           tabBarIcon: ({ focused }) => (
             <View>
-                <FontAwesome6 name="gift" size={24} className={`${focused ? 'bg-clip-text text-transparent bg-gradient-to-r from-[#5A189A] to-[#9C4EDC]' : 'text-white'}`} />
-                {focused ? (
-                  <View 
-                    className='w-full h-[1.5px] bg-gradient-to-r from-[#5A189A] to-[#9C4EDC] rounded-full mt-[4px]'
-                    style={{
-                      shadowColor: '#9C4EDC', // Cor da sombra
-                      shadowOpacity: 1, // Opacidade da sombra
-                      shadowRadius: 10, // Raio de desfoque da sombra
-                      shadowOffset: { width: 0, height: 0 }, // Deslocamento da sombra
-                    }}
-                  ></View>
-                ) : <></>}
+                <MaterialCommunityIcons name="party-popper" size={28} color={`${focused ? '#9C4EDC' : '#FFFFFF'}`} />
             </View>
           ),
         }}
@@ -67,18 +48,7 @@ export default function TabLayout() {
           tabBarLabel: '', // Oculta o nome da aba
           tabBarIcon: ({ focused }) => (
             <View>
-                <FontAwesome6 name="heart" size={24} className={`${focused ? 'bg-clip-text text-transparent bg-gradient-to-r from-[#5A189A] to-[#9C4EDC]' : 'text-white'}`} solid/>
-                {focused ? (
-                  <View 
-                    className='w-full h-[1.5px] bg-gradient-to-r from-[#5A189A] to-[#9C4EDC] rounded-full mt-[4px]'
-                    style={{
-                      shadowColor: '#9C4EDC', // Cor da sombra
-                      shadowOpacity: 1, // Opacidade da sombra
-                      shadowRadius: 10, // Raio de desfoque da sombra
-                      shadowOffset: { width: 0, height: 0 }, // Deslocamento da sombra
-                    }}
-                  ></View>
-                ) : <></>}
+                <FontAwesome6 name="heart" size={24} color={`${focused ? '#9C4EDC' : '#FFFFFF'}`} solid />
             </View>
           ),
         }}
@@ -110,17 +80,6 @@ export default function TabLayout() {
                     />
                 </View>
             </LinearGradient>
-            {focused ? (
-              <View 
-                className='w-full h-[1.5px] bg-gradient-to-r from-[#5A189A] to-[#9C4EDC] rounded-full mt-[4px]'
-                style={{
-                  shadowColor: '#9C4EDC', // Cor da sombra
-                  shadowOpacity: 1, // Opacidade da sombra
-                  shadowRadius: 10, // Raio de desfoque da sombra
-                  shadowOffset: { width: 0, height: 0 }, // Deslocamento da sombra
-                }}
-              ></View>
-            ) : <></>}
         </View>
           ),
         }}

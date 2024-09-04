@@ -24,13 +24,13 @@ export default function Index() {
       <Link href={'/first-page'}>First Page</Link>
       <Link href={'/opening'}>Opening</Link>
       <Link href={'/sign-in'}>Sign In</Link>
+      <Link href={'/sign-up'}>Sign Up</Link>
       <Link href={'/almost-there'}>Almost there</Link>
       <Link href={'/confirm-forgot-password'}>Confirm Forgot Password</Link>
       <Link href={'/sign-up'}>Sign Up</Link>
       <Link href={'/recovery-code'}>Recovery Code</Link>
       <Link href={'/forgot-password'}>Forgot Password</Link>
       <Link href={'/home'}>Home</Link>
-      
       {/* View para testar os components */}
       <View className="my-5 w-full bg-[#121212]">
         {/* <RoleMainButton type='gradient' buttonFunction={teste} disabled={buttonDisabled}>
