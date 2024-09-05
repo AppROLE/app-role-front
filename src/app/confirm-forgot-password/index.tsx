@@ -30,7 +30,6 @@ export default function ConfirmForgotPassword() {
     if(verifyPassword()){
       const email = 'email' // Preencher com o email do usuário
       const response = await confirmForgotPassword({email: 'email', newPassword: password})
-      console.log(response)
       if(response.message === 'Senha alterada com sucesso!'){
         // Redirecionar para a tela de login
       }
