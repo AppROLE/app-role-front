@@ -20,7 +20,7 @@ export class AuthRepositoryHttp {
 
   async signUp(data: object) {
     try {
-      const response = await http.post('', data)
+      const response = await http.post('/sign-up', data)
       return response.data
     } catch (error: any) {
       return error.response.data

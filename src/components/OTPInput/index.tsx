@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '86%'
+    width: '100%'
   },
   input: {
     width: '14%',

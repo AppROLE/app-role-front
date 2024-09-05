@@ -21,8 +21,10 @@ export default function Index() {
       <Text className="text-2xl font-bold text-red-500">
         EH FRONTAS DO APP ROLE
       </Text>
+      <Link href={'/first-page'}>First Page</Link>
       <Link href={'/opening'}>Opening</Link>
       <Link href={'/sign-in'}>Sign In</Link>
+      <Link href={'/sign-up'}>Sign Up</Link>
       <Link href={'/almost-there'}>Almost there</Link>
       <Link href={'/confirm-forgot-password'}>Confirm Forgot Password</Link>
       <Link href={'/sign-up'}>Sign Up</Link>
