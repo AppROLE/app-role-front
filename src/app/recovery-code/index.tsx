@@ -5,13 +5,16 @@ import {
   StyleSheet,
   Image,
   Pressable,
-  TouchableOpacity
+  TouchableOpacity,
+  Dimensions
 } from 'react-native'
 import Constants from 'expo-constants'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Link, useRouter } from 'expo-router'
 import { RecoveryCodeInput } from '@/src/components/OTPInput'
 import { useRef, useState } from 'react'
+import Background from '@/src/components/background'
+import RoleMainButton from '@/src/components/roleMainButton'
 
 const styles = StyleSheet.create({
   container: {
@@ -36,6 +39,7 @@ const statusBarHeight = Constants.statusBarHeight
 export default function RecoveryCode() {
   const navigation = useRouter()
   const [codes, setCodes] = useState<string[]>(Array(6).fill(''))
+  const windowWidth = Dimensions.get('window').width
   const refs = Array(6)
     .fill(null)
     .map(() => useRef<TextInput>(null))
@@ -49,50 +53,31 @@ export default function RecoveryCode() {
       refs[index + 1]?.current?.focus()
     }
   }
+
+  function handleVoltar() {
+    navigation.push({ pathname: '/home' })
+  }
+
   return (
-    <LinearGradient
-      style={{ flex: 1 }}
-      className="flex h-screen w-full"
-      colors={[
-        '#10002B',
-        '#240046',
-        '#3C096C',
-        '#5A189A',
-        '#9C4EDC',
-        '#DFA9FD'
-      ]}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-    >
-      <View
-        style={{ marginTop: statusBarHeight }}
-        className="flex h-full w-full flex-col justify-between gap-4"
-      >
-        <Image
-          style={{
-            width: 140, // Ajuste aqui para o tamanho desejado
-            height: 70 // Ajuste aqui para o tamanho desejado
-          }}
-          source={require('../../../assets/images/ROLE.png')}
-          className="ml-6 mt-4"
-        />
-        <View className="flex h-[89%] flex-col items-center gap-16 rounded-t-[54px] bg-background pt-12">
-          <View className="flex items-center">
-            <View className="flex flex-row justify-center">
-              <Text className="w-[89%] text-center text-2xl font-normal text-white max-[320px]:text-xl">
-                Escreva o código de 6 dígitos enviado ao seu e-mail
-              </Text>
-            </View>
+    <Background>
+      <View className="flex h-[89%] flex-col items-center gap-16 rounded-t-[54px] bg-background pt-12">
+        <View className="flex items-center">
+          <View className="flex flex-row justify-center">
+            <Text className="w-[60%] text-center text-2xl font-normal text-white max-[320px]:text-xl">
+              Escreva o código de 6 dígitos enviado ao seu e-mail
+            </Text>
           </View>
-          <View className="flex w-full gap-6">
-            <View className="flex w-full flex-row justify-center">
+        </View>
+        <View className="flex w-full justify-center items-center gap-6">
+          <View className='flex flex-col gap-6'>
+            <View className="flex w-[84%] flex-row justify-center ">
               <RecoveryCodeInput
                 codes={codes!}
                 onChangeCode={onChangeCode}
                 refs={refs}
               />
             </View>
-            <View className="ml-[10%] flex flex-col gap-4">
+            <View className="ml-[2%] flex flex-col gap-4">
               <View className="-mt-2 flex w-full flex-row gap-4">
                 <Text className="text-[10px] text-white">
                   Não recebeu um código?
@@ -103,39 +88,17 @@ export default function RecoveryCode() {
               </View>
             </View>
           </View>
+        </View>
 
-          <LinearGradient
-            style={{
-              width: '86%',
-              borderRadius: 16,
-              shadowColor: 'rgba(255, 255, 255, 0.134)', // Cor da sombra
-              shadowOffset: { width: 0, height: 0 }, // Deslocamento da sombra
-              shadowOpacity: 1, // Opacidade da sombra
-              shadowRadius: 11, // Raio de desfoque
-              elevation: 10
-            }}
-            colors={['#3C096C', '#5A189A', '#9C4EDC']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-          >
-            <Pressable className="w-full items-center py-2">
-              <Text className="text-white">Entrar</Text>
-            </Pressable>
-          </LinearGradient>
-          <Pressable
-            className="-mt-6 flex w-[86%] flex-row items-center justify-center gap-3 rounded-2xl bg-button-color py-2"
-            onPress={() => {
-              if (navigation.canGoBack()) {
-                navigation.back()
-              } else {
-                navigation.push({ pathname: '/sign-in' })
-              }
-            }}
-          >
+        <View className='w-[100vw] gap-12 px-[8%]'>
+          <RoleMainButton type="gradient">
+            <Text className="text-white">Entrar</Text>
+          </RoleMainButton>
+          <RoleMainButton type="simple" buttonFunction={() => handleVoltar()}>
             <Text className="text-white">Voltar</Text>
-          </Pressable>
+          </RoleMainButton>
         </View>
       </View>
-    </LinearGradient>
+    </Background>
   )
 }
