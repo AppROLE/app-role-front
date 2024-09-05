@@ -11,13 +11,15 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import Background from '@/src/components/background'
 import RoleMainButton from '@/src/components/roleMainButton'
 import RoleInput from '@/src/components/input'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import { AuthContext } from '@/context/auth_context'
 
 export default function Index() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
+  const { signIn } = useContext(AuthContext)
 
   function handleEmailChange(text: string) {
     setEmail(text)
@@ -27,6 +29,17 @@ export default function Index() {
   function handlePasswordChange(text: string) {
     setPassword(text)
     if (passwordError) setPasswordError('') // Reseta o erro ao digitar
+  }
+
+  function Login() {
+    if (!email || !password) {
+      if (!email) setEmailError('Email obrigatório')
+      if (!password) setPasswordError('Senha obrigatória')
+      return
+    }
+
+    const response = signIn(email, password)
+    console.log(response)
   }
 
   return (
