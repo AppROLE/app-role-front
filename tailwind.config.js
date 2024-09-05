@@ -14,7 +14,9 @@ module.exports = {
         DARK_PURPLE: '#240046',
         DARK_BLUE: '#10002B',
         background: '#121212',
-        button_color: '#1C1C1C'
+        button_color: '#1C1C1C',
+        line_gray: '#2C2B2B',
+        sub_text: '#8E8E8E',
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif']
