@@ -39,7 +39,7 @@ export class AuthRepositoryHttp {
 
   async confirmForgotPassword(data: confirmForgotPasswordRequestDTO) {
     try {
-      const response = await http.post(`/confirm-forgot-password`, data)
+      const response = await http.put(`/confirm-forgot-password`, data)
       return response.data as confirmForgotPasswordResponseDTO
     } catch (error: any) {
       return error.response.data
