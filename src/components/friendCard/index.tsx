@@ -1,7 +1,5 @@
-
 import {Text, TouchableOpacity, Image, View} from "react-native";
 import React from "react";
-import Entypo from "@expo/vector-icons/Entypo";
 
 interface FriendCardProps {
     image: string;
@@ -22,8 +20,8 @@ export default function FriendCard({image, nickname, user} : FriendCardProps) {
                     className="rounded-full"
                 />
                 <View>
-                    <Text className="text-2xl font-bold text-white flex-1 line-clamp-3">{nickname}</Text>
-                    <Text className="text-md flex-1 line-clamp-3 text-sub_text">@{user}</Text>
+                    <Text className="text-2xl font-bold text-white flex-1 line-clamp-1">{nickname}</Text>
+                    <Text className="text-md flex-1 line-clamp-1 text-sub_text">@{user}</Text>
                 </View>
 
             </View>
