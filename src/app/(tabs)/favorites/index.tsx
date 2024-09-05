@@ -1,13 +1,14 @@
 import Background from "@/src/components/background";
-import {Text, TouchableOpacity, View, FlatList} from "react-native";
+import {Text, TouchableOpacity, View, FlatList, Dimensions} from "react-native";
 import React from "react";
 import SocialCard from "@/src/components/socialCard";
 import SvgUri from "react-native-svg-uri";
 
-import { Link } from 'expo-router'
+import { Link, router } from 'expo-router'
 
 
 export default function Favorites() {
+    const { width } = Dimensions.get('window')
 
     const json = [
         {
@@ -27,6 +28,14 @@ export default function Favorites() {
         },
     ]
 
+    function navigateToFriends() {
+        router.navigate('/friends')
+    }
+
+    function navigateToNotifications() {
+        router.navigate('/notifications')
+    }
+
     return (
         <Background>
             <View className="items-start h-full w-full">
@@ -41,21 +50,21 @@ export default function Favorites() {
                                 alignItems: 'center',
                                 justifyContent: 'center',
                             }}
-                            onPress={() => {}}
+                            onPress={navigateToFriends}
                         >
-                            <Link href={"/friends"} className='text-white text-sm'>Adicione um amigo!</Link>
+                            <Text className='text-white text-sm'>Adicione um amigo!</Text>
                         </TouchableOpacity>
-                        <View className="relative">
+                        <TouchableOpacity className="relative" onPress={navigateToNotifications}>
                             <SvgUri
-                                source={{uri: "https://d2sw4frthbnrzj.cloudfront.net/bell.svg"}}
-                                width="21.6"
-                                height="26.1"
+                                source={{uri: process.env.EXPO_PUBLIC_URL_S3 + '/bell.svg'}}
+                                width={width / 17.8}
+                                height={width / 14.7}
                             />
                             {/*Notificação*/}
-                            <View className="absolute right-0 rounded-full w-4 h-4 bg-red-600 items-center justify-center">
+                            <View className="absolute right-[-4] rounded-full w-4 h-4 bg-red-600 items-center justify-center">
                                 <Text className=" text-white text-center" style={{fontSize: 10, lineHeight: 12}}>9+</Text>
                             </View>
-                        </View>
+                        </TouchableOpacity>
                     </View>
                 </View>
                 <View className="border-t-line_gray border-2 mt-8 p-10 w-full">
