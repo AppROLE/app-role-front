@@ -23,7 +23,7 @@ export default function SocialCard({image, title} : SocialCardProps) {
             </View>
             <View className="pr-3">
                 <SvgUri
-                    source={{uri: "https://d2sw4frthbnrzj.cloudfront.net/bookmark.svg"}}
+                    source={{uri: process.env.EXPO_PUBLIC_URL_S3 + "/bookmark.svg"}}
                     width="14"
                     height="18"
                 />
