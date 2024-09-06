@@ -1,20 +1,29 @@
-import { Text, View } from 'react-native'
-import { Link } from 'expo-router'
+import { Text, TouchableOpacity, View } from 'react-native'
+import { Link, router } from 'expo-router'
 import RoleCard from '../components/roleCard'
 import CategoryCard from '../components/category-musicalCard'
 import RoleMainButton from '../components/roleMainButton'
 import { useState } from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function Index() {
   const [buttonDisabled, setButtonDisabled] = useState(false)
 
-  function teste () {
+
+  function teste() {
     console.log('teste')
     // setButtonDisabled(true)
     // setTimeout(() => {
     //   setButtonDisabled(false)
     // }, 3000)
   }
+
+  function saveAsync() {
+    AsyncStorage.setItem('emaiu', 'joao@emaiu')
+    AsyncStorage.setItem('passwordi', '123456')
+  }
+
+
 
   return (
     <View className="flex h-full w-full items-center justify-center bg-blue-100">
@@ -24,7 +33,12 @@ export default function Index() {
       <Link href={'/opening'}>Opening</Link>
       <Link href={'/sign-in'}>Sign In</Link>
       <Link href={'/sign-up'}>Sign Up</Link>
-      <Link href={'/almost-there'}>Almost there</Link>
+      <TouchableOpacity>
+        <Link href={{
+          pathname: '/almost-there',
+          params: { emaiu: 'joao@email', passwordi: '123456' },
+        }}>Almost there</Link>
+      </TouchableOpacity>
       <Link href={'/confirm-forgot-password'}>Confirm Forgot Password</Link>
       <Link href={'/sign-up'}>Sign Up</Link>
       <Link href={'/recovery-code'}>Recovery Code</Link>
