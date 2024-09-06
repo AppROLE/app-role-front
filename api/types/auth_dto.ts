@@ -24,3 +24,15 @@ export type forgotPaaswordResponseDTO = {
 }
 
 
+export type finishSignUpRequestDTO = {
+  email: string,
+  username: string,
+  nickname?: string,
+  password: string
+}
+
+export type finishSignUpResponseDTO = {
+  message: string,
+}
+
+
