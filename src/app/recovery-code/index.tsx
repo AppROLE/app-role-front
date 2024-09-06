@@ -2,42 +2,33 @@ import {
   Text,
   View,
   TextInput,
-  StyleSheet,
-  Image,
-  Pressable,
-  TouchableOpacity,
-  Dimensions
 } from 'react-native'
-import Constants from 'expo-constants'
-import { LinearGradient } from 'expo-linear-gradient'
-import { Link, useRouter } from 'expo-router'
+import {Link, router, useRouter} from 'expo-router'
 import { RecoveryCodeInput } from '@/src/components/OTPInput'
 import { useContext, useRef, useState } from 'react'
 import Background from '@/src/components/background'
 import RoleMainButton from '@/src/components/roleMainButton'
 import { AuthContext } from '@/context/auth_context'
-import { confirmCodeResponseDTO } from '@/api/types/auth_dto'
 
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: '#fff',
+//     alignItems: 'center',
+//     justifyContent: 'center'
+//   },
+//   image: {
+//     flex: 1,
+//     // position: 'absolute',
+//     top: 0,
+//     left: 0
+//     // width: 500
+//     // height: 500
+//     // backgroundColor: '#0553'
+//   }
+// })
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  image: {
-    flex: 1,
-    // position: 'absolute',
-    top: 0,
-    left: 0
-    // width: 500
-    // height: 500
-    // backgroundColor: '#0553'
-  }
-})
-
-const statusBarHeight = Constants.statusBarHeight
+// const statusBarHeight = Constants.statusBarHeight
 
 export default function RecoveryCode() {
   const navigation = useRouter()
@@ -45,7 +36,7 @@ export default function RecoveryCode() {
   const [incorrect, setIncorrect] = useState(false);
   const {confirmCode} = useContext(AuthContext);
 
-  const windowWidth = Dimensions.get('window').width
+  // const windowWidth = Dimensions.get('window').width
   const refs = Array(6)
     .fill(null)
     .map(() => useRef<TextInput>(null))
@@ -64,25 +55,28 @@ export default function RecoveryCode() {
     navigation.push({ pathname: '/home' })
   }
 
-  function handlePost(){
+  const handlePost = async () => {
     if(codes.includes("")){
       setIncorrect(true)
     }
     else{
       //if código errado setIncorrect true return
-
       const code = codes.join("")
-      async () => {
-        const response = await confirmCode("a@email.com", code );
-        if (response.message == "Código correto"){
-          setIncorrect(false)
-          //trocar de tela
+      const email = ""
+
+      try{
+        const response = await confirmCode(email, code );
+        if(response.message != "Código validado com sucesso!"){
+            setIncorrect(true)
+            return
         }
-        else{
-          setIncorrect(true)
-        }
+        setIncorrect(false)
+        router.navigate('/almost-there')
       }
-      
+      catch (error){
+        console.log(error)
+        setIncorrect(true)
+      }
     }
   }
 
