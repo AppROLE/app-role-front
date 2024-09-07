@@ -6,6 +6,7 @@ type AuthContextType = {
   signIn: (email: string, password: string) => Promise<object>
   signUp: (data: signUpRequestDTO) => Promise<object>
   forgotPassword: (email: string) => Promise<forgotPaaswordResponseDTO>
+  resendCode: (email: string) => Promise<{ message: string }>
 }
 
 const defaultAuthContext = {
@@ -16,6 +17,11 @@ const defaultAuthContext = {
     return {}
   },
   forgotPassword: async (_email: string) => {
+    return {
+      message: ''
+    }
+  },
+  resendCode: async (_email: string) => {
     return {
       message: ''
     }
@@ -54,8 +60,17 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
     }
   }
 
+  async function resendCode(email: string) {
+    try {
+      const response = await authRepository.resendCode({ email })
+      return response
+    } catch (error: any) {
+      return error
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ signIn, signUp, forgotPassword }}>
+    <AuthContext.Provider value={{ signIn, signUp, forgotPassword, resendCode }}>
       {children}
     </AuthContext.Provider>
   )

@@ -1,38 +1,20 @@
 import Background from '@/src/components/background'
 import RoleMainButton from '@/src/components/roleMainButton'
 import SearchingBarInput from '@/src/components/searchingBarInput'
+import AnimatedOption from '@/src/components/selectedCard'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
-import { LinearGradient } from 'expo-linear-gradient'
 import { useRouter } from 'expo-router'
 import React, { useState } from 'react'
-import {
-  View,
-  Text,
-  ScrollView,
-  Pressable,
-  TouchableOpacity
-} from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
 
 interface Filter {
   icon: string
   title: string
   options: { label: string; value: string }[]
-  selected: number | null
+  selected: number | null | number[]
 }
 
 const initialFilters = [
-  {
-    icon: 'calendar',
-    title: 'Data',
-    options: [
-      { label: 'Hoje', value: 'today' },
-      { label: 'Amanhã', value: 'tomorrow' },
-      { label: 'Esta Semana', value: 'this-week' },
-      { label: 'Este Mês', value: 'this-month' },
-      { label: 'Personalizado', value: 'custom' }
-    ],
-    selected: null
-  },
   {
     icon: 'location-dot',
     title: 'Região',
@@ -42,9 +24,10 @@ const initialFilters = [
       { label: 'Zona Leste', value: 'east' },
       { label: 'Zona Oeste', value: 'west' },
       { label: 'ABC Paulista', value: 'abc' },
-      { label: 'Outros', value: 'others' }
+      { label: 'Outros', value: 'others' },
+      { label: 'Mais Populares', value: 'popular' }
     ],
-    selected: null
+    selected: []
   },
   {
     icon: 'store',
@@ -54,9 +37,11 @@ const initialFilters = [
       { label: 'Universitário', value: 'universitarian' },
       { label: 'Bar', value: 'bar' },
       { label: 'Show', value: 'show' },
-      { label: 'Festa', value: 'Party' }
+      { label: 'Festa', value: 'Party' },
+      { label: 'Festival', value: 'festival' },
+      { label: 'Bar Balada', value: 'bar-balad' }
     ],
-    selected: null
+    selected: []
   },
   {
     icon: 'music',
@@ -64,17 +49,17 @@ const initialFilters = [
     options: [
       { label: 'Funk', value: 'funk' },
       { label: 'Sertanejo', value: 'sertanejo' },
-      { label: 'Pop', value: 'pop' },
+      { label: 'POP', value: 'pop' },
       { label: 'Rock', value: 'rock' },
       { label: 'Eletrônica', value: 'eletronic' },
       { label: 'Rap', value: 'rap' },
-      { label: 'Samba', value: 'samba' },
       { label: 'Pagode', value: 'pagode' },
       { label: 'MPB', value: 'mpb' },
       { label: 'Forró', value: 'forro' },
-      { label: 'Reggae', value: 'reggae' }
+      { label: 'Reggae', value: 'reggae' },
+      { label: 'Trap', value: 'trap' }
     ],
-    selected: null
+    selected: []
   },
   {
     icon: 'sack-dollar',
@@ -86,7 +71,7 @@ const initialFilters = [
       { label: '$$$$', value: 'very-expensive' },
       { label: '$$$$$', value: 'luxury' }
     ],
-    selected: 'null'
+    selected: '[]'
   },
   {
     icon: 'user-shield',
@@ -98,7 +83,7 @@ const initialFilters = [
       { label: '31-40', value: '31-40' },
       { label: '40+', value: '40+' }
     ],
-    selected: null
+    selected: []
   },
   {
     icon: 'star',
@@ -116,32 +101,57 @@ const initialFilters = [
     options: [
       { label: 'Open Bar', value: 'open-bar' },
       { label: 'Estacionamento', value: 'parking' },
-      { label: 'Vip', value: 'vip' }
+      { label: 'Fumódromo', value: 'smoking-area' },
+      { label: 'Valet', value: 'valet' },
+      { label: 'Área Aberta', value: 'open-area' },
+      { label: 'Welcome Shot', value: 'welcome-shot' },
+      { label: 'Messas', value: 'tables' },
+      { label: 'Ao Vivo', value: 'live' },
+      { label: 'Esquenta', value: 'warm-up' },
+      { label: 'After', value: 'after' }
     ],
-    selected: null
+    selected: []
   },
   {
     icon: 'user',
     title: 'Amigos',
     options: [{ label: 'Apenas Amigos', value: 'only-friends' }],
-    selected: null
+    selected: []
   }
 ]
 
 export default function SearchingFilters() {
   const navigation = useRouter()
   const [isDisabled, setIsDisabled] = useState(false)
+  const [selectedTimestamp, setSelectedTimestamp] = useState<number | null>(
+    null
+  )
   const [search, setSearch] = useState('')
   const [filters, setFilters] = useState<Filter[]>(
     initialFilters.map((filter) => ({ ...filter, selected: null }))
   )
 
-  const handleOptionSelect = (
-    filterIndex: number,
-    optionIndex: number | null
-  ) => {
+  const handleOptionSelect = (filterIndex: number, optionIndex: number) => {
     const newFilters = [...filters]
-    newFilters[filterIndex].selected = optionIndex
+    const filter = newFilters[filterIndex]
+
+    if (filter.title === 'Avaliação') {
+      // Se for o filtro "Avaliação", permite apenas uma seleção
+      filter.selected = optionIndex === filter.selected ? null : optionIndex
+    } else {
+      // Para outros filtros, permite múltiplas seleções
+      const selectedOptions = Array.isArray(filter.selected)
+        ? filter.selected
+        : []
+      if (selectedOptions.includes(optionIndex)) {
+        filter.selected = selectedOptions.filter(
+          (index) => index !== optionIndex
+        )
+      } else {
+        filter.selected = [...selectedOptions, optionIndex]
+      }
+    }
+
     setFilters(newFilters)
   }
 
@@ -156,6 +166,20 @@ export default function SearchingFilters() {
       setIsDisabled(false)
     }, 500)
   }
+
+
+const handleDateChange = (event: any, selectedDate: Date | undefined) => {
+  if (selectedDate) {
+    // Ajusta o horário para meia-noite (para garantir que seja o início do dia)
+    const dayOnly = new Date(selectedDate.setHours(0, 0, 0, 0));
+
+    // Armazena o timestamp (milissegundos desde 1970-01-01)
+    const timestamp = dayOnly.getTime();
+    
+    // Atualiza o estado com o timestamp escolhido
+    setSelectedTimestamp(timestamp);
+  }
+};
 
   function handleVoltar() {
     navigation.back()
@@ -178,7 +202,7 @@ export default function SearchingFilters() {
             {filters.map((filter, index) => (
               <View
                 key={index}
-                className={`mb-8 flex flex-col gap-2 pb-2 pt-5 ${filter.title === 'Data' ? '' : 'border-t-2 border-t-[#2C2B2B]'}`}
+                className={`'border-t-2 mb-8 flex flex-col gap-2 border-t-[#2C2B2B] pb-2 pt-5`}
               >
                 <View className="flex flex-row">
                   <View className="ml-4 mt-4">
@@ -191,46 +215,16 @@ export default function SearchingFilters() {
                 <View className="mx-2 mt-2 flex flex-row flex-wrap">
                   {filter.options.map((option, optionIndex) => (
                     <View key={optionIndex} className="m-1">
-                      {filter.selected === optionIndex ? (
-                        <Pressable
-                          onPress={() => handleOptionSelect(index, null)}
-                        >
-                          <LinearGradient
-                            colors={['#5A189A', '#9C4EDC']}
-                            start={{ x: 0, y: 0 }}
-                            end={{ x: 1, y: 1 }} // Gradiente diagonal suave
-                            style={{
-                              paddingVertical: 12,
-                              paddingHorizontal: 30,
-                              borderRadius: 20, // Bordas arredondadas
-                              alignItems: 'center',
-                              shadowColor: 'rgba(156, 78, 220, 0.3)', // Cor da sombra
-                              shadowOffset: { width: 0, height: 7 }, // Deslocamento da sombra
-                              shadowOpacity: 1, // Opacidade da sombra
-                              shadowRadius: 11, // Raio de desfoque
-                              elevation: 10
-                            }}
-                          >
-                            <Text className="text-xs text-white">
-                              {option.label}
-                            </Text>
-                          </LinearGradient>
-                        </Pressable>
-                      ) : (
-                        <Pressable
-                          className="flex flex-row items-center justify-center gap-4 bg-[#1C1C1C]"
-                          style={{
-                            paddingVertical: 12,
-                            paddingHorizontal: 30,
-                            borderRadius: 20
-                          }}
-                          onPress={() => handleOptionSelect(index, optionIndex)}
-                        >
-                          <Text className="text-xs text-[#BDBDBD]">
-                            {option.label}
-                          </Text>
-                        </Pressable>
-                      )}
+                      <AnimatedOption
+                        label={option.label}
+                        selected={
+                          filter.title === 'Avaliação'
+                            ? filter.selected === optionIndex
+                            : Array.isArray(filter.selected) &&
+                              filter.selected.includes(optionIndex)
+                        }
+                        onPress={() => handleOptionSelect(index, optionIndex)}
+                      />
                     </View>
                   ))}
                 </View>

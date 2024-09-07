@@ -35,4 +35,13 @@ export class AuthRepositoryHttp {
       return error.response.data
     }
   }
+
+  async resendCode(data: object) {
+    try {
+      const response = await http.post('/resend-code', data)
+      return response.data
+    } catch (error: any) {
+      return error.response.data
+    }
+  }
 }

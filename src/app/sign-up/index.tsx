@@ -50,36 +50,37 @@ export default function SignUp() {
   }
 
   interface SignUpResponse {
-    message?: string;
+    message?: string
   }
 
   async function changePassword() {
-    verifyPassword();
-  
+    verifyPassword()
+
     const data = {
       name: user,
       email: email,
       password: password,
-      acceptedTerms: isChecked,
-    };
-  
+      acceptedTerms: isChecked
+    }
+
     try {
-      const response: SignUpResponse = await signUp(data);
+      const response: SignUpResponse = await signUp(data)
+      console.log(response)
       Toast.show({
         type: 'success',
         text1: 'Sucesso',
         text2: response.message || 'Cadastro realizado com sucesso!',
         visibilityTime: 3000,
-        topOffset: 0,
-      });
+        topOffset: 0
+      })
     } catch (error: any) {
       Toast.show({
         type: 'error',
         text1: 'Erro',
         text2: error.message || 'Ocorreu um erro ao realizar o cadastro.',
         visibilityTime: 3000,
-        topOffset: 0,
-      });
+        topOffset: 0
+      })
     }
   }
 
@@ -129,7 +130,7 @@ export default function SignUp() {
               error={userError}
             />
           </View>
-          <View className="mt-4 flex w-full items-center">
+          <View className="mt-2 flex w-full items-center">
             <View className="w-[72%]">
               <RoleInput
                 type="email"
@@ -138,7 +139,7 @@ export default function SignUp() {
                 error={emailError}
               />
             </View>
-            <View className="mt-4 flex w-full items-center">
+            <View className="mt-2 flex w-full items-center">
               <View className="w-[72%]">
                 <RoleInput
                   type="hidden-password"
@@ -148,7 +149,7 @@ export default function SignUp() {
                 />
               </View>
             </View>
-            <View className="mt-4 flex w-full items-center">
+            <View className="mt-2 flex w-full items-center">
               <View className="w-[72%]">
                 <RoleInput
                   type="hidden-confirm-password"
@@ -158,7 +159,7 @@ export default function SignUp() {
                 />
               </View>
             </View>
-            <View className="mt-14 flex flex-row justify-center gap-3">
+            <View className="mt-5 w-2/3 flex flex-row items-center  justify-center gap-3">
               <Pressable onPress={() => setIsChecked(!isChecked)}>
                 {isChecked ? (
                   <Ionicons name="checkbox-outline" size={24} color="white" />
@@ -166,11 +167,11 @@ export default function SignUp() {
                   <Ionicons name="square-outline" size={24} color="white" />
                 )}
               </Pressable>
-              <Text className="w-3/4 text-xs text-white">
-                Eu li e concordo com os {''}
-                <TouchableOpacity onPress={handleIsVisible()}>
-                  <Text className="text-[#D8A9FF] text-xs">termos de uso</Text>
-                </TouchableOpacity>{' '}
+              <Text className="flex items-center justify-center text-xs text-white">
+                Eu li e concordo com os{' '}
+                <Text onPress={handleIsVisible()} className="text-[#D8A9FF]">
+                  termos de uso
+                </Text>{' '}
                 e política de privacidade
               </Text>
             </View>
@@ -181,11 +182,11 @@ export default function SignUp() {
             type="gradient"
             buttonFunction={() => changePassword()}
           >
-            <Text className="text-white">Entrar</Text>
+            <Text className="text-white">Cadastrar</Text>
           </RoleMainButton>
           <RoleMainButton type="simple">
             <FontAwesome6 name="google" size={24} color="white" />
-            <Text className="text-white">Entrar via Google</Text>
+            <Text className="text-white">Cadastrar via Google</Text>
           </RoleMainButton>
         </View>
         <View className="mt-7 flex flex-row gap-2">

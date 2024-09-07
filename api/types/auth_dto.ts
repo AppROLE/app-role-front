@@ -14,6 +14,14 @@ export type signUpResponseDTO = {
     message: string
   }
 
+  export type resendCodeRequestDTO = {
+    email: string
+  }
+
+  export type resendCodeResponseDTO = {
+    message: string
+  }
+
 
 export type forgotPasswordRequestDTO = {
   email: string
