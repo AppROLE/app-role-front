@@ -1,4 +1,5 @@
 import { http } from '../http'
+import { confirmCodeRequestDTO } from '../types/auth_dto'
 
 export class AuthRepositoryHttp {
   async signIn(email: string, password: string) {
@@ -30,6 +31,15 @@ export class AuthRepositoryHttp {
   async forgotPassword(data: object) {
     try {
       const response = await http.post('', data)
+      return response.data
+    } catch (error: any) {
+      return error.response.data
+    }
+  }
+
+  async confirmCode(data: confirmCodeRequestDTO){
+    try {
+      const response = await http.post('confirm-code', data)
       return response.data
     } catch (error: any) {
       return error.response.data
