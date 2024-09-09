@@ -1,4 +1,4 @@
-import { forgotPasswordResponseDTO, signUpRequestDTO } from '@/api/types/auth_dto'
+import { confirmCodeResponseDTO, forgotPaaswordResponseDTO, signUpRequestDTO } from '@/api/types/auth_dto'
 import { createContext, PropsWithChildren } from 'react'
 import { AuthRepositoryHttp } from '@/api/repositories/auth_repository_http'
 
@@ -6,6 +6,7 @@ type AuthContextType = {
   signIn: (email: string, password: string) => Promise<object>
   signUp: (data: signUpRequestDTO) => Promise<object>
   forgotPassword: (email: string) => Promise<forgotPasswordResponseDTO>
+  confirmCode: (email: string, code: string) => Promise<confirmCodeResponseDTO>
 }
 
 const defaultAuthContext = {
@@ -17,6 +18,11 @@ const defaultAuthContext = {
   },
   forgotPassword: async (_email: string) => {
     return {
+      message: ''
+    }
+  },
+  confirmCode: async(_email: string, _code: string) => {
+    return{
       message: ''
     }
   }
@@ -54,8 +60,17 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
     }
   }
 
+  async function confirmCode(email: string, code: string){
+    try {
+      const response = await authRepository.confirmCode({ email, code })
+      return response
+    } catch (error: any) {
+      return error
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ signIn, signUp, forgotPassword }}>
+    <AuthContext.Provider value={{ signIn, signUp, forgotPassword, confirmCode }}>
       {children}
     </AuthContext.Provider>
   )
