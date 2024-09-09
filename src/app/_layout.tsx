@@ -36,9 +36,9 @@ export default function RootLayout() {
           name="notifications/index"
           options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name="(tabs)"
-          options={{ headerShown: false }}
+        <Stack.Screen 
+          name="(tabs)" 
+          options={{ headerShown: false }} 
         />
         <Stack.Screen
           name="first-page/index"
