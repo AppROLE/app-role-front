@@ -2,9 +2,9 @@ import Background from "@/src/components/background";
 import {Text, TouchableOpacity, View, FlatList, Dimensions} from "react-native";
 import React from "react";
 import SocialCard from "@/src/components/socialCard";
-import SvgUri from "react-native-svg-uri";
+import {SvgUri} from "react-native-svg";
 
-import { Link, router } from 'expo-router'
+import { router } from 'expo-router'
 
 
 export default function Favorites() {
@@ -56,7 +56,7 @@ export default function Favorites() {
                         </TouchableOpacity>
                         <TouchableOpacity className="relative" onPress={navigateToNotifications}>
                             <SvgUri
-                                source={{uri: process.env.EXPO_PUBLIC_URL_S3 + '/bell.svg'}}
+                                uri={process.env.EXPO_PUBLIC_URL_S3 + '/bell.svg'}
                                 width={width / 17.8}
                                 height={width / 14.7}
                             />
