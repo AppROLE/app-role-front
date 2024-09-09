@@ -19,8 +19,8 @@ export type forgotPasswordRequestDTO = {
   email: string
 }
 
-export type forgotPaaswordResponseDTO = { 
-  message: string 
+export type forgotPasswordResponseDTO = {
+  message: string
 }
 
 export type confirmCodeRequestDTO = {

@@ -1,7 +1,7 @@
 import Background from "@/src/components/background";
 import { Text, TouchableOpacity, View, Keyboard } from "react-native";
 import { useContext, useState } from "react";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import RoleInput from "@/src/components/input";
 import Toast from 'react-native-toast-message';
 import RoleMainButton from "@/src/components/roleMainButton";
@@ -11,16 +11,28 @@ export default function ForgotPassword() {
     const [email, setEmail] = useState("");
     const [emailError, setEmailError] = useState("");
     const { forgotPassword } = useContext(AuthContext);
+    const router = useRouter(); 
 
     const validateEmail = (email: string) => {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return re.test(String(email).toLowerCase());
     };
 
-    const handlePress = async () => {
+    const handlePress = async (router : any) => {
         if (validateEmail(email)) {
             try {
                 const response = await forgotPassword(email);
+                if (typeof response === 'string' && response === 'Nenhum item foi encontrado para this email') {
+                    Keyboard.dismiss();
+                    Toast.show({
+                        type: 'error',
+                        text1: 'Erro',
+                        text2: 'E-mail não encontrado.',
+                        visibilityTime: 3000,
+                        topOffset: 0,
+                    })
+                    return;
+                }
                 Keyboard.dismiss();
                 Toast.show({    
                     type: 'success',
@@ -29,8 +41,10 @@ export default function ForgotPassword() {
                     visibilityTime: 3000,
                     topOffset: 0,
                 });
-                
-                setEmail("");
+                setTimeout(() => {
+                    router.push('/recovery-code');
+                    setEmail(""); 
+                }, 3000);
             } catch (error : any) {
                 Toast.show({    
                     type: 'error',
@@ -68,7 +82,7 @@ export default function ForgotPassword() {
                         />
                     </View>
                     <View className="pt-16">
-                        <RoleMainButton type='gradient' buttonFunction={handlePress}>
+                        <RoleMainButton type='gradient' buttonFunction={() => handlePress(router)}>
                             <Text className="text-white">Enviar</Text>
                         </RoleMainButton>
                         <Link href={'/sign-in'} className="mt-8" asChild>

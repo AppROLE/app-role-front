@@ -5,7 +5,7 @@ import { AuthRepositoryHttp } from '@/api/repositories/auth_repository_http'
 type AuthContextType = {
   signIn: (email: string, password: string) => Promise<object>
   signUp: (data: signUpRequestDTO) => Promise<object>
-  forgotPassword: (email: string) => Promise<forgotPaaswordResponseDTO>
+  forgotPassword: (email: string) => Promise<forgotPasswordResponseDTO>
   confirmCode: (email: string, code: string) => Promise<confirmCodeResponseDTO>
 }
 
@@ -53,7 +53,7 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
 
   async function forgotPassword(email: string) {
     try {
-      const response = await authRepository.forgotPassword({ email })
+      const response = await authRepository.forgotPassword({ email: email })
       return response
     } catch (error: any) {
       return error
