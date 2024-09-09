@@ -1,4 +1,4 @@
-import { finishSignUpRequestDTO, finishSignUpResponseDTO, forgotPaaswordResponseDTO, signUpRequestDTO } from '@/api/types/auth_dto'
+import { confirmCodeResponseDTO, forgotPaaswordResponseDTO, signUpRequestDTO, finishSignUpRequestDTO, finishSignUpResponseDTO, } from '@/api/types/auth_dto'
 import { createContext, PropsWithChildren } from 'react'
 import { AuthRepositoryHttp } from '@/api/repositories/auth_repository_http'
 
@@ -8,6 +8,7 @@ type AuthContextType = {
   forgotPassword: (email: string) => Promise<forgotPaaswordResponseDTO>
   finishSignUp: (data: finishSignUpRequestDTO) => Promise<finishSignUpResponseDTO>
   uploadImageProfile: (formData: FormData) => Promise<object>
+  confirmCode: (email: string, code: string) => Promise<confirmCodeResponseDTO>
 }
 
 const defaultAuthContext = {
@@ -29,6 +30,11 @@ const defaultAuthContext = {
   },
   uploadImageProfile: async (_formData: FormData) => {
     return {}
+  },
+  confirmCode: async (_email: string, _code: string) => {
+    return {
+      message: ''
+    }
   }
 }
 
@@ -74,19 +80,29 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
     }
   }
 
-  async function uploadImageProfile(formData: FormData) { 
+  async function uploadImageProfile(formData: FormData) {
     try {
       const response = await authRepository.uploadImageProfile(formData);
       console.log("RESPOSTA DO UPLOAD IMAGE PROFILE CONTEXT" + response);
       return response;
-    } catch (error: any) { 
+    } catch (error: any) {
       console.log(error);
       return error;
     }
   }
 
+
+  async function confirmCode(email: string, code: string) {
+    try {
+      const response = await authRepository.confirmCode({ email, code })
+      return response
+    } catch (error: any) {
+      return error
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ signIn, signUp, forgotPassword, finishSignUp, uploadImageProfile }}>
+    <AuthContext.Provider value={{ signIn, signUp, forgotPassword, confirmCode, finishSignUp, uploadImageProfile }}>
       {children}
     </AuthContext.Provider>
   )

@@ -2,6 +2,8 @@ import { router } from 'expo-router';
 import { http } from '../http'
 import { finishSignUpRequestDTO } from '../types/auth_dto'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { confirmCodeRequestDTO } from '../types/auth_dto'
+
 
 export class AuthRepositoryHttp {
   async signIn(email: string, password: string) {
@@ -72,6 +74,14 @@ export class AuthRepositoryHttp {
     } catch (error: any) {
       console.log(error);
       return error.response.data;
+    }
+  }
+  async confirmCode(data: confirmCodeRequestDTO){
+    try {
+      const response = await http.post('confirm-code', data)
+      return response.data
+    } catch (error: any) {
+      return error.response.data
     }
   }
 }
