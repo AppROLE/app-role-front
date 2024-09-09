@@ -1,6 +1,6 @@
 import {Text, TouchableOpacity, Image, View} from "react-native";
 import React from "react";
-import SvgUri from "react-native-svg-uri";
+import {SvgUri} from "react-native-svg";
 
 interface SocialCardProps {
     image: string;
@@ -23,7 +23,7 @@ export default function SocialCard({image, title} : SocialCardProps) {
             </View>
             <View className="pr-3">
                 <SvgUri
-                    source={{uri: process.env.EXPO_PUBLIC_URL_S3 + "/bookmark.svg"}}
+                    uri={process.env.EXPO_PUBLIC_URL_S3 + "/bookmark.svg"}
                     width="14"
                     height="18"
                 />
