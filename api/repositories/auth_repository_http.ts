@@ -76,6 +76,7 @@ export class AuthRepositoryHttp {
       return error.response.data;
     }
   }
+  
   async confirmCode(data: confirmCodeRequestDTO){
     try {
       const response = await http.post('confirm-code', data)
