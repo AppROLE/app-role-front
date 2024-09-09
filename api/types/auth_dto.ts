@@ -28,6 +28,19 @@ export type confirmCodeRequestDTO = {
   code: string
 }
 
+export type finishSignUpRequestDTO = {
+  email: string,
+  username: string,
+  nickname?: string,
+  password: string
+}
+
+export type finishSignUpResponseDTO = {
+  message: string,
+}
+
+
 export type confirmCodeResponseDTO = {
   message: string
 }
+

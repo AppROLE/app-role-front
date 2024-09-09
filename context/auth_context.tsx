@@ -1,11 +1,14 @@
-import { confirmCodeResponseDTO, forgotPaaswordResponseDTO, signUpRequestDTO } from '@/api/types/auth_dto'
+import { confirmCodeResponseDTO, signUpRequestDTO, finishSignUpRequestDTO, finishSignUpResponseDTO, forgotPasswordResponseDTO, } from '@/api/types/auth_dto'
 import { createContext, PropsWithChildren } from 'react'
 import { AuthRepositoryHttp } from '@/api/repositories/auth_repository_http'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 type AuthContextType = {
   signIn: (email: string, password: string) => Promise<object>
   signUp: (data: signUpRequestDTO) => Promise<object>
   forgotPassword: (email: string) => Promise<forgotPasswordResponseDTO>
+  finishSignUp: (data: finishSignUpRequestDTO) => Promise<finishSignUpResponseDTO>
+  uploadImageProfile: (formData: FormData) => Promise<object>
   confirmCode: (email: string, code: string) => Promise<confirmCodeResponseDTO>
 }
 
@@ -21,8 +24,16 @@ const defaultAuthContext = {
       message: ''
     }
   },
-  confirmCode: async(_email: string, _code: string) => {
-    return{
+  finishSignUp: async (_data: finishSignUpRequestDTO) => {
+    return {
+      message: ''
+    }
+  },
+  uploadImageProfile: async (_formData: FormData) => {
+    return {}
+  },
+  confirmCode: async (_email: string, _code: string) => {
+    return {
       message: ''
     }
   }
@@ -45,6 +56,9 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
   async function signUp(data: signUpRequestDTO) {
     try {
       const response = await authRepository.signUp(data)
+      await AsyncStorage.setItem('email', data.email);
+      await AsyncStorage.setItem('password', data.password);
+
       return response
     } catch (error: any) {
       return error
@@ -60,7 +74,31 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
     }
   }
 
-  async function confirmCode(email: string, code: string){
+  async function finishSignUp(data: finishSignUpRequestDTO) {
+    try {
+      const response = await authRepository.finishSignUp(data)
+      console.log("RESPOSTA DA REQ FINISH SIGN UP CONTEXT" + response);
+      await AsyncStorage.removeItem('email');
+      await AsyncStorage.removeItem('password');
+      return response
+    } catch (error: any) {
+      return error
+    }
+  }
+
+  async function uploadImageProfile(formData: FormData) {
+    try {
+      const response = await authRepository.uploadImageProfile(formData);
+      console.log("RESPOSTA DO UPLOAD IMAGE PROFILE CONTEXT" + response);
+      return response;
+    } catch (error: any) {
+      console.log(error);
+      return error;
+    }
+  }
+
+
+  async function confirmCode(email: string, code: string) {
     try {
       const response = await authRepository.confirmCode({ email, code })
       return response
@@ -70,7 +108,7 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
   }
 
   return (
-    <AuthContext.Provider value={{ signIn, signUp, forgotPassword, confirmCode }}>
+    <AuthContext.Provider value={{ signIn, signUp, forgotPassword, confirmCode, finishSignUp, uploadImageProfile }}>
       {children}
     </AuthContext.Provider>
   )
