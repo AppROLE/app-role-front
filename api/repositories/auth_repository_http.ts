@@ -1,4 +1,5 @@
 import { http } from '../http'
+import { forgotPasswordRequestDTO } from '../types/auth_dto'
 
 export class AuthRepositoryHttp {
   async signIn(email: string, password: string) {
@@ -27,10 +28,10 @@ export class AuthRepositoryHttp {
     }
   }
 
-  async forgotPassword(data: object) {
+  async forgotPassword(data: forgotPasswordRequestDTO) {
     try {
-      const response = await http.post('', data)
-      return response.data
+      const response = await http.post('/forgot-password', data)
+      return response.data as forgotPasswordRequestDTO
     } catch (error: any) {
       return error.response.data
     }
