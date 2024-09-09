@@ -68,6 +68,16 @@ export default function AlmostThere() {
         if (nickname) setNicknameError('') // Reseta o erro ao digitar
     }
 
+    useEffect(() => {
+        async function loginVerify() {
+            const response = await AsyncStorage.getItem('token');
+            if (response) {
+                console.log("TOKEN NO STORAGE " + response);
+            }
+        }
+        loginVerify();
+    }, []);
+
     async function handleFinishSignUp() {
         if (username === '') {
             setUsernameError('Campo obrigatório')
@@ -82,24 +92,34 @@ export default function AlmostThere() {
         console.log("DADOS ENVIADOS NA REQ " + data);
 
         const response = await finishSignUp(data);
-        const result = await signIn(data.email, data.password);
-        const formData = new FormData();
-        formData.append('username', username);
-        formData.append('email', data.email);
-        formData.append('profilePhoto', profilePhoto);
-        formData.append('typePhoto', imageType);
+        // const result = await signIn(data.email, data.password);
+        console.log("PROFILE PHOTO " + profilePhoto);
+        console.log("NICKNAME " + nickname);
+        console.log("USERNAME " + username);
+        console.log("IMAGE TYPE " + imageType);
 
         try {
+            const formData = new FormData();
+            formData.append('username', username);
+            formData.append('email', 'jota@email.com');
+            formData.append('profilePhoto', profilePhoto);
+            formData.append('typePhoto', imageType);
+
             // Fazer upload da imagem para o backend
             const uploadResponse = await uploadImageProfile(formData);
+            console.log(uploadResponse);
+            if (Object.keys(uploadResponse).length === 0) {
+                console.error("Erro ao fazer upload da imagem");
+                return;
+            }
             console.log("Upload concluído:", uploadResponse);
+            console.log("FORM DATA " + formData)
         } catch (error) {
             console.error("Erro ao fazer upload da imagem:", error);
         }
-        await uploadImageProfile(formData);
-        console.log("FORM DATA " + formData)
-        console.log("SIGN IN " + result)
-        console.log("FINISH SIGNUP " + response)
+        
+        // console.log("SIGN IN " + result)
+        console.log("FINISH SIGNUP " + response.message)
     }
 
     return (
@@ -142,7 +162,7 @@ export default function AlmostThere() {
                                         </View>
                                     </TouchableOpacity>
                                 </LinearGradient>
-                                
+
                                 <TouchableOpacity
                                     onPress={pickImage}
                                     className="absolute "
@@ -176,14 +196,14 @@ export default function AlmostThere() {
                                     </Text>
                                 </View>
                                 <View>
-                                <RoleInput
-                                    type="nickname"
-                                    value={nickname}
-                                    error={nicknameError}
-                                    onChangeText={handleNicknameChange}
-                                    onFocus={() => setIsInputFocused(true)}
-                                    style={{ padding: isInputFocused || nickname ? 1 : 0 }}
-                                />
+                                    <RoleInput
+                                        type="nickname"
+                                        value={nickname}
+                                        error={nicknameError}
+                                        onChangeText={handleNicknameChange}
+                                        onFocus={() => setIsInputFocused(true)}
+                                        style={{ padding: isInputFocused || nickname ? 1 : 0 }}
+                                    />
                                 </View>
                             </View>
                             <View className="my-6 flex w-[80%]">
