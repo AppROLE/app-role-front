@@ -1,6 +1,7 @@
 import { confirmCodeResponseDTO, forgotPaaswordResponseDTO, signUpRequestDTO, finishSignUpRequestDTO, finishSignUpResponseDTO, } from '@/api/types/auth_dto'
 import { createContext, PropsWithChildren } from 'react'
 import { AuthRepositoryHttp } from '@/api/repositories/auth_repository_http'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 type AuthContextType = {
   signIn: (email: string, password: string) => Promise<object>
@@ -55,6 +56,9 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
   async function signUp(data: signUpRequestDTO) {
     try {
       const response = await authRepository.signUp(data)
+      await AsyncStorage.setItem('email', data.email);
+      await AsyncStorage.setItem('password', data.password);
+
       return response
     } catch (error: any) {
       return error
@@ -74,6 +78,8 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
     try {
       const response = await authRepository.finishSignUp(data)
       console.log("RESPOSTA DA REQ FINISH SIGN UP CONTEXT" + response);
+      await AsyncStorage.removeItem('email');
+      await AsyncStorage.removeItem('password');
       return response
     } catch (error: any) {
       return error
