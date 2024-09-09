@@ -4,7 +4,7 @@ import React from "react";
 import SocialCard from "@/src/components/socialCard";
 import {SvgUri} from "react-native-svg";
 
-import { Link, router } from 'expo-router'
+import { router } from 'expo-router'
 
 
 export default function Favorites() {
