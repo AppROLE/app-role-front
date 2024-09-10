@@ -17,12 +17,16 @@ interface RoleInputProps {
   value?: string
   onChangeText?: (value: string) => void
   error: string
+  onFocus?: () => void;
+  style?: any;
 }
 
 export default function RoleInput({
   type,
   value,
   onChangeText,
+  onFocus,
+  style,
   error
 }: RoleInputProps) {
   const [hidden, setHidden] = useState(true)
@@ -112,6 +116,8 @@ export default function RoleInput({
             hidden &&
             (type === 'hidden-password' || type === 'hidden-confirm-password')
           }
+          onFocus={onFocus}
+          style={style}
         />
         {(type === 'hidden-password' || type === 'hidden-confirm-password') &&
           (hidden === true ? (

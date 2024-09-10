@@ -7,7 +7,6 @@ export default function RootLayout() {
     <AuthContextProvider>
       <Stack>
         <Stack.Screen name="sign-in/index" options={{ headerShown: false }} />
-        <Stack.Screen name="sign-up/index" options={{ headerShown: false }} />
         <Stack.Screen name="opening/index" options={{ headerShown: false }} />
         <Stack.Screen
           name="almost-there/index"
@@ -29,9 +28,20 @@ export default function RootLayout() {
           name="confirm-forgot-password/index"
           options={{ headerShown: false }}
         />
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
-          name="searching-filters/index"
+          name="friends/index"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="notifications/index"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen 
+          name="(tabs)" 
+          options={{ headerShown: false }} 
+        />
+        <Stack.Screen
+          name="first-page/index"
           options={{ headerShown: false }}
         />
       </Stack>
