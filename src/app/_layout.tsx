@@ -36,6 +36,10 @@ export default function RootLayout() {
           name="notifications/index"
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          name="searching-filters/index"
+          options={{ headerShown: false }}
+        />
         <Stack.Screen 
           name="(tabs)" 
           options={{ headerShown: false }} 
