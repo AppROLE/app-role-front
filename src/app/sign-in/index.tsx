@@ -20,6 +20,7 @@ export default function Index() {
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
   const { signIn } = useContext(AuthContext)
+  const [disabledB, setDisabledB] = useState(true)
 
   function handleEmailChange(text: string) {
     setEmail(text)
@@ -31,15 +32,15 @@ export default function Index() {
     if (passwordError) setPasswordError('') // Reseta o erro ao digitar
   }
 
-  function Login() {
+  async function Login() {
     if (!email || !password) {
       if (!email) setEmailError('Email obrigatório')
       if (!password) setPasswordError('Senha obrigatória')
       return
     }
-
-    const response = signIn(email, password)
-    console.log(response)
+    
+    const response = await signIn({email, password})
+    setEmailError(response.toString())
   }
 
   return (
@@ -76,7 +77,7 @@ export default function Index() {
           </View>
         </View>
         <View className="gap-12 px-[8%]">
-          <RoleMainButton type="gradient">
+          <RoleMainButton type="gradient" buttonFunction={Login}>
             <Text className="text-white">Entrar</Text>
           </RoleMainButton>
           <RoleMainButton type="simple">
