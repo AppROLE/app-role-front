@@ -1,18 +1,11 @@
 import { http } from '../http'
+import { signInRequestDTO, signInResponseDTO } from '../types/auth_dto'
 
 export class AuthRepositoryHttp {
-  async signIn(email: string, password: string) {
+  async signIn(data: signInRequestDTO) {
     try {
-      if (!email || !password) {
-        return {
-          message: 'Email ou Senha inválidos'
-        }
-      }
-      const response = await http.post('', {
-        email,
-        password
-      })
-      return response.data
+      const response = await http.post(`/sign-in`, data)
+      return response.data as signInResponseDTO
     } catch (error: any) {
       return error.response.data
     }
