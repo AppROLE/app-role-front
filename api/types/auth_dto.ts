@@ -23,4 +23,13 @@ export type forgotPaaswordResponseDTO = {
   message: string 
 }
 
+export type signInRequestDTO = {
+  email: string
+  password: string
+}
 
+export type signInResponseDTO = {
+  access_token: string
+  id_token: string
+  refresh_token: string
+}
