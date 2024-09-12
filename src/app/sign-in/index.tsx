@@ -11,6 +11,12 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import Background from '@/src/components/background'
 import RoleMainButton from '@/src/components/roleMainButton'
 import RoleInput from '@/src/components/input'
+import { useEffect, useState } from 'react'
+
+import * as WebBrowser from 'expo-web-browser'
+import * as Google from 'expo-auth-session/providers/google'
+
+WebBrowser.maybeCompleteAuthSession()
 import { useContext, useState } from 'react'
 import { AuthContext } from '@/context/auth_context'
 
@@ -21,6 +27,32 @@ export default function Index() {
   const [passwordError, setPasswordError] = useState('')
   const { signIn } = useContext(AuthContext)
   const [disabledB, setDisabledB] = useState(true)
+
+  const [request, responseGoogle, promptAsyncGoogle] = Google.useIdTokenAuthRequest({
+    clientId: '469140650893-s1ajgpbpvtkhmg607hlgksmkvo8fmj42.apps.googleusercontent.com',
+    scopes: ['email', 'profile'],
+    iosClientId: '469140650893-hlqn9g7ngejghi571aevjpqnp570mh58.apps.googleusercontent.com',
+    androidClientId: '469140650893-3op6l9dvib6q2vi2kbq52uclcqqmog6m.apps.googleusercontent.com'
+  })
+
+  async function getUserInfoFromOAuth(accessToken: string) {
+    const response = await fetch('https://www.googleapis.com/oauth2/v1/userinfo?alt=json', {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    })
+    const userInfo = await response.json()
+    console.log(userInfo)
+  }
+
+  useEffect(() => {
+    if (responseGoogle?.type === 'success') {
+      console.log(responseGoogle);
+      const { authentication } = responseGoogle;
+      console.log(authentication);
+      const accessToken = authentication?.accessToken
+      accessToken && getUserInfoFromOAuth(accessToken);
+    }
+  }, [responseGoogle])
+
 
   function handleEmailChange(text: string) {
     setEmail(text)
@@ -80,7 +112,7 @@ export default function Index() {
           <RoleMainButton type="gradient" buttonFunction={Login}>
             <Text className="text-white">Entrar</Text>
           </RoleMainButton>
-          <RoleMainButton type="simple" buttonFunction={() => {}}>
+          <RoleMainButton type="simple" buttonFunction={() => promptAsyncGoogle()}>
             <FontAwesome6 name="google" size={24} color="white" />
             <Text className="text-white">Entrar via Google</Text>
           </RoleMainButton>
