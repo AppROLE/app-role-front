@@ -17,12 +17,16 @@ import * as WebBrowser from 'expo-web-browser'
 import * as Google from 'expo-auth-session/providers/google'
 
 WebBrowser.maybeCompleteAuthSession()
+import { useContext, useState } from 'react'
+import { AuthContext } from '@/context/auth_context'
 
 export default function Index() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
+  const { signIn } = useContext(AuthContext)
+  const [disabledB, setDisabledB] = useState(true)
 
   const [request, responseGoogle, promptAsyncGoogle] = Google.useIdTokenAuthRequest({
     clientId: '469140650893-s1ajgpbpvtkhmg607hlgksmkvo8fmj42.apps.googleusercontent.com',
@@ -60,6 +64,17 @@ export default function Index() {
     if (passwordError) setPasswordError('') // Reseta o erro ao digitar
   }
 
+  async function Login() {
+    if (!email || !password) {
+      if (!email) setEmailError('Email obrigatório')
+      if (!password) setPasswordError('Senha obrigatória')
+      return
+    }
+
+    const response = await signIn({ email, password })
+    setEmailError(response.toString())
+  }
+
   return (
     <Background>
       <View className="w-full flex-1">
@@ -86,15 +101,15 @@ export default function Index() {
               error={passwordError}
             />
             <View className="flex flex-row gap-2">
-              <Text className="text-white text-xs">Esqueceu sua senha?</Text>
-              <Link className="text-[#D8A9FF] text-xs" href="/forgot-password">
+              <Text className="text-xs text-white">Esqueceu sua senha?</Text>
+              <Link className="text-xs text-[#D8A9FF]" href="/forgot-password">
                 Recuperar senha
               </Link>
             </View>
           </View>
         </View>
         <View className="gap-12 px-[8%]">
-          <RoleMainButton type="gradient">
+          <RoleMainButton type="gradient" buttonFunction={Login}>
             <Text className="text-white">Entrar</Text>
           </RoleMainButton>
           <RoleMainButton type="simple" buttonFunction={() => promptAsyncGoogle()}>
