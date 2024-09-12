@@ -38,8 +38,8 @@ export default function Index() {
       if (!password) setPasswordError('Senha obrigatória')
       return
     }
-    
-    const response = await signIn({email, password})
+
+    const response = await signIn({ email, password })
     setEmailError(response.toString())
   }
 
@@ -69,8 +69,8 @@ export default function Index() {
               error={passwordError}
             />
             <View className="flex flex-row gap-2">
-              <Text className="text-white text-xs">Esqueceu sua senha?</Text>
-              <Link className="text-[#D8A9FF] text-xs" href="/forgot-password">
+              <Text className="text-xs text-white">Esqueceu sua senha?</Text>
+              <Link className="text-xs text-[#D8A9FF]" href="/forgot-password">
                 Recuperar senha
               </Link>
             </View>
@@ -80,7 +80,7 @@ export default function Index() {
           <RoleMainButton type="gradient" buttonFunction={Login}>
             <Text className="text-white">Entrar</Text>
           </RoleMainButton>
-          <RoleMainButton type="simple">
+          <RoleMainButton type="simple" buttonFunction={() => {}}>
             <FontAwesome6 name="google" size={24} color="white" />
             <Text className="text-white">Entrar via Google</Text>
           </RoleMainButton>
