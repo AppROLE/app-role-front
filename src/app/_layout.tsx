@@ -44,6 +44,10 @@ export default function RootLayout() {
           name="first-page/index"
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          name="account/index"
+          options={{ headerShown: false }}
+        />
       </Stack>
     </AuthContextProvider>
   )
