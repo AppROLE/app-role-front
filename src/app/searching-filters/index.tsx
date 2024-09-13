@@ -284,6 +284,7 @@ export default function SearchingFilters() {
                   mode="date"
                   display="inline"
                   accentColor="#9C4EDC"
+                  themeVariant='dark'
                   minimumDate={new Date()}
                   onChange={handleDateChange}
                 />
