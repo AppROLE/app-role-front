@@ -171,6 +171,8 @@ export default function SearchingFilters() {
       selected: null
     }))
     setDate(new Date())
+    setFormattedDate('DD/MM/YYYY')
+    setDateSelected(false)
     setFilters(clearedFilters)
     setTimeout(() => {
       setIsDisabled(false)
