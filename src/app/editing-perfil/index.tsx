@@ -1,10 +1,11 @@
 import Background from "@/src/components/background";
 import RoleInput from "@/src/components/input";
 import RoleMainButton from "@/src/components/roleMainButton";
+import * as ImagePicker from 'expo-image-picker';
 import { FontAwesome6 } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { TouchableOpacity, View, Text, ScrollView } from "react-native";
+import { TouchableOpacity, View, Text, ScrollView, Image, StyleSheet } from "react-native";
 
 
 export default function EditingPerfil() {
@@ -15,28 +16,67 @@ export default function EditingPerfil() {
   const [instaErr, setInstaErr] = useState('')
   const [tiktokErr, setTiktokErr] = useState('')
 
-  const [profileImage, setProfileImage] = useState(null)
-  const [banner, setBanner] = useState(null)
+  const [profileImage, setProfileImage] = useState('')
+  const [imageType, setImageType] = useState('')
+  const [banner, setBanner] = useState('')
+  const [bannerType, setBannerType] = useState('')
   const [user, setUser] = useState('')
   const [nick, setNick] = useState('')
   const [bio, setBio] = useState('')
   const [insta, setInsta] = useState('')
   const [tiktok, setTiktok] = useState('')
 
-  function handleChoosePhoto() {
-    launchImageLibrary({ mediaType: 'photo' }, (response) => {
-      if (response.assets) {
-        setProfileImage(response.assets[0].uri);
-      }
+  const pickProfilePhoto = async () => {
+    // No permissions request is necessary for launching the image library
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1
     });
+
+    console.log("RESPOSTA DO PICKER " + result);
+
+    if (!result.canceled) {
+      const selectedImage = result.assets[0]; // Obter o primeiro item na seleção
+      const imageUri = selectedImage.uri;
+      const imageType = imageUri.split('.').pop();
+      const formattedImageType = imageType ? `.${imageType}` : '';
+
+      console.log("IMAGEM SELECIONADA " + selectedImage.uri);
+      console.log("TYPE IMAGE ", formattedImageType);
+
+      setImageType(formattedImageType); // Definir a imagem localmente para exibição na UI
+      setProfileImage(imageUri); // Definir a imagem para envio ao backend    
+    } else {
+      console.log('Cancelado');
+    }
   }
 
-  function handleChooseBanner() {
-    launchImageLibrary({ mediaType: 'photo' }, (response) => {
-      if (response.assets) {
-        setBanner(response.assets[0].uri);
-      }
+  const handleChooseBanner = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [6, 19],
+      quality: 1
     });
+
+    console.log("RESPOSTA DO PICKER " + result);
+
+    if (!result.canceled) {
+      const selectedImage = result.assets[0]; // Obter o primeiro item na seleção
+      const imageUri = selectedImage.uri;
+      const imageType = imageUri.split('.').pop();
+      const formattedImageType = imageType ? `.${imageType}` : '';
+
+      console.log("IMAGEM SELECIONADA " + selectedImage.uri);
+      console.log("TYPE IMAGE ", formattedImageType);
+
+      setBannerType(formattedImageType); // Definir a imagem localmente para exibição na UI
+      setBanner(imageUri); // Definir a imagem para envio ao backend    
+    } else {
+      console.log('Cancelado');
+    }
   }
 
   function handleVoltar() {
@@ -64,8 +104,23 @@ export default function EditingPerfil() {
             <View className="p-8 pl-10 gap-5 border-b-2 border-b-[#1C1C1C]">
               <Text className="text-white text-2xl">Foto de perfil</Text>
               <View className="flex flex-row items-center gap-8">
-                <View className="flex h-24 w-24 rounded-full bg-[#1C1C1C] items-center justify-center" />
-                <TouchableOpacity onPress={handleChoosePhoto} className="flex h-12 w-12 rounded-full bg-[#1C1C1C] items-center justify-center">
+                <View className="flex h-24 w-24 rounded-full bg-[#1C1C1C] items-center justify-center">
+                  {profileImage ? (
+                    <Image
+                      source={{ uri: profileImage }}
+                      style={styles.image}
+                      className="rounded-full"
+                    />
+                  ) : (
+                    <FontAwesome6
+                      name="user"
+                      size={64}
+                      color="white"
+                      className="items-center justify-center p-3"
+                    />
+                  )}
+                </View>
+                <TouchableOpacity onPress={pickProfilePhoto} className="flex h-12 w-12 rounded-full bg-[#1C1C1C] items-center justify-center">
                   <FontAwesome6 name="pen" size={18} color="white" />
                 </TouchableOpacity>
               </View>
@@ -75,7 +130,21 @@ export default function EditingPerfil() {
                 Banner
               </Text>
               <View className="flex flex-row items-center gap-8">
-                <View className="flex h-24 w-48 bg-[#1c1c1c] items-center justify-center" />
+                <View className="flex h-24 w-48 bg-[#1c1c1c] items-center justify-center" >
+                  {banner ? (
+                    <Image
+                      source={{ uri: banner }}
+                      style={{ width: 168, height: 84 }}
+                    />
+                  ) : (
+                    <FontAwesome6
+                      name="landscape"
+                      size={64}
+                      color="white"
+                      className="items-center justify-center p-3"
+                    />
+                  )}
+                </View>
                 <TouchableOpacity onPress={handleChooseBanner} className="flex h-12 w-12 rounded-full bg-[#1C1C1C] items-center justify-center">
                   <FontAwesome6 name="pen" size={18} color="white" />
                 </TouchableOpacity>
@@ -116,7 +185,7 @@ export default function EditingPerfil() {
                 <RoleInput type="email" error={instaErr} value={insta} />
               </View>
               <View className="flex flex-row items-center gap-8">
-                <View className="flex h-12 w-12 rounded-full bg-[#1C1C1C] items-center justify-center">
+                <View className="flex h-12 w-12 rounded-md bg-[#1C1C1C] items-center justify-center">
                   <FontAwesome6 name="tiktok" size={18} color="white" />
                 </View>
                 <RoleInput type="email" error={tiktokErr} value={tiktok} />
@@ -136,6 +205,9 @@ export default function EditingPerfil() {
   );
 }
 
-function launchImageLibrary(arg0: { mediaType: string; }, arg1: (response: any) => void) {
-  throw new Error("Function not implemented.");
-}
+const styles = StyleSheet.create({
+  image: {
+    width: 100,
+    height: 100
+  }
+})
