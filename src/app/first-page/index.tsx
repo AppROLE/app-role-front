@@ -1,7 +1,8 @@
 import RoleMainButton from "@/src/components/roleMainButton";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
-import { Link, useRouter } from "expo-router"; 
-import { useState, useRef } from "react";
+import { Link, router, useRouter } from "expo-router"; 
+import { useState, useRef, useEffect } from "react";
 import { Dimensions, FlatList, Image, Text, View, StyleSheet } from "react-native";
 
 const handlePress = (router: any) => {
@@ -21,6 +22,17 @@ export default function FirstPage() {
     const router = useRouter(); 
     const [activeIndex, setActiveIndex] = useState(0);
     const flatListRef = useRef(null);
+
+    async function validateToken() {
+        const token = await AsyncStorage.getItem('refresh_token');
+        if (token) {
+            router.push('/home');
+        }
+    }
+    
+    useEffect(() => {
+        validateToken();
+    }, []);
 
     const renderItem = ({ item }: { item: any }) => (
         <View style={{ width: width, height: 600, justifyContent: 'center', alignItems: 'center', padding: 10}}>
