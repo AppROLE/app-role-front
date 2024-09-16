@@ -9,6 +9,7 @@ import { router } from 'expo-router'
 type AuthContextType = {
   signIn: (data: signInRequestDTO) => Promise<signInResponseDTO>
   signUp: (data: signUpRequestDTO) => Promise<object>
+  resendCode: (email: string) => Promise<{ message: string }>
   confirmForgotPassword: (data: confirmForgotPasswordRequestDTO) => Promise<confirmForgotPasswordResponseDTO>
   forgotPassword: (email: string) => Promise<forgotPasswordResponseDTO>
   finishSignUp: (data: finishSignUpRequestDTO) => Promise<finishSignUpResponseDTO>
@@ -32,6 +33,11 @@ const defaultAuthContext = {
       message: ''
     }
   },
+  resendCode: async (_email: string) => {
+    return {
+      message: ''
+    }
+  }, 
   finishSignUp: async (_data: finishSignUpRequestDTO) => {
     return {
       message: ''
@@ -142,8 +148,17 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
     }
   }
 
+  async function resendCode(email: string) {
+    try {
+      const response = await authRepository.resendCode({ email })
+      return response
+    } catch (error: any) {
+      return error
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ signIn, signUp, forgotPassword, confirmCode, finishSignUp, uploadImageProfile, confirmForgotPassword }}>
+    <AuthContext.Provider value={{ signIn, signUp, forgotPassword, confirmCode, finishSignUp, uploadImageProfile, confirmForgotPassword, resendCode }}>
       {children}
     </AuthContext.Provider>
   )

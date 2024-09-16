@@ -81,6 +81,16 @@ export class AuthRepositoryHttp {
     }
   }
 
+  async resendCode(data: object) {
+    try {
+      const response = await http.post('/resend-code', data)
+      return response.data
+    } catch (error: any) {
+      return error.response.data
+    }
+  }
+
+
   async confirmForgotPassword(data: confirmForgotPasswordRequestDTO) {
     try {
       const response = await http.post(`/confirm-forgot-password`, data)
