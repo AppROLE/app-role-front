@@ -6,7 +6,7 @@ import RoleInput from '@/src/components/input'
 import RoleMainButton from '@/src/components/roleMainButton'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import Ionicons from '@expo/vector-icons/Ionicons'
-import { Link } from 'expo-router'
+import { Link, router } from 'expo-router'
 import React from 'react'
 import { View, Pressable, Text, TouchableOpacity } from 'react-native'
 import Toast from 'react-native-toast-message'
@@ -73,7 +73,9 @@ export default function SignUp() {
         visibilityTime: 3000,
         topOffset: 0,
       });
+      await AsyncStorage.setItem('ScreenRequestToCode', 'sign-up')
       await AsyncStorage.setItem('user_email', email)
+      router.push('/recovery-code');
     } catch (error: any) {
       Toast.show({
         type: 'error',
