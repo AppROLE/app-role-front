@@ -75,7 +75,17 @@ export default function RecoveryCode() {
             return
         }
         setIncorrectMessage("")
-        router.navigate('/almost-there')
+        AsyncStorage.getItem('ScreenRequestToCode').then((value) => {
+          if(value == 'sign-up'){
+            navigation.push({ pathname: '/almost-there' })
+          }
+          else if(value == 'forgot-password'){
+            navigation.push({ pathname: '/confirm-forgot-password' })
+          }
+          else{
+            navigation.push({ pathname: '/' })
+          }
+        }) 
       }
       catch (error){
         console.log(error)
