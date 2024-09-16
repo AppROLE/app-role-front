@@ -14,7 +14,6 @@ export type signUpResponseDTO = {
   message: string
 }
 
-
 export type forgotPasswordRequestDTO = {
   email: string
 }
