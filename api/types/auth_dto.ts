@@ -22,12 +22,20 @@ export type signUpResponseDTO = {
     message: string
   }
 
-
 export type forgotPasswordRequestDTO = {
   email: string
 }
 
 export type forgotPasswordResponseDTO = {
+  message: string
+}
+
+export type confirmForgotPasswordRequestDTO = {
+  newPassword: string
+  email: string
+}
+
+export type confirmForgotPasswordResponseDTO = {
   message: string
 }
 
@@ -47,8 +55,17 @@ export type finishSignUpResponseDTO = {
   message: string,
 }
 
+export type signInRequestDTO = {
+  email: string
+  password: string
+}
+
+export type signInResponseDTO = {
+  access_token: string
+  id_token: string
+  refresh_token: string
+}
 
 export type confirmCodeResponseDTO = {
   message: string
 }
-

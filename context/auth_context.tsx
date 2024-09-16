@@ -1,12 +1,16 @@
-import { confirmCodeResponseDTO, signUpRequestDTO, finishSignUpRequestDTO, finishSignUpResponseDTO, forgotPasswordResponseDTO, } from '@/api/types/auth_dto'
+import { confirmCodeResponseDTO, signUpRequestDTO, finishSignUpRequestDTO, finishSignUpResponseDTO, 
+  signInRequestDTO, signInResponseDTO, confirmForgotPasswordResponseDTO, forgotPasswordResponseDTO,
+  confirmForgotPasswordRequestDTO,} from '@/api/types/auth_dto'
 import { createContext, PropsWithChildren } from 'react'
 import { AuthRepositoryHttp } from '@/api/repositories/auth_repository_http'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { router } from 'expo-router'
 
 type AuthContextType = {
-  signIn: (email: string, password: string) => Promise<object>
+  signIn: (data: signInRequestDTO) => Promise<signInResponseDTO>
   signUp: (data: signUpRequestDTO) => Promise<object>
   resendCode: (email: string) => Promise<{ message: string }>
+  confirmForgotPassword: (data: confirmForgotPasswordRequestDTO) => Promise<confirmForgotPasswordResponseDTO>
   forgotPassword: (email: string) => Promise<forgotPasswordResponseDTO>
   finishSignUp: (data: finishSignUpRequestDTO) => Promise<finishSignUpResponseDTO>
   uploadImageProfile: (formData: FormData) => Promise<object>
@@ -14,8 +18,12 @@ type AuthContextType = {
 }
 
 const defaultAuthContext = {
-  signIn: async (_email: string, _password: string) => {
-    return {}
+  signIn: async (_data: signInRequestDTO) => {
+    return {
+      access_token: '',
+      id_token: '',
+      refresh_token: ''
+    }
   },
   signUp: async (_data: signUpRequestDTO) => {
     return {}
@@ -42,6 +50,11 @@ const defaultAuthContext = {
     return {
       message: ''
     }
+  },
+  confirmForgotPassword: async (_data: confirmForgotPasswordRequestDTO) => {
+    return {
+      message: ''
+    }
   }
 }
 
@@ -50,10 +63,19 @@ export const AuthContext = createContext<AuthContextType>(defaultAuthContext)
 export function AuthContextProvider({ children }: PropsWithChildren) {
   const authRepository = new AuthRepositoryHttp()
 
-  async function signIn(email: string, password: string) {
+  async function signIn(data: signInRequestDTO) {
     try {
-      const response = await authRepository.signIn(email, password)
-      return response
+      const response = await authRepository.signIn(data)
+      if (response.access_token) {
+        await AsyncStorage.setItem('access_token', response.access_token)
+        await AsyncStorage.setItem('id_token', response.id_token)
+        await AsyncStorage.setItem('refresh_token', response.refresh_token)
+        router.replace('/(tabs)/home')
+        return ''
+      }
+      else {
+        return response
+      }
     } catch (error: any) {
       return error
     }
@@ -112,6 +134,19 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
       return error
     }
   }
+  
+  async function confirmForgotPassword(data: confirmForgotPasswordRequestDTO) {
+    try {
+      const response = await authRepository.confirmForgotPassword(data)
+      console.log('response')
+      console.log(response)
+      return response as confirmForgotPasswordResponseDTO
+    } catch (error: any) {
+      console.log('error')
+      console.log(error.reponse)
+      return error
+    }
+  }
 
   async function resendCode(email: string) {
     try {
@@ -123,8 +158,7 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
   }
 
   return (
-
-    <AuthContext.Provider value={{ signIn, signUp, forgotPassword, confirmCode, finishSignUp, uploadImageProfile, resendCode }}>
+    <AuthContext.Provider value={{ signIn, signUp, forgotPassword, confirmCode, finishSignUp, uploadImageProfile, confirmForgotPassword, resendCode }}>
       {children}
     </AuthContext.Provider>
   )

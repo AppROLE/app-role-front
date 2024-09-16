@@ -1,24 +1,18 @@
 import { router } from 'expo-router';
 import { http } from '../http'
+import { signInRequestDTO, signInResponseDTO } from '../types/auth_dto'
 import { finishSignUpRequestDTO } from '../types/auth_dto'
+import { confirmForgotPasswordRequestDTO, confirmForgotPasswordResponseDTO } from '../types/auth_dto'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { forgotPasswordRequestDTO } from '../types/auth_dto'
 import { confirmCodeRequestDTO } from '../types/auth_dto'
 
 
 export class AuthRepositoryHttp {
-  async signIn(email: string, password: string) {
+  async signIn(data: signInRequestDTO) {
     try {
-      if (!email || !password) {
-        return {
-          message: 'Email ou Senha inválidos'
-        }
-      }
-      const response = await http.post('', {
-        email,
-        password
-      })
-      return response.data
+      const response = await http.post(`/sign-in`, data)
+      return response.data as signInResponseDTO
     } catch (error: any) {
       return error.response.data
     }
@@ -91,6 +85,16 @@ export class AuthRepositoryHttp {
     try {
       const response = await http.post('/resend-code', data)
       return response.data
+    } catch (error: any) {
+      return error.response.data
+    }
+  }
+
+
+  async confirmForgotPassword(data: confirmForgotPasswordRequestDTO) {
+    try {
+      const response = await http.post(`/confirm-forgot-password`, data)
+      return response.data as confirmForgotPasswordResponseDTO
     } catch (error: any) {
       return error.response.data
     }

@@ -10,16 +10,18 @@ interface BackgroundProps {
   children: any
   text?: string
   scrollable?: boolean
+  lockScroll?: boolean
+  function1?: any
 }
 
-export default function Background({ children, text, scrollable }: BackgroundProps) {
+export default function Background({ children, text, scrollable, lockScroll, function1 }: BackgroundProps) {
   const [scrolled, setScrolled] = useState(false)
-  const slideAnim = useRef(new Animated.Value(0)).current // Animação de deslocamento
-  const textOpacity = useRef(new Animated.Value(1)).current // Animação de opacidade
-  const textSize = useRef(new Animated.Value(22)).current // Animação de tamanho do texto
-  const buttonOpacity = useRef(new Animated.Value(0)).current // Animação de opacidade do botão
-  const [buttonVisible, setButtonVisible] = useState(false) // Controle de visibilidade do botão
-  const [animateImage, setAnimateImage] = useState(false) // Controle de animação da imagem
+  const slideAnim = useRef(new Animated.Value(0)).current
+  const textOpacity = useRef(new Animated.Value(1)).current
+  const textSize = useRef(new Animated.Value(22)).current
+  const buttonOpacity = useRef(new Animated.Value(0)).current
+  const [buttonVisible, setButtonVisible] = useState(false)
+  const [animateImage, setAnimateImage] = useState(false)
 
   useEffect(() => {
     if (scrolled) {
@@ -82,10 +84,25 @@ export default function Background({ children, text, scrollable }: BackgroundPro
   }, [scrolled, slideAnim, textOpacity, textSize, buttonVisible])
 
   function handleScroll(event: any) {
+    getToFinalFunc(event);
     if (event.nativeEvent.contentOffset.y > 0) {
       setScrolled(true);
     } else {
       setScrolled(false);
+    }
+  }
+
+  function getToFinalFunc(event: any) {
+    const contentHeight = event.nativeEvent.contentSize.height;
+    const scrollPosition = event.nativeEvent.contentOffset.y;
+    const containerHeight = event.nativeEvent.layoutMeasurement.height;
+
+    if (scrollPosition + containerHeight >= contentHeight - 4) {
+      console.log('Chegou ao final');
+      function1 && function1();
+      // return true;
+    } else {
+      // console.log('Não chegou ao final');
     }
   }
 
@@ -165,6 +182,8 @@ export default function Background({ children, text, scrollable }: BackgroundPro
             scrollEventThrottle={16}
             className="bg-background rounded-t-[54px] pt-12 flex-grow"
             contentContainerStyle={{ justifyContent: 'flex-start', paddingBottom: 60 }}
+            nestedScrollEnabled={true}
+            scrollEnabled={!lockScroll}
           >
             {children}
           </ScrollView>

@@ -6,8 +6,18 @@ export default function RootLayout() {
   return (
     <AuthContextProvider>
       <Stack>
-        <Stack.Screen name="sign-in/index" options={{ headerShown: false }} />
-        <Stack.Screen name="opening/index" options={{ headerShown: false }} />
+        <Stack.Screen 
+          name="sign-in/index" 
+          options={{ headerShown: false }} 
+        />
+        <Stack.Screen 
+          name="sign-up/index" 
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen 
+          name="opening/index" 
+          options={{ headerShown: false }} 
+        />
         <Stack.Screen
           name="almost-there/index"
           options={{ headerShown: false }}

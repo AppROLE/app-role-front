@@ -6,10 +6,11 @@ import RoleInput from '@/src/components/input'
 import RoleMainButton from '@/src/components/roleMainButton'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import Ionicons from '@expo/vector-icons/Ionicons'
-import { Link } from 'expo-router'
+import { Link, router } from 'expo-router'
 import React from 'react'
 import { View, Pressable, Text, TouchableOpacity } from 'react-native'
 import Toast from 'react-native-toast-message'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function SignUp() {
   const [isVisible, setIsVisible] = React.useState(false)
@@ -71,8 +72,11 @@ export default function SignUp() {
         text1: 'Sucesso',
         text2: response.message || 'Cadastro realizado com sucesso!',
         visibilityTime: 3000,
-        topOffset: 0
-      })
+        topOffset: 0,
+      });
+      await AsyncStorage.setItem('ScreenRequestToCode', 'sign-up')
+      await AsyncStorage.setItem('user_email', email)
+      router.push('/recovery-code');
     } catch (error: any) {
       Toast.show({
         type: 'error',
