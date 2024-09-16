@@ -116,7 +116,7 @@ export default function Index() {
         <View className="mb-16 py-4">
           <View className="mx-auto flex flex-row justify-center gap-2">
             <Text className="text-[#BDBDBD]">Não possui uma conta?</Text>
-            <Link className="text-[#D8A9FF]" href="/">
+            <Link className="text-[#D8A9FF]" href="/sign-up">
               Criar Conta
             </Link>
           </View>

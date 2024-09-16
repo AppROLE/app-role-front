@@ -15,6 +15,7 @@ import e from '@/assets/images/e.png'
 import l from '@/assets/images/l.png'
 
 import { LinearGradient } from 'expo-linear-gradient'
+import { router } from 'expo-router'
 
 export default function Opening() {
   const { width } = Dimensions.get('window')
@@ -47,6 +48,9 @@ export default function Opening() {
       } finally {
         setIsLoading(false)
         endLoadingAnimation()
+        setTimeout(() => {
+          router.push('/first-page')
+        }, 3000)
       }
     }
     loadData()

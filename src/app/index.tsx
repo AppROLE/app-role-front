@@ -23,7 +23,9 @@ export default function Index() {
     AsyncStorage.setItem('passwordi', '123456')
   }
 
-
+  function clearAsync() {
+    AsyncStorage.clear()
+  }
 
   return (
     <View className="flex h-full w-full items-center justify-center bg-blue-100">
@@ -53,6 +55,9 @@ export default function Index() {
         {/* <RoleCard data={'16 DEZ'} image={'https://placehold.co/600x400'} title={'São Conrado'} type={'Bar'} stars={4.5} local={'Itaim'} idRole={'1'}/> */}
         {/* <CategoryCard type='Musical' name='Pagode'/> */}
       </View>
+      <TouchableOpacity onPress={clearAsync}>
+        <Text>Limpar async</Text>
+      </TouchableOpacity>
     </View>
   )
 }

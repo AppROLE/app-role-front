@@ -4,6 +4,8 @@ import RoleInput from '@/src/components/input'
 import RoleMainButton from '@/src/components/roleMainButton'
 import { useState, useContext } from 'react'
 import { AuthContext } from '@/context/auth_context'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { router } from 'expo-router'
 
 export default function ConfirmForgotPassword() {
   const [password, setPassword] = useState('')
@@ -28,10 +30,10 @@ export default function ConfirmForgotPassword() {
 
   async function changePassword() {
     if(verifyPassword()){
-      const email = 'email' // Preencher com o email do usuário
-      const response = await confirmForgotPassword({email: 'email', newPassword: password})
+      const email = (await AsyncStorage.getItem('user_email')) || ''
+      const response = await confirmForgotPassword({email: email, newPassword: password})
       if(response.message === 'Senha alterada com sucesso!'){
-        // Redirecionar para a tela de login
+        router.push('/sign-in')
       }
     }
   }
