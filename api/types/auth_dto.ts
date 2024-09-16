@@ -14,12 +14,20 @@ export type signUpResponseDTO = {
   message: string
 }
 
-
 export type forgotPasswordRequestDTO = {
   email: string
 }
 
 export type forgotPasswordResponseDTO = {
+  message: string
+}
+
+export type confirmForgotPasswordRequestDTO = {
+  newPassword: string
+  email: string
+}
+
+export type confirmForgotPasswordResponseDTO = {
   message: string
 }
 
