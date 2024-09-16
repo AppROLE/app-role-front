@@ -86,7 +86,7 @@ export default function EditingPerfil() {
                 Usuário
               </Text>
               <View className="flex flex-row items-center gap-8">
-                <RoleInput type="user" error={userErr} />
+                <RoleInput type="user" error={userErr} value={user} />
               </View>
             </View>
             <View className="p-8 pl-10 gap-5 border-b-2 border-b-[#1C1C1C]">
@@ -94,7 +94,7 @@ export default function EditingPerfil() {
                 Apelido
               </Text>
               <View className="flex flex-row items-center gap-8">
-                <RoleInput type="user" error={nickErr} />
+                <RoleInput type="user" error={nickErr} value={nick} />
               </View>
             </View>
             <View className="p-8 pl-10 gap-5 border-b-2 border-b-[#1C1C1C]">
@@ -102,7 +102,7 @@ export default function EditingPerfil() {
                 Biografia
               </Text>
               <View className="flex flex-row items-center gap-8">
-                <RoleInput type="user" error={bioErr} />
+                <RoleInput type="user" error={bioErr} value={bio} />
               </View>
             </View>
             <View className="p-8 pl-10 gap-5">
@@ -110,10 +110,16 @@ export default function EditingPerfil() {
                 Contas vinculadas
               </Text>
               <View className="flex flex-row items-center gap-8">
-                <RoleInput type="email" error={instaErr} />
+                <View className="flex h-12 w-12 rounded-full bg-[#1C1C1C] items-center justify-center">
+                  <FontAwesome6 name="instagram" size={18} color="white" />
+                </View>
+                <RoleInput type="email" error={instaErr} value={insta} />
               </View>
               <View className="flex flex-row items-center gap-8">
-                <RoleInput type="email" error={tiktokErr} />
+                <View className="flex h-12 w-12 rounded-full bg-[#1C1C1C] items-center justify-center">
+                  <FontAwesome6 name="tiktok" size={18} color="white" />
+                </View>
+                <RoleInput type="email" error={tiktokErr} value={tiktok} />
               </View>
             </View>
           </ScrollView>
