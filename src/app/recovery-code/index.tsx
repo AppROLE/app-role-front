@@ -9,6 +9,7 @@ import { useContext, useRef, useState } from 'react'
 import Background from '@/src/components/background'
 import RoleMainButton from '@/src/components/roleMainButton'
 import { AuthContext } from '@/context/auth_context'
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // const styles = StyleSheet.create({
 //   container: {
@@ -33,7 +34,7 @@ import { AuthContext } from '@/context/auth_context'
 export default function RecoveryCode() {
   const navigation = useRouter()
   const [codes, setCodes] = useState<string[]>(Array(6).fill(''))
-  const [incorrect, setIncorrect] = useState(false);
+  const [incorrectMessage, setIncorrectMessage] = useState('');
   const {confirmCode} = useContext(AuthContext);
 
   // const windowWidth = Dimensions.get('window').width
@@ -57,25 +58,28 @@ export default function RecoveryCode() {
 
   const handlePost = async () => {
     if(codes.includes("")){
-      setIncorrect(true)
+      setIncorrectMessage("*Código incompleto")
     }
     else{
-      //if código errado setIncorrect true return
-      const code = codes.join("")
-      const email = ""
-
       try{
-        const response = await confirmCode(email, code );
-        if(response.message != "Código validado com sucesso!"){
-            setIncorrect(true)
+        const code = codes.join("")
+        const email = await AsyncStorage.getItem('user_email')
+        console.log(email)
+        if (email == null){
+            setIncorrectMessage("*Email não encontrado no sistema, tente novamente")
             return
         }
-        setIncorrect(false)
+        const response = await confirmCode(email, code );
+        if(response.message != "Código validado com sucesso!"){
+          setIncorrectMessage("*Código incorreto")
+            return
+        }
+        setIncorrectMessage("")
         router.navigate('/almost-there')
       }
       catch (error){
         console.log(error)
-        setIncorrect(true)
+        setIncorrectMessage("*Erro no sistema, tente novamente")
       }
     }
   }
@@ -92,9 +96,9 @@ export default function RecoveryCode() {
         </View>
         <View className="flex w-full justify-center items-center">
           <View className='flex flex-col gap-6'>
-            <View className='w-full'>
-              <Text className='text-red-500 mb-2'>{incorrect ? "*Código incorreto" : ""}</Text>
-              <View className="flex w-[84%] flex-row justify-center ">
+            <View className='w-[84%]'>
+              <Text adjustsFontSizeToFit numberOfLines={1} className='text-red-500 mb-2'>{incorrectMessage}</Text>
+              <View className="flex flex-row justify-center ">
                 <RecoveryCodeInput
                   codes={codes!}
                   onChangeCode={onChangeCode}

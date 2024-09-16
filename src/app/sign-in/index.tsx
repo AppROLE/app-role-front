@@ -1,23 +1,18 @@
 import {
   Text,
   View,
-  TextInput,
-  StyleSheet,
-  Image,
-  Pressable
 } from 'react-native'
 import { Link } from 'expo-router'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import Background from '@/src/components/background'
 import RoleMainButton from '@/src/components/roleMainButton'
 import RoleInput from '@/src/components/input'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 
 import * as WebBrowser from 'expo-web-browser'
 import * as Google from 'expo-auth-session/providers/google'
 
 WebBrowser.maybeCompleteAuthSession()
-import { useContext, useState } from 'react'
 import { AuthContext } from '@/context/auth_context'
 
 export default function Index() {
@@ -26,7 +21,7 @@ export default function Index() {
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
   const { signIn } = useContext(AuthContext)
-  const [disabledB, setDisabledB] = useState(true)
+  // const [disabledB, setDisabledB] = useState(true)
 
   const [request, responseGoogle, promptAsyncGoogle] = Google.useIdTokenAuthRequest({
     clientId: '469140650893-s1ajgpbpvtkhmg607hlgksmkvo8fmj42.apps.googleusercontent.com',

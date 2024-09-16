@@ -10,6 +10,7 @@ import { Link } from 'expo-router'
 import React from 'react'
 import { View, Pressable, Text, TouchableOpacity } from 'react-native'
 import Toast from 'react-native-toast-message'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function SignUp() {
   const [isVisible, setIsVisible] = React.useState(false)
@@ -72,6 +73,7 @@ export default function SignUp() {
         visibilityTime: 3000,
         topOffset: 0,
       });
+      await AsyncStorage.setItem('user_email', email)
     } catch (error: any) {
       Toast.show({
         type: 'error',
