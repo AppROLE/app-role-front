@@ -14,7 +14,7 @@ export default function CategoryMusicalCard({type, name} : CategoryMusicalCardPr
     }
 
     return (
-        <TouchableOpacity className="bg-button_color flex justify-end w-2/5 h-52 rounded-2xl pb-10">
+        <TouchableOpacity className={`bg-button_color flex justify-end h-52 rounded-2xl pb-10 w-40 mr-3`} onPress={handleCategory}>
             <View className="mx-auto flex flex-col items-center gap-8">
                 {type === 'Musical' ? (
                     <FontAwesome6 name="music" size={48} color="white" />
