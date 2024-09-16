@@ -4,17 +4,19 @@ import RoleCard from "@/src/components/roleCard";
 import RoleEmphasis from "@/src/components/roleEmphasis";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { SetStateAction, useState } from "react";
+import { View, Text, TextInput, TouchableOpacity, Dimensions, ScrollView, FlatList } from "react-native";
+import Carousel from 'react-native-reanimated-carousel';
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
 export default function Home() {
+    const [scrollDisabled, setScrollDisabled] = useState(false);
     const [disabledB, setDisabled] = useState(false);
     const [roles, setRoles] = useState([
         {
             idRole: "1",
             data: "16 DEZ",
-            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png",
+            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png",
             title: "São Conrado",
             type: "Bar",
             stars: 4.5,
@@ -23,7 +25,7 @@ export default function Home() {
         {
             idRole: "2",
             data: "17 DEZ",
-            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png",
+            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png",
             title: "São Conrado",
             type: "Bar",
             stars: 4.5,
@@ -32,7 +34,7 @@ export default function Home() {
         {
             idRole: "3",
             data: "18 DEZ",
-            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png",
+            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png",
             title: "São Conrado",
             type: "Bar",
             stars: 4.5,
@@ -41,7 +43,7 @@ export default function Home() {
         {
             idRole: "4",
             data: "19 DEZ",
-            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png",
+            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png",
             title: "São Conrado",
             type: "Bar",
             stars: 4.5,
@@ -50,7 +52,7 @@ export default function Home() {
         {
             idRole: "5",
             data: "20 DEZ",
-            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png",
+            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png",
             title: "São Conrado",
             type: "Bar",
             stars: 4.5,
@@ -59,7 +61,7 @@ export default function Home() {
         {
             idRole: "6",
             data: "16 DEZ",
-            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png",
+            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png",
             title: "São Conrado",
             type: "Bar",
             stars: 4.5,
@@ -68,7 +70,7 @@ export default function Home() {
         {
             idRole: "7",
             data: "17 DEZ",
-            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png",
+            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png",
             title: "São Conrado",
             type: "Bar",
             stars: 4.5,
@@ -77,7 +79,7 @@ export default function Home() {
         {
             idRole: "8",
             data: "18 DEZ",
-            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png",
+            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png",
             title: "São Conrado",
             type: "Bar",
             stars: 4.5,
@@ -86,7 +88,7 @@ export default function Home() {
         {
             idRole: "9",
             data: "19 DEZ",
-            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png",
+            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png",
             title: "São Conrado",
             type: "Bar",
             stars: 4.5,
@@ -95,7 +97,7 @@ export default function Home() {
         {
             idRole: "10",
             data: "20 DEZ",
-            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png",
+            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png",
             title: "São Conrado",
             type: "Bar",
             stars: 4.5,
@@ -104,7 +106,7 @@ export default function Home() {
         {
             idRole: "11",
             data: "16 DEZ",
-            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png",
+            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png",
             title: "São Conrado",
             type: "Bar",
             stars: 4.5,
@@ -113,7 +115,7 @@ export default function Home() {
         {
             idRole: "12",
             data: "17 DEZ",
-            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png",
+            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png",
             title: "São Conrado",
             type: "Bar",
             stars: 4.5,
@@ -122,7 +124,7 @@ export default function Home() {
         {
             idRole: "13",
             data: "18 DEZ",
-            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png",
+            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png",
             title: "São Conrado",
             type: "Bar",
             stars: 4.5,
@@ -131,7 +133,7 @@ export default function Home() {
         {
             idRole: "14",
             data: "19 DEZ",
-            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png",
+            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png",
             title: "São Conrado",
             type: "Bar",
             stars: 4.5,
@@ -140,7 +142,7 @@ export default function Home() {
         {
             idRole: "15",
             data: "20 DEZ",
-            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png",
+            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png",
             title: "São Conrado",
             type: "Bar",
             stars: 4.5,
@@ -149,7 +151,7 @@ export default function Home() {
         {
             idRole: "16",
             data: "16 DEZ",
-            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png",
+            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png",
             title: "São Conrado",
             type: "Bar",
             stars: 4.5,
@@ -158,7 +160,7 @@ export default function Home() {
         {
             idRole: "17",
             data: "17 DEZ",
-            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png",
+            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png",
             title: "São Conrado",
             type: "Bar",
             stars: 4.5,
@@ -167,7 +169,7 @@ export default function Home() {
         {
             idRole: "18",
             data: "18 DEZ",
-            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png",
+            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png",
             title: "São Conrado",
             type: "Bar",
             stars: 4.5,
@@ -176,7 +178,7 @@ export default function Home() {
         {
             idRole: "19",
             data: "19 DEZ",
-            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png",
+            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png",
             title: "São Conrado",
             type: "Bar",
             stars: 4.5,
@@ -185,23 +187,172 @@ export default function Home() {
         {
             idRole: "20",
             data: "20 DEZ",
-            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png",
+            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png",
             title: "São Conrado",
             type: "Bar",
             stars: 4.5,
             local: "Itaim",
         },
     ])
+    const [activeSlide, setActiveSlide] = useState(0);
+    const [loadLock, setLoadLock] = useState(false);
+
+    const [typesRole, setTypesRole] = useState([
+        {
+            name: "Bar",
+            type: "Musical",
+        },
+        {
+            name: "Balada",
+            type: "Musical",
+        },
+        {
+            name: "Bar",
+            type: "Musical",
+        },
+        {
+            name: "Balada",
+            type: "Musical",
+        },
+        {
+            name: "Bar",
+            type: "Musical",
+        },
+        {
+            name: "Balada",
+            type: "Musical",
+        },
+        {
+            name: "Bar",
+            type: "Musical",
+        },
+        {
+            name: "Balada",
+            type: "Musical",
+        },
+        {
+            name: "Bar",
+            type: "Musical",
+        },
+        {
+            name: "Balada",
+            type: "Musical",
+        },
+    ])
+
+    const [musicRole, setMusicRole] = useState([
+        {
+            name: "Eletrônica",
+            type: "Musical",
+        },
+        {
+            name: "Funk",
+            type: "Musical",
+        },
+        {
+            name: "Sertanejo",
+            type: "Musical",
+        },
+        {
+            name: "Eletrônica",
+            type: "Musical",
+        },
+        {
+            name: "Funk",
+            type: "Musical",
+        },
+        {
+            name: "Sertanejo",
+            type: "Musical",
+        },
+        {
+            name: "Eletrônica",
+            type: "Musical",
+        },
+        {
+            name: "Funk",
+            type: "Musical",
+        },
+        {
+            name: "Sertanejo",
+            type: "Musical",
+        },
+        {
+            name: "Eletrônica",
+            type: "Musical",
+        },
+    ])
+
+    const [carrosselData, setCarrosselData] = useState([
+        {
+            id: "1",
+            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png",
+        },
+        {
+            id: "2",
+            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png",
+        },
+        {
+            id: "3",
+            image: "https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png",
+        },
+    ])
+
+    const {width, height} = Dimensions.get('window');
 
     const gradientColors = disabledB 
         ? ['rgba(90, 24, 154, 0.25)', 'rgba(156, 78, 220, 0.25)'] // Cores do gradiente com brilho reduzido
         : ['#5A189A', '#DFA9FD']; // Cores normais do gradiente
 
+    function endScroll(index: SetStateAction<number>) {
+        setActiveSlide(index);
+        setScrollDisabled(false);
+    }
+
+    function loadMoreRoles() {
+        setLoadLock(!loadLock);
+        if (loadLock) {
+            setRoles([...roles, ...roles]);
+            console.log(roles.length);
+            setLoadLock(false);
+        } else {
+            setLoadLock(true);
+        }
+    }
+
     return (
-        <Background text="Home" scrollable>
+        <Background text="Home" scrollable lockScroll={scrollDisabled} function1={loadMoreRoles}>
             <Text className="text-white text-3xl font-bold text-center mb-4">Role Bombando</Text>
-            <View className="px-12 mb-12">
-                <RoleEmphasis />
+            <View className="px-12 mb-10">
+                <Carousel
+                    loop
+                    snapEnabled // Ativa o snap (encaixar) dos itens
+                    snapToInterval={width * 0.8 + 20}
+                    width={width * 0.8}
+                    height={height * 0.18}
+                    autoPlay={true}
+                    autoPlayInterval={5000}
+                    data={carrosselData}
+                    onScrollBegin={() => setScrollDisabled(true)} // Desabilita o scroll da tela
+                    onScrollEnd={(index) => endScroll(index)} // Atualiza o slide ativo
+                    scrollAnimationDuration={1000}
+                    renderItem={({ item }) => (
+                        <View style={{ marginHorizontal: 10 }}>
+                            <RoleEmphasis />
+                        </View>
+                    )}
+                    panGestureHandlerProps={{
+                        activeOffsetX: [-10, 10], // Para evitar conflitos com scroll vertical
+                    }}
+                />
+                <View className="flex flex-row justify-center gap-2 mt-4">
+                  {carrosselData.map((_, index) => (
+                    <View
+                      key={index}
+                      className={`h-[6px] rounded-full ${activeSlide === index ? 'bg-white w-[18px]' : 'bg-[#BDBDBD] w-[6px]'}`}
+                    />
+                  ))}
+                </View>
             </View>
             <View className="px-12 mb-12">
                 <View className="bg-[#1C1C1C] flex flex-row px-2 py-1 items-center rounded-full">
@@ -218,22 +369,34 @@ export default function Home() {
             </View>
             <View className="px-12 flex flex-col gap-4">
                 <Text className="text-white text-3xl font-bold">Explore</Text>
-                {roles.slice(0, 5).map(role => (
-                    <RoleCard key={role.idRole} {...role} />
+                {roles.slice(0, 5).map((role, index) => (
+                    <RoleCard key={`id${role.idRole}ind${index}`} {...role} />
                 ))}
                 <View>
-                    <CategoryMusicalCard name="Balada" type="Musical"/>
+                    <Text className="text-white text-2xl font-bold mt-3 mb-2">Categorias</Text>
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{marginBottom: 16}}>
+                        {typesRole.map((type, index) => (
+                            <View key={`viewtype-${type.name}-${index}`}>
+                                <CategoryMusicalCard key={`cardtype-${type.name}-${index}`} {...type} />
+                            </View>
+                        ))}
+                    </ScrollView>
                 </View>
-                {roles.slice(5, 10).map(role => (
-                    <RoleCard key={role.idRole} {...role} />
+                {roles.slice(5, 10).map((role, index) => (
+                    <RoleCard key={`id${role.idRole}ind${index}`} {...role} />
                 ))}
                 <View>
-                    <CategoryMusicalCard name="Bar" type="Musical"/>
+                    <Text className="text-white text-2xl font-bold mt-3 mb-2">Gênero Musical</Text>
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{marginBottom: 16}}>
+                        {musicRole.map((music, index) => (
+                            <CategoryMusicalCard key={`music-${music.name}-${index}`} {...music} />
+                        ))}
+                    </ScrollView>
                 </View>
-                {roles.slice(10, 15).map(role => (
-                    <RoleCard key={role.idRole} {...role} />
+                {roles.slice(10).map((role, index) => (
+                    <RoleCard key={`id${role.idRole}ind${index}`} {...role} />
                 ))}
-                <View className="mt-8">
+                <View className="mt-8 pb-8">
                     <Text className="text-lg text-[#BDBDBD] text-center">Não encontrou o que procurava?</Text>
                     <Text className="text-lg text-[#BDBDBD] text-center">Utilieze os nossos <Text className="font-bold text-white">Filtros!</Text></Text>
                     <TouchableOpacity className="flex justify-center w-full rounded-2xl py-4">
@@ -260,6 +423,10 @@ export default function Home() {
                             <Text className="text-white text-lg">Filtrar</Text>
                         </LinearGradient>
                     </TouchableOpacity>
+                    {loadLock && (
+                        <View className="flex justify-center w-full h-1 bg-white">
+                        </View>
+                    )}
                 </View>
             </View>
         </Background>
