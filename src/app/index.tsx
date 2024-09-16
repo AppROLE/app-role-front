@@ -46,6 +46,7 @@ export default function Index() {
       <Link href={'/searching-filters'}>Searching-filters</Link>
       <Link href={'/forgot-password'}>Forgot Password</Link>
       <Link href={'/home'}>Home</Link>
+      <Link href={'/editing-perfil'}>Notifications</Link>
       {/* View para testar os components */}
       <View className="my-5 w-full bg-[#121212]">
         {/* <RoleMainButton type='gradient' buttonFunction={teste} disabled={buttonDisabled}>

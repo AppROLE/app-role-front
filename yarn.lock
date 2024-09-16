@@ -2608,9 +2608,10 @@ anymatch@^3.0.3, anymatch@~3.1.2:
   version "1.0.0"
   dependencies:
     "@expo/vector-icons" "^14.0.2"
+    "@react-native-async-storage/async-storage" "^2.0.0"
     "@react-native-community/datetimepicker" react-native-community/datetimepicker
     "@react-navigation/native" "^6.0.2"
-    app-role-front "file:../../../../../Library/Caches/Yarn/v6/npm-app-role-front-1.0.0-5d09920f-b62e-4c25-911b-c196b0a7c875-1725998781187/node_modules/app-role-front"
+    app-role-front "file:../../../../../Library/Caches/Yarn/v6/npm-app-role-front-1.0.0-09566dd5-8eb2-435a-9ac4-4b3592d6d300-1726484142820/node_modules/app-role-front"
     axios "^1.7.5"
     expo "~51.0.28"
     expo-constants "~16.0.2"
@@ -7710,6 +7711,11 @@ react-native-helmet-async@2.0.4:
     invariant "^2.2.4"
     react-fast-compare "^3.2.2"
     shallowequal "^1.1.0"
+
+react-native-image-picker@^7.1.2:
+  version "7.1.2"
+  resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-7.1.2.tgz#383849d1953caf4578874a1f5e5dd11c737bd5cd"
+  integrity sha512-b5y5nP60RIPxlAXlptn2QwlIuZWCUDWa/YPUVjgHc0Ih60mRiOg1PSzf0IjHSLeOZShCpirpvSPGnDExIpTRUg==
 
 react-native-reanimated@~3.10.1:
   version "3.10.1"

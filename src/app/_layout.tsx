@@ -48,6 +48,10 @@ export default function RootLayout() {
           name="first-page/index"
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          name="editing-perfil/index"
+          options={{ headerShown: false }}
+        />
       </Stack>
     </AuthContextProvider>
   )
