@@ -1,23 +1,53 @@
 import {
   Text,
   View,
-  TextInput,
-  StyleSheet,
-  Image,
-  Pressable
 } from 'react-native'
 import { Link } from 'expo-router'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import Background from '@/src/components/background'
 import RoleMainButton from '@/src/components/roleMainButton'
 import RoleInput from '@/src/components/input'
-import { useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
+
+import * as WebBrowser from 'expo-web-browser'
+import * as Google from 'expo-auth-session/providers/google'
+
+WebBrowser.maybeCompleteAuthSession()
+import { AuthContext } from '@/context/auth_context'
 
 export default function Index() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
+  const { signIn } = useContext(AuthContext)
+  // const [disabledB, setDisabledB] = useState(true)
+
+  const [request, responseGoogle, promptAsyncGoogle] = Google.useIdTokenAuthRequest({
+    clientId: '469140650893-s1ajgpbpvtkhmg607hlgksmkvo8fmj42.apps.googleusercontent.com',
+    scopes: ['email', 'profile'],
+    iosClientId: '469140650893-hlqn9g7ngejghi571aevjpqnp570mh58.apps.googleusercontent.com',
+    androidClientId: '469140650893-3op6l9dvib6q2vi2kbq52uclcqqmog6m.apps.googleusercontent.com'
+  })
+
+  async function getUserInfoFromOAuth(accessToken: string) {
+    const response = await fetch('https://www.googleapis.com/oauth2/v1/userinfo?alt=json', {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    })
+    const userInfo = await response.json()
+    console.log(userInfo)
+  }
+
+  useEffect(() => {
+    if (responseGoogle?.type === 'success') {
+      console.log(responseGoogle);
+      const { authentication } = responseGoogle;
+      console.log(authentication);
+      const accessToken = authentication?.accessToken
+      accessToken && getUserInfoFromOAuth(accessToken);
+    }
+  }, [responseGoogle])
+
 
   function handleEmailChange(text: string) {
     setEmail(text)
@@ -27,6 +57,17 @@ export default function Index() {
   function handlePasswordChange(text: string) {
     setPassword(text)
     if (passwordError) setPasswordError('') // Reseta o erro ao digitar
+  }
+
+  async function Login() {
+    if (!email || !password) {
+      if (!email) setEmailError('Email obrigatório')
+      if (!password) setPasswordError('Senha obrigatória')
+      return
+    }
+
+    const response = await signIn({ email, password })
+    setEmailError(response.toString())
   }
 
   return (
@@ -55,18 +96,18 @@ export default function Index() {
               error={passwordError}
             />
             <View className="flex flex-row gap-2">
-              <Text className="text-white text-xs">Esqueceu sua senha?</Text>
-              <Link className="text-[#D8A9FF] text-xs" href="/forgot-password">
+              <Text className="text-xs text-white">Esqueceu sua senha?</Text>
+              <Link className="text-xs text-[#D8A9FF]" href="/forgot-password">
                 Recuperar senha
               </Link>
             </View>
           </View>
         </View>
         <View className="gap-12 px-[8%]">
-          <RoleMainButton type="gradient">
+          <RoleMainButton type="gradient" buttonFunction={Login}>
             <Text className="text-white">Entrar</Text>
           </RoleMainButton>
-          <RoleMainButton type="simple">
+          <RoleMainButton type="simple" buttonFunction={() => promptAsyncGoogle()}>
             <FontAwesome6 name="google" size={24} color="white" />
             <Text className="text-white">Entrar via Google</Text>
           </RoleMainButton>

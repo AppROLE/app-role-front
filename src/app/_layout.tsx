@@ -28,9 +28,21 @@ export default function RootLayout() {
           name="confirm-forgot-password/index"
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          name="friends/index"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="notifications/index"
+          options={{ headerShown: false }}
+        />
         <Stack.Screen 
           name="(tabs)" 
           options={{ headerShown: false }} 
+        />
+        <Stack.Screen
+          name="first-page/index"
+          options={{ headerShown: false }}
         />
       </Stack>
     </AuthContextProvider>

@@ -94,10 +94,10 @@ export default function Opening() {
   }
 
   return (
-    <View>
+    <View className="flex-1 justify-center items-center " >
       <LinearGradient
-        className="h-full w-full"
-        colors={[
+          style={{ width: '100%', height: '100%' }}
+          colors={[
           '#DFA9FD',
           '#9C4EDC',
           '#5A189A',
@@ -108,50 +108,50 @@ export default function Opening() {
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
       >
-        <View className={`items-center justify-center`} style={{ flex: 1 }}>
-          <View style={{ flexDirection: 'row' }}>
+        <View className='flex flex-1 items-center justify-center'>
+          <View className="flex flex-row">
             <Animated.Image
-              source={r}
-              resizeMode="contain"
-              style={[
-                {
-                  width: logoWidth * 0.2116648411829135,
-                  height: geralHeight,
-                  marginRight: logoWidth * 0.0350492880613363
-                },
-                animatedBounce(0)
-              ]}
+                source={r}
+                resizeMode="contain"
+                style={[
+                  {
+                    width: logoWidth * 0.2116648411829135,
+                    height: geralHeight,
+                    marginRight: logoWidth * 0.0350492880613363
+                  },
+                  animatedBounce(0)
+                ]}
             />
 
             <Animated.Image
-              source={logo}
-              resizeMode="contain"
-              style={[
-                { marginRight: logoWidth * 0.0553121577217963 },
-                isLoading ? animatedStylesOLoading : animatedStylesO
-              ]}
+                source={logo}
+                resizeMode="contain"
+                style={[
+                  { marginRight: logoWidth * 0.0553121577217963 },
+                  isLoading ? animatedStylesOLoading : animatedStylesO
+                ]}
             />
 
             <Animated.Image
-              source={l}
-              resizeMode="contain"
-              style={[
-                {
-                  width: logoWidth * 0.1782584884994524,
-                  height: geralHeight,
-                  marginRight: logoWidth * 0.0413472070098576
-                },
-                animatedBounce(100)
-              ]}
+                source={l}
+                resizeMode="contain"
+                style={[
+                  {
+                    width: logoWidth * 0.1782584884994524,
+                    height: geralHeight,
+                    marginRight: logoWidth * 0.0413472070098576
+                  },
+                  animatedBounce(100)
+                ]}
             />
 
             <Animated.Image
-              source={e}
-              resizeMode="contain"
-              style={[
-                { width: logoWidth * 0.1919496166484118, height: geralHeight },
-                animatedBounce(200)
-              ]}
+                source={e}
+                resizeMode="contain"
+                style={[
+                  { width: logoWidth * 0.1919496166484118, height: geralHeight },
+                  animatedBounce(200)
+                ]}
             />
           </View>
         </View>
