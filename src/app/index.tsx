@@ -45,6 +45,7 @@ export default function Index() {
       <Link href={'/recovery-code'}>Recovery Code</Link>
       <Link href={'/forgot-password'}>Forgot Password</Link>
       <Link href={'/home'}>Home</Link>
+      <Link href={'/configs'}>Configs</Link>
       {/* View para testar os components */}
       <View className="my-5 w-full bg-[#121212]">
         {/* <RoleMainButton type='gradient' buttonFunction={teste} disabled={buttonDisabled}>

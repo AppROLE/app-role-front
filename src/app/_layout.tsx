@@ -44,6 +44,14 @@ export default function RootLayout() {
           name="first-page/index"
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          name="configs/index"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="configs/delete/index"
+          options={{ headerShown: false }}
+        />
       </Stack>
     </AuthContextProvider>
   )

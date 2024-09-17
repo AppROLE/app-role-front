@@ -1,29 +1,31 @@
-import Entypo from '@expo/vector-icons/Entypo'
-import Constants from 'expo-constants'
-import { LinearGradient } from 'expo-linear-gradient'
-import { useState, useEffect, useRef } from 'react'
-import { Animated, Image, Text, View, ScrollView, TouchableOpacity } from 'react-native'
+import Entypo from '@expo/vector-icons/Entypo';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Constants from 'expo-constants';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useFocusEffect } from 'expo-router';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { Animated, Image, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 
-const statusBarHeight = Constants.statusBarHeight
+const statusBarHeight = Constants.statusBarHeight;
 
 interface BackgroundProps {
-  children: any
-  text?: string
-  scrollable?: boolean
+  children: any;
+  text?: string;
+  scrollable?: boolean;
+  themeMode?: string;
 }
 
-export default function Background({ children, text, scrollable }: BackgroundProps) {
-  const [scrolled, setScrolled] = useState(false)
-  const slideAnim = useRef(new Animated.Value(0)).current // Animação de deslocamento
-  const textOpacity = useRef(new Animated.Value(1)).current // Animação de opacidade
-  const textSize = useRef(new Animated.Value(22)).current // Animação de tamanho do texto
-  const buttonOpacity = useRef(new Animated.Value(0)).current // Animação de opacidade do botão
-  const [buttonVisible, setButtonVisible] = useState(false) // Controle de visibilidade do botão
-  const [animateImage, setAnimateImage] = useState(false) // Controle de animação da imagem
+export default function Background({ children, text, scrollable, themeMode }: BackgroundProps) {
+  const [scrolled, setScrolled] = useState(false);
+  const slideAnim = useRef(new Animated.Value(0)).current;
+  const textOpacity = useRef(new Animated.Value(1)).current;
+  const textSize = useRef(new Animated.Value(22)).current;
+  const buttonOpacity = useRef(new Animated.Value(0)).current;
+  const [buttonVisible, setButtonVisible] = useState(false);
+  const [themeModeS, setThemeModeS] = useState('dark');
 
   useEffect(() => {
     if (scrolled) {
-      // Se estiver rolando para baixo
       Animated.parallel([
         Animated.timing(textOpacity, {
           toValue: 0,
@@ -41,7 +43,7 @@ export default function Background({ children, text, scrollable }: BackgroundPro
           useNativeDriver: true,
         }),
       ]).start(() => {
-        setButtonVisible(true); // Torna o botão visível após as animações
+        setButtonVisible(true);
       });
 
       Animated.timing(slideAnim, {
@@ -50,14 +52,12 @@ export default function Background({ children, text, scrollable }: BackgroundPro
         useNativeDriver: true,
       }).start();
     } else {
-      // Se estiver rolando para cima
       Animated.timing(buttonOpacity, {
         toValue: 0,
         duration: 300,
         useNativeDriver: true,
       }).start(() => {
-        setButtonVisible(false); // Torna o botão invisível após a animação
-        // Inicia a animação da imagem para a posição original
+        setButtonVisible(false);
         Animated.timing(slideAnim, {
           toValue: 0,
           duration: 300,
@@ -65,7 +65,6 @@ export default function Background({ children, text, scrollable }: BackgroundPro
         }).start();
       });
 
-      // Animações de texto
       Animated.parallel([
         Animated.timing(textOpacity, {
           toValue: 1,
@@ -79,68 +78,53 @@ export default function Background({ children, text, scrollable }: BackgroundPro
         }),
       ]).start();
     }
-  }, [scrolled, slideAnim, textOpacity, textSize, buttonVisible])
+  }, [scrolled, slideAnim, textOpacity, textSize, buttonVisible]);
 
   function handleScroll(event: any) {
-    if (event.nativeEvent.contentOffset.y > 0) {
-      setScrolled(true);
-    } else {
-      setScrolled(false);
-    }
+    setScrolled(event.nativeEvent.contentOffset.y > 0);
   }
+
+  useFocusEffect(
+    useCallback(() => {
+      const loadTheme = async () => {
+        const value = await AsyncStorage.getItem('themeMode');
+        if (value) {
+          setThemeModeS(value);
+        }
+      };
+      loadTheme();
+    }, [])
+  );
+
+  useEffect(() => {
+    if (themeMode) {
+      setThemeModeS(themeMode);
+    }
+  }, [themeMode]);
+
+  const backgroundColor = themeModeS === 'dark' ? '#121212' : '#FFFFFF';
 
   return (
     <LinearGradient
       style={{ flex: 1 }}
-      className="flex h-screen w-full"
-      colors={[
-        '#10002B',
-        '#9C4EDC',
-        '#DFA9FD'
-      ]}
+      colors={['#10002B', '#9C4EDC', '#DFA9FD']}
       start={{ x: 0.1, y: 0.1 }}
       end={{ x: 1, y: 1 }}
     >
-      <View
-        style={{ marginTop: statusBarHeight }}
-        className="flex h-full w-full flex-col justify-between"
-      >
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginTop: 32, // Adiciona margem superior
-          }}
-        >
-          <Animated.View
-            style={{
-              transform: [{ translateX: slideAnim }],
-              alignSelf: 'center', // Centraliza a imagem horizontalmente
-            }}
-          >
-            <Image
-              style={{
-                width: 140, // Ajuste aqui para o tamanho desejado
-                height: 70, // Ajuste aqui para o tamanho desejado
-              }}
-              source={require('../../../assets/images/ROLE.png')}
-            />
+      <View style={{ marginTop: statusBarHeight }} className="flex h-full w-full flex-col justify-between">
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 32 }}>
+          <Animated.View style={{ transform: [{ translateX: slideAnim }] }}>
+            <Image style={{ width: 140, height: 70 }} source={require('../../../assets/images/ROLE.png')} />
           </Animated.View>
           {buttonVisible && (
             <Animated.View style={{ opacity: buttonOpacity, marginLeft: 10 }}>
-              <TouchableOpacity 
-                className='flex flex-row border-2 border-white rounded-lg bg-transparent gap-2'
-                style={{
-                  paddingHorizontal: 8,
-                  paddingVertical: 4,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
+              <TouchableOpacity
+                className="flex flex-row border-2 border-white rounded-lg bg-transparent gap-2"
+                style={{ paddingHorizontal: 8, paddingVertical: 4 }}
                 onPress={() => alert('Botão pressionado!')}
               >
-                <Entypo name='rocket' size={24} color='#FFFFFF' />
-                <Text className='text-white text-sm'>Suporte um promoter!</Text>
+                <Entypo name="rocket" size={24} color="#FFFFFF" />
+                <Text className="text-white text-sm">Suporte um promoter!</Text>
               </TouchableOpacity>
             </Animated.View>
           )}
@@ -153,23 +137,20 @@ export default function Background({ children, text, scrollable }: BackgroundPro
           </Animated.View>
         )}
         {!scrollable ? (
-          <View 
-            className="flex h-[89%] flex-col items-center rounded-t-[54px] bg-background pt-12" 
-            style={{ paddingBottom: 60 }}
-          >
+          <View className="flex h-[89%] flex-col items-center rounded-t-[54px] pt-12" style={{ paddingBottom: 60, backgroundColor }}>
             {children}
           </View>
         ) : (
           <ScrollView
             onScroll={handleScroll}
             scrollEventThrottle={16}
-            className="bg-background rounded-t-[54px] pt-12 flex-grow"
-            contentContainerStyle={{ justifyContent: 'flex-start', paddingBottom: 60 }}
+            className="rounded-t-[54px] pt-12 flex-grow"
+            contentContainerStyle={{ justifyContent: 'flex-start', paddingBottom: 60, backgroundColor }}
           >
             {children}
           </ScrollView>
         )}
       </View>
     </LinearGradient>
-  )
+  );
 }
