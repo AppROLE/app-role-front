@@ -2,7 +2,7 @@ import {
   TouchableOpacity,
   View,
   Text,
-  ScrollView, Modal,
+  ScrollView,
 } from 'react-native';
 import Background from '@/src/components/background';
 import React from "react";
