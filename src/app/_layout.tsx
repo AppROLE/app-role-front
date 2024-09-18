@@ -6,8 +6,18 @@ export default function RootLayout() {
   return (
     <AuthContextProvider>
       <Stack>
-        <Stack.Screen name="sign-in/index" options={{ headerShown: false }} />
-        <Stack.Screen name="opening/index" options={{ headerShown: false }} />
+        <Stack.Screen 
+          name="sign-in/index" 
+          options={{ headerShown: false }} 
+        />
+        <Stack.Screen 
+          name="sign-up/index" 
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen 
+          name="opening/index" 
+          options={{ headerShown: false }} 
+        />
         <Stack.Screen
           name="almost-there/index"
           options={{ headerShown: false }}
@@ -36,6 +46,10 @@ export default function RootLayout() {
           name="notifications/index"
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          name="searching-filters/index"
+          options={{ headerShown: false }}
+        />
         <Stack.Screen 
           name="(tabs)" 
           options={{ headerShown: false }} 
@@ -45,7 +59,7 @@ export default function RootLayout() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="account/index"
+          name="editing-perfil/index"
           options={{ headerShown: false }}
         />
       </Stack>
