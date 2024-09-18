@@ -83,6 +83,26 @@ export default function Background({ children, text, scrollable, themeMode, lock
     }
   }, [scrolled, slideAnim, textOpacity, textSize, buttonVisible]);
 
+  useFocusEffect(
+    useCallback(() => {
+      const loadTheme = async () => {
+        const value = await AsyncStorage.getItem('themeMode');
+        if (value) {
+          setThemeModeS(value);
+        }
+      };
+      loadTheme();
+    }, [])
+  );
+
+  useEffect(() => {
+    if (themeMode) {
+      setThemeModeS(themeMode);
+    }
+  }, [themeMode]);
+
+  const backgroundColor = themeModeS === 'dark' ? '#121212' : '#FFFFFF';
+
   function handleScroll(event: any) {
     getToFinalFunc(event);
     if (event.nativeEvent.contentOffset.y > 0) {
@@ -90,25 +110,6 @@ export default function Background({ children, text, scrollable, themeMode, lock
     } else {
       setScrolled(false);
     }
-    useFocusEffect(
-      useCallback(() => {
-        const loadTheme = async () => {
-          const value = await AsyncStorage.getItem('themeMode');
-          if (value) {
-            setThemeModeS(value);
-          }
-        };
-        loadTheme();
-      }, [])
-    );
-  
-    useEffect(() => {
-      if (themeMode) {
-        setThemeModeS(themeMode);
-      }
-    }, [themeMode]);
-  
-    const backgroundColor = themeModeS === 'dark' ? '#121212' : '#FFFFFF';
   }
   function getToFinalFunc(event: any) {
     const contentHeight = event.nativeEvent.contentSize.height;
