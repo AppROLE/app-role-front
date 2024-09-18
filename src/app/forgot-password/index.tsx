@@ -6,6 +6,7 @@ import RoleInput from "@/src/components/input";
 import Toast from 'react-native-toast-message';
 import RoleMainButton from "@/src/components/roleMainButton";
 import { AuthContext } from "@/context/auth_context";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ForgotPassword() {
     const [email, setEmail] = useState("");
@@ -41,7 +42,9 @@ export default function ForgotPassword() {
                     visibilityTime: 3000,
                     topOffset: 0,
                 });
-                setTimeout(() => {
+                setTimeout(async () => {
+                    await AsyncStorage.setItem('user_email', email)
+                    await AsyncStorage.setItem('ScreenRequestToCode', 'forgot-password');
                     router.push('/recovery-code');
                     setEmail(""); 
                 }, 3000);

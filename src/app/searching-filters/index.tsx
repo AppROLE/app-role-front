@@ -1,38 +1,28 @@
 import Background from '@/src/components/background'
 import RoleMainButton from '@/src/components/roleMainButton'
 import SearchingBarInput from '@/src/components/searchingBarInput'
+import AnimatedOption from '@/src/components/selectedCard'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
-import { LinearGradient } from 'expo-linear-gradient'
 import { useRouter } from 'expo-router'
 import React, { useState } from 'react'
 import {
   View,
   Text,
   ScrollView,
-  Pressable,
-  TouchableOpacity
+  TouchableOpacity,
+  Platform
 } from 'react-native'
+import DateTimePicker from '@react-native-community/datetimepicker'
+import SvgUri from 'react-native-svg'
 
 interface Filter {
   icon: string
   title: string
   options: { label: string; value: string }[]
-  selected: number | null
+  selected: number | null | number[]
 }
 
 const initialFilters = [
-  {
-    icon: 'calendar',
-    title: 'Data',
-    options: [
-      { label: 'Hoje', value: 'today' },
-      { label: 'Amanhã', value: 'tomorrow' },
-      { label: 'Esta Semana', value: 'this-week' },
-      { label: 'Este Mês', value: 'this-month' },
-      { label: 'Personalizado', value: 'custom' }
-    ],
-    selected: null
-  },
   {
     icon: 'location-dot',
     title: 'Região',
@@ -42,9 +32,10 @@ const initialFilters = [
       { label: 'Zona Leste', value: 'east' },
       { label: 'Zona Oeste', value: 'west' },
       { label: 'ABC Paulista', value: 'abc' },
-      { label: 'Outros', value: 'others' }
+      { label: 'Outros', value: 'others' },
+      { label: 'Mais Populares', value: 'popular' }
     ],
-    selected: null
+    selected: []
   },
   {
     icon: 'store',
@@ -54,9 +45,11 @@ const initialFilters = [
       { label: 'Universitário', value: 'universitarian' },
       { label: 'Bar', value: 'bar' },
       { label: 'Show', value: 'show' },
-      { label: 'Festa', value: 'Party' }
+      { label: 'Festa', value: 'Party' },
+      { label: 'Festival', value: 'festival' },
+      { label: 'Bar Balada', value: 'bar-balad' }
     ],
-    selected: null
+    selected: []
   },
   {
     icon: 'music',
@@ -64,17 +57,17 @@ const initialFilters = [
     options: [
       { label: 'Funk', value: 'funk' },
       { label: 'Sertanejo', value: 'sertanejo' },
-      { label: 'Pop', value: 'pop' },
+      { label: 'POP', value: 'pop' },
       { label: 'Rock', value: 'rock' },
       { label: 'Eletrônica', value: 'eletronic' },
       { label: 'Rap', value: 'rap' },
-      { label: 'Samba', value: 'samba' },
       { label: 'Pagode', value: 'pagode' },
       { label: 'MPB', value: 'mpb' },
       { label: 'Forró', value: 'forro' },
-      { label: 'Reggae', value: 'reggae' }
+      { label: 'Reggae', value: 'reggae' },
+      { label: 'Trap', value: 'trap' }
     ],
-    selected: null
+    selected: []
   },
   {
     icon: 'sack-dollar',
@@ -86,7 +79,7 @@ const initialFilters = [
       { label: '$$$$', value: 'very-expensive' },
       { label: '$$$$$', value: 'luxury' }
     ],
-    selected: 'null'
+    selected: '[]'
   },
   {
     icon: 'user-shield',
@@ -98,7 +91,7 @@ const initialFilters = [
       { label: '31-40', value: '31-40' },
       { label: '40+', value: '40+' }
     ],
-    selected: null
+    selected: []
   },
   {
     icon: 'star',
@@ -116,15 +109,22 @@ const initialFilters = [
     options: [
       { label: 'Open Bar', value: 'open-bar' },
       { label: 'Estacionamento', value: 'parking' },
-      { label: 'Vip', value: 'vip' }
+      { label: 'Fumódromo', value: 'smoking-area' },
+      { label: 'Valet', value: 'valet' },
+      { label: 'Área Aberta', value: 'open-area' },
+      { label: 'Welcome Shot', value: 'welcome-shot' },
+      { label: 'Messas', value: 'tables' },
+      { label: 'Ao Vivo', value: 'live' },
+      { label: 'Esquenta', value: 'warm-up' },
+      { label: 'After', value: 'after' }
     ],
-    selected: null
+    selected: []
   },
   {
     icon: 'user',
     title: 'Amigos',
     options: [{ label: 'Apenas Amigos', value: 'only-friends' }],
-    selected: null
+    selected: []
   }
 ]
 
@@ -132,16 +132,35 @@ export default function SearchingFilters() {
   const navigation = useRouter()
   const [isDisabled, setIsDisabled] = useState(false)
   const [search, setSearch] = useState('')
+
+  const [date, setDate] = useState(new Date())
+  const [showPicker, setShowPicker] = useState(false)
+  const [dateSelected, setDateSelected] = useState(false)
+  const [formattedDate, setFormattedDate] = useState('DD/MM/YYYY')
+
   const [filters, setFilters] = useState<Filter[]>(
     initialFilters.map((filter) => ({ ...filter, selected: null }))
   )
 
-  const handleOptionSelect = (
-    filterIndex: number,
-    optionIndex: number | null
-  ) => {
+  const handleOptionSelect = (filterIndex: number, optionIndex: number) => {
     const newFilters = [...filters]
-    newFilters[filterIndex].selected = optionIndex
+    const filter = newFilters[filterIndex]
+
+    if (filter.title === 'Avaliação') {
+      filter.selected = optionIndex === filter.selected ? null : optionIndex
+    } else {
+      const selectedOptions = Array.isArray(filter.selected)
+        ? filter.selected
+        : []
+      if (selectedOptions.includes(optionIndex)) {
+        filter.selected = selectedOptions.filter(
+          (index) => index !== optionIndex
+        )
+      } else {
+        filter.selected = [...selectedOptions, optionIndex]
+      }
+    }
+
     setFilters(newFilters)
   }
 
@@ -151,14 +170,34 @@ export default function SearchingFilters() {
       ...filter,
       selected: null
     }))
+    setDate(new Date())
+    setFormattedDate('DD/MM/YYYY')
+    setDateSelected(false)
     setFilters(clearedFilters)
     setTimeout(() => {
       setIsDisabled(false)
     }, 500)
   }
 
+  const handleDateChange = (event: any, selectedDate: Date | undefined) => {
+    const currentDate = selectedDate || date
+    setShowPicker(false)
+    setDate(currentDate)
+
+    const day = String(currentDate.getDate()).padStart(2, '0')
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0')
+    const year = currentDate.getFullYear()
+
+    setFormattedDate(`${day}/${month}/${year}`)
+    setDateSelected(true)
+  }
+
   function handleVoltar() {
     navigation.back()
+  }
+
+  function handleClosePicker() {
+    setShowPicker(false)
   }
 
   return (
@@ -169,16 +208,33 @@ export default function SearchingFilters() {
             onPress={() => handleVoltar()}
             className="ml-5 flex h-12 w-12 items-center justify-center rounded-full bg-[#1C1C1C]"
           >
-            <FontAwesome6 name="arrow-left" size={20} color="white" />
+            <FontAwesome6 name="arrow-left" size={18} color="white" />
           </TouchableOpacity>
           <SearchingBarInput search={search} setSearch={setSearch} />
         </View>
         <View className="flex-1">
           <ScrollView className="mt-12 flex-1">
+            <View
+              className={` mb-8 flex flex-col gap-2  pb-2 pt-5`}
+            >
+              <View className="flex flex-row">
+                <View className="ml-4 mt-4">
+                  <FontAwesome6 name="calendar" size={20} color="white" />
+                </View>
+                <Text className="ml-2 mt-4 text-lg text-white">Data</Text>
+              </View>
+              <View className="mx-2 mt-2 flex flex-row flex-wrap">
+                <AnimatedOption
+                  label={formattedDate}
+                  selected={dateSelected}
+                  onPress={() => setShowPicker(true)}
+                />
+              </View>
+            </View>
             {filters.map((filter, index) => (
               <View
                 key={index}
-                className={`mb-8 flex flex-col gap-2 pb-2 pt-5 ${filter.title === 'Data' ? '' : 'border-t-2 border-t-[#2C2B2B]'}`}
+                className={`border-t-2 mb-8 flex flex-col gap-2 border-t-[#2C2B2B] pb-2 pt-5`}
               >
                 <View className="flex flex-row">
                   <View className="ml-4 mt-4">
@@ -188,49 +244,19 @@ export default function SearchingFilters() {
                     {filter.title}
                   </Text>
                 </View>
-                <View className="mx-2 mt-2 flex flex-row flex-wrap">
+                <View className={`mx-2 mt-2 flex flex-row flex-wrap`}>
                   {filter.options.map((option, optionIndex) => (
                     <View key={optionIndex} className="m-1">
-                      {filter.selected === optionIndex ? (
-                        <Pressable
-                          onPress={() => handleOptionSelect(index, null)}
-                        >
-                          <LinearGradient
-                            colors={['#5A189A', '#9C4EDC']}
-                            start={{ x: 0, y: 0 }}
-                            end={{ x: 1, y: 1 }} // Gradiente diagonal suave
-                            style={{
-                              paddingVertical: 12,
-                              paddingHorizontal: 30,
-                              borderRadius: 20, // Bordas arredondadas
-                              alignItems: 'center',
-                              shadowColor: 'rgba(156, 78, 220, 0.3)', // Cor da sombra
-                              shadowOffset: { width: 0, height: 7 }, // Deslocamento da sombra
-                              shadowOpacity: 1, // Opacidade da sombra
-                              shadowRadius: 11, // Raio de desfoque
-                              elevation: 10
-                            }}
-                          >
-                            <Text className="text-xs text-white">
-                              {option.label}
-                            </Text>
-                          </LinearGradient>
-                        </Pressable>
-                      ) : (
-                        <Pressable
-                          className="flex flex-row items-center justify-center gap-4 bg-[#1C1C1C]"
-                          style={{
-                            paddingVertical: 12,
-                            paddingHorizontal: 30,
-                            borderRadius: 20
-                          }}
-                          onPress={() => handleOptionSelect(index, optionIndex)}
-                        >
-                          <Text className="text-xs text-[#BDBDBD]">
-                            {option.label}
-                          </Text>
-                        </Pressable>
-                      )}
+                      <AnimatedOption
+                        label={option.label}
+                        selected={
+                          filter.title === 'Avaliação'
+                            ? filter.selected === optionIndex
+                            : Array.isArray(filter.selected) &&
+                              filter.selected.includes(optionIndex)
+                        }
+                        onPress={() => handleOptionSelect(index, optionIndex)}
+                      />
                     </View>
                   ))}
                 </View>
@@ -250,6 +276,30 @@ export default function SearchingFilters() {
             </RoleMainButton>
           </View>
         </View>
+
+        {showPicker && (
+          <View className="absolute inset-0 flex z-50 bg-transparent mt-20 w-[100vw] p-5">
+            <View className="relative flex justify-center items-center bg-black rounded-3xl">
+              <View className="w-[90%] flex p-4 rounded-lg mx-auto">
+                <DateTimePicker
+                  value={date}
+                  mode="date"
+                  display="inline"
+                  accentColor="#9C4EDC"
+                  themeVariant='dark'
+                  minimumDate={new Date()}
+                  onChange={handleDateChange}
+                />
+                <TouchableOpacity
+                  onPress={handleClosePicker}
+                  className="mt-4 p-2 bg-[#1C1C1C] rounded-full items-center justify-center"
+                >
+                  <Text className="text-white">Fechar</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        )}
       </View>
     </Background>
   )
