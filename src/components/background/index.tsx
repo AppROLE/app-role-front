@@ -159,7 +159,7 @@ export default function Background({ children, text, scrollable, themeMode, lock
           </Animated.View>
         )}
         {!scrollable ? (
-          <View className="flex h-[89%] flex-col items-center rounded-t-[54px] pt-12" style={{ paddingBottom: 60, backgroundColor }}>
+          <View className="flex h-[89%] flex-col items-center rounded-t-[54px] pt-12" style={{ backgroundColor }}>
             {children}
           </View>
         ) : (
