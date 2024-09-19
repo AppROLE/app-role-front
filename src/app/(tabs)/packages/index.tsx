@@ -1,9 +1,10 @@
-import { getAllInstituteByIdResponseDTO, Institute } from "@/api/types/institute_dto";
+import { getInstituteByPartnerTypeResponseDTO, Institute } from "@/api/types/institute_dto";
 import { InstituteContext } from "@/context/institute_context";
 import Background from "@/src/components/background";
 import RoleMainButton from "@/src/components/roleMainButton";
 import { FontAwesome6 } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
 import { useContext, useEffect, useState } from "react";
 import { Animated, Image, KeyboardAvoidingView, Linking, Platform, Pressable, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
@@ -15,7 +16,7 @@ export default function Packages() {
     const [selectedCard, setSelectedCard] = useState<number | null>(null);
     const [date, setDate] = useState('');
     const [isDateFocused, setIsDateFocused] = useState(false);
-    const { getAll } = useContext(InstituteContext);
+    const { getAllInstitutesByPartnerType } = useContext(InstituteContext);
     const [institutes, setInstitutes] = useState<Institute[]>([]);
 
     const data = [
@@ -71,13 +72,20 @@ export default function Packages() {
     };
 
     useEffect(() => { 
-        const response = getAll()
-        response.then((res : getAllInstituteByIdResponseDTO) => {
-            setInstitutes(res.institutes)
-            console.log(res.institutes)
-        }).catch((error) => {
-            console.log("error "+ error)
-        })
+        async function getInstitutes() { 
+            const idToken = (await AsyncStorage.getItem('idToken')) || ''
+            if (idToken === '') return
+            if (getAllInstitutesByPartnerType) {
+                const response = getAllInstitutesByPartnerType(idToken);
+                response.then((res : getInstituteByPartnerTypeResponseDTO) => {
+                    setInstitutes(res.institutes)
+                    console.log(res.institutes)
+                }).catch((error) => {
+                    console.log("error "+ error)
+                })
+            }
+        }
+        getInstitutes();
     }, []);
 
     return (
@@ -147,9 +155,9 @@ export default function Packages() {
                                                         style={{ borderRadius: 999, flexDirection: 'row', alignItems: 'center', height: '100%', width: 157 }}
                                                     >
                                                         <View className="mx-1">
-                                                            <Image source={institute.image} />
+                                                            <Image source={{ uri: institute.image }} />
                                                         </View>
-                                                        <Text className="text-white text-center text-lg mx-3">{institute.title}</Text>
+                                                        <Text className="text-white text-center text-lg mx-3">{institute.name}</Text>
                                                     </LinearGradient>
                                                 </Pressable>
                                             </View>
@@ -159,9 +167,9 @@ export default function Packages() {
                                                 className="flex-row w-[157px] bg-button_color m-2 h-[75%] justify-center items-center rounded-full"
                                             >
                                                 <View className="mx-1">
-                                                    <Image source={institute.image} />
+                                                    <Image source={{ uri: institute.image }} />
                                                 </View>
-                                                <Text className="text-white text-center text-lg mx-3">{institute.title}</Text>
+                                                <Text className="text-white text-center text-lg mx-3">{institute.name}</Text>
                                             </View>
                                         )}
                                     </TouchableOpacity>

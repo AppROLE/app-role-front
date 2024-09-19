@@ -1,6 +1,6 @@
 
 export type createReviewRequestDTO = { 
-    reviewed_at: Date
+    reviewed_at: number
     star: number
     comment: string
 }

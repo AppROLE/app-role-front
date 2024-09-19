@@ -74,7 +74,7 @@ export default function RootLayout() {
           name="role-description/index"
           options={{ headerShown: false }}
         />
-        <Stack.Screen>
+        <Stack.Screen
             name="privacy/index"
             options={{ headerShown: false }}
         />
