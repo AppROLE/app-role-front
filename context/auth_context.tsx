@@ -1,6 +1,7 @@
 import { confirmCodeResponseDTO, signUpRequestDTO, finishSignUpRequestDTO, finishSignUpResponseDTO, 
   signInRequestDTO, signInResponseDTO, confirmForgotPasswordResponseDTO, forgotPasswordResponseDTO,
-  confirmForgotPasswordRequestDTO,} from '@/api/types/auth_dto'
+  confirmForgotPasswordRequestDTO,
+  signUpResponseDTO,} from '@/api/types/auth_dto'
 import { createContext, PropsWithChildren } from 'react'
 import { AuthRepositoryHttp } from '@/api/repositories/auth_repository_http'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -8,7 +9,7 @@ import { router } from 'expo-router'
 
 type AuthContextType = {
   signIn: (data: signInRequestDTO) => Promise<signInResponseDTO>
-  signUp: (data: signUpRequestDTO) => Promise<object>
+  signUp: (data: signUpRequestDTO) => Promise<signUpResponseDTO>
   resendCode: (email: string) => Promise<{ message: string }>
   confirmForgotPassword: (data: confirmForgotPasswordRequestDTO) => Promise<confirmForgotPasswordResponseDTO>
   forgotPassword: (email: string) => Promise<forgotPasswordResponseDTO>
@@ -26,7 +27,14 @@ const defaultAuthContext = {
     }
   },
   signUp: async (_data: signUpRequestDTO) => {
-    return {}
+    return {
+      name: '',
+      email: '',
+      roleType: '',
+      nickname: '',
+      username: '',
+      message: ''
+    }
   },
   forgotPassword: async (_email: string) => {
     return {
@@ -117,7 +125,7 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
   async function uploadImageProfile(formData: FormData) {
     try {
       const response = await authRepository.uploadImageProfile(formData);
-      console.log("RESPOSTA DO UPLOAD IMAGE PROFILE CONTEXT" + response);
+      console.log("RESPOSTA DO UPLOAD IMAGE PROFILE CONTEXT", response);
       return response;
     } catch (error: any) {
       console.log(error);
