@@ -9,3 +9,7 @@ export type getAllInstituteByIdResponseDTO = {
     institutes: Institute[],
     message: string    
 }
+
+export type getInstituteByIdResponseDTO = { 
+    
+}
