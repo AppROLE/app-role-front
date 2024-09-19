@@ -4,6 +4,7 @@ import Background from "@/src/components/background";
 import RoleMainButton from "@/src/components/roleMainButton";
 import { FontAwesome6 } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
 import { useContext, useEffect, useState } from "react";
 import { Animated, Image, KeyboardAvoidingView, Linking, Platform, Pressable, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
@@ -15,7 +16,7 @@ export default function Packages() {
     const [selectedCard, setSelectedCard] = useState<number | null>(null);
     const [date, setDate] = useState('');
     const [isDateFocused, setIsDateFocused] = useState(false);
-    const { getAll } = useContext(InstituteContext);
+    const { getAllInstitutesByPartnerType } = useContext(InstituteContext);
     const [institutes, setInstitutes] = useState<Institute[]>([]);
 
     const data = [
@@ -71,13 +72,17 @@ export default function Packages() {
     };
 
     useEffect(() => { 
-        const response = getAll()
-        response.then((res : getAllInstituteByIdResponseDTO) => {
-            setInstitutes(res.institutes)
-            console.log(res.institutes)
-        }).catch((error) => {
-            console.log("error "+ error)
-        })
+        async function getInstitutes() { 
+            const idToken = (await AsyncStorage.getItem('idToken')) || ''
+            const response = getAllInstitutesByPartnerType(idToken)
+            response.then((res : any) => {
+                setInstitutes(res.institutes)
+                console.log(res.institutes)
+            }).catch((error) => {
+                console.log("error "+ error)
+            })
+        }
+        getInstitutes();
     }, []);
 
     return (
