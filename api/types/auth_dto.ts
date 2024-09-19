@@ -11,7 +11,7 @@ export type signUpResponseDTO = {
     roleType: string,
     nickname: string,
     username: string,
-    message: string
+    message: string,
   }
 
   export type resendCodeRequestDTO = {
