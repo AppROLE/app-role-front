@@ -63,6 +63,14 @@ export default function RootLayout() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
+          name="configs/index"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="configs/delete/index"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
           name="role-description/index"
           options={{ headerShown: false }}
         />
