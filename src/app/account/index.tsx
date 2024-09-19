@@ -5,14 +5,28 @@ import {
   ScrollView,
 } from 'react-native';
 import Background from '@/src/components/background';
-import React from "react";
+import React, {useState} from "react";
 import Svg from "@/src/components/svg";
 import RoleInput from "@/src/components/input";
 import BigButton from "@/src/components/bigButton";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 export default function Account() {
   const [phone, setPhone] = React.useState('');
   const [cpf, setCpf] = React.useState('');
+
+  const insets = useSafeAreaInsets(); // Obtem as margens seguras do dispositivo
+  const [viewHeight, setViewHeight] = useState(0);
+
+  const handleLayout = (event:any) => {
+    const { height } = event.nativeEvent.layout;
+    setViewHeight(height);
+  };
+
+  const tabBarHeightWithSafeArea = viewHeight - 20;
+  const tabBarHeightWithoutSafeArea = 0;
+
+  const tabBarHeight = insets.bottom > 0 ? tabBarHeightWithoutSafeArea : tabBarHeightWithSafeArea;
 
   function handlePhoneChange(text: string) {
     setPhone(text);
@@ -114,7 +128,7 @@ export default function Account() {
             </TouchableOpacity>
           </View>
         </ScrollView>
-        <View className="flex justify-end items-center py-4 bg-button_color">
+        <View onLayout={handleLayout} className="absolute flex justify-end items-center py-4 bg-button_color w-full" style={{bottom: tabBarHeight}}>
           <BigButton buttonFunction={onSave}>
             <Text className="text-white text-lg">
               Salvar
