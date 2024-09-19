@@ -74,6 +74,14 @@ export default function RootLayout() {
           name="role-description/index"
           options={{ headerShown: false }}
         />
+        <Stack.Screen>
+            name="privacy/index"
+            options={{ headerShown: false }}
+        />
+        <Stack.Screen
+            name="account/index"
+            options={{ headerShown: false }}
+        />
       </Stack>
     </AuthContextProvider>
   )

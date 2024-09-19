@@ -51,6 +51,8 @@ export default function Index() {
       <Link href={'/editing-perfil'}>Editing perfil</Link>
       <Link href={'/role-description'}>Role description</Link>
       <Link href={'/configs'}>Configs</Link>
+      <Link href={'/privacy'}>Privacy</Link>
+      <Link href={'/account'}>Account</Link>
       {/* View para testar os components */}
       <View className="my-5 w-full bg-[#121212]">
         {/* <RoleMainButton type='gradient' buttonFunction={teste} disabled={buttonDisabled}>
