@@ -23,7 +23,9 @@ export default function Index() {
     AsyncStorage.setItem('passwordi', '123456')
   }
 
-
+  function clearAsync() {
+    AsyncStorage.clear()
+  }
 
   return (
     <View className="flex h-full w-full items-center justify-center bg-blue-100">
@@ -43,8 +45,11 @@ export default function Index() {
       <Link href={'/confirm-forgot-password'}>Confirm Forgot Password</Link>
       <Link href={'/sign-up'}>Sign Up</Link>
       <Link href={'/recovery-code'}>Recovery Code</Link>
+      <Link href={'/searching-filters'}>Searching-filters</Link>
       <Link href={'/forgot-password'}>Forgot Password</Link>
       <Link href={'/home'}>Home</Link>
+      <Link href={'/editing-perfil'}>Editing perfil</Link>
+      <Link href={'/configs'}>Configs</Link>
       {/* View para testar os components */}
       <View className="my-5 w-full bg-[#121212]">
         {/* <RoleMainButton type='gradient' buttonFunction={teste} disabled={buttonDisabled}>
@@ -53,6 +58,9 @@ export default function Index() {
         {/* <RoleCard data={'16 DEZ'} image={'https://placehold.co/600x400'} title={'São Conrado'} type={'Bar'} stars={4.5} local={'Itaim'} idRole={'1'}/> */}
         {/* <CategoryCard type='Musical' name='Pagode'/> */}
       </View>
+      <TouchableOpacity onPress={clearAsync}>
+        <Text>Limpar async</Text>
+      </TouchableOpacity>
     </View>
   )
 }
