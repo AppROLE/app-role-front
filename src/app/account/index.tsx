@@ -33,20 +33,21 @@ export default function Account() {
   return (
     <Background>
       <View className="w-full flex-1">
-        <View className="flex flex-row h-12 w-full items-center gap-3 border-b-2 border-b-line_gray">
+        <View className="relative flex flex-row h-12 w-full items-center gap-3 border-b-2 border-b-line_gray">
           <TouchableOpacity
-              className="ml-5 flex h-12 w-12 items-center justify-center rounded-full bg-button_color mb-8"
+              className="absolute flex h-12 w-12 items-center justify-center rounded-full bg-button_color bottom-4 left-6"
           >
             <Svg
                 uri={process.env.EXPO_PUBLIC_URL_S3 + "/left_arrow.svg"}
             />
           </TouchableOpacity>
           <View className="flex-1 h-full mb-8">
-            <Text className="text-white text-center text-3xl font-bold">
+            <Text className="absolute left-1/2 transform -translate-x-1/2 text-white text-3xl font-bold">
               Conta
             </Text>
           </View>
         </View>
+
         <ScrollView>
           <View className="pl-6 gap-6 pt-6 items-start border-b-2 border-b-line_gray">
             <Text className="text-white text-lg font-bold">
