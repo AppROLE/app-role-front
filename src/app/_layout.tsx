@@ -62,6 +62,10 @@ export default function RootLayout() {
           name="editing-perfil/index"
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          name="role-description/index"
+          options={{ headerShown: false }}
+        />
       </Stack>
     </AuthContextProvider>
   )
