@@ -19,7 +19,8 @@ import RoleInput from '@/src/components/input';
 import { AuthContext } from '@/context/auth_context';
 import { finishSignUpRequestDTO } from '@/api/types/auth_dto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { router } from 'expo-router';
+import * as FileSystem from 'expo-file-system';
 
 export default function AlmostThere() {
     const [imageType, setImageType] = useState<string>(''); // Provide a default value for imageType
@@ -27,7 +28,7 @@ export default function AlmostThere() {
     const [nickname, setNickname] = useState<string>('');
     const [usernameError, setUsernameError] = useState<string>('');
     const [nicknameError, setNicknameError] = useState<string>('');
-    const [profilePhoto, setProfilePhoto] = useState<string>('');
+    const [profilePhoto, setProfilePhoto] = useState<File>();
     const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
     const { finishSignUp, signIn, uploadImageProfile } = useContext(AuthContext);
 
@@ -40,7 +41,7 @@ export default function AlmostThere() {
             quality: 1
         });
 
-        console.log("RESPOSTA DO PICKER " + result);
+        console.log("RESPOSTA DO PICKER ", result);
 
         if (!result.canceled) {
             const selectedImage = result.assets[0]; // Obter o primeiro item na seleção
@@ -101,7 +102,7 @@ export default function AlmostThere() {
         try {
             const formData = new FormData();
             formData.append('username', username);
-            formData.append('email', 'jota@email.com');
+            formData.append('email', await AsyncStorage.getItem('user_email') ?? '');
             formData.append('profilePhoto', profilePhoto);
             formData.append('typePhoto', imageType);
 
@@ -114,12 +115,13 @@ export default function AlmostThere() {
             }
             console.log("Upload concluído:", uploadResponse);
             console.log("FORM DATA " + formData)
+            
         } catch (error) {
             console.error("Erro ao fazer upload da imagem:", error);
         }
         
         // console.log("SIGN IN " + result)
-        console.log("FINISH SIGNUP " + response.message)
+        console.log("FINISH SIGNUP ", response.message)
     }
 
     return (
