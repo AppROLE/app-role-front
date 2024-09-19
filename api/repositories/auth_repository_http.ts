@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import { http } from '../http'
-import { signInRequestDTO, signInResponseDTO } from '../types/auth_dto'
+import { signInRequestDTO, signInResponseDTO, signUpRequestDTO, signUpResponseDTO } from '../types/auth_dto'
 import { finishSignUpRequestDTO } from '../types/auth_dto'
 import { confirmForgotPasswordRequestDTO, confirmForgotPasswordResponseDTO } from '../types/auth_dto'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -18,10 +18,10 @@ export class AuthRepositoryHttp {
     }
   }
 
-  async signUp(data: object) {
+  async signUp(data: signUpRequestDTO) {
     try {
       const response = await http.post('/sign-up', data)
-      return response.data
+      return response.data as signUpResponseDTO
     } catch (error: any) {
       return error.response.data
     }
@@ -59,7 +59,7 @@ export class AuthRepositoryHttp {
 
   async uploadImageProfile(formData: FormData) {
     try {
-      const response = await http.post('/upload-image-profile', formData, {
+      const response = await http.post('/upload-profile-photo', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
