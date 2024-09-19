@@ -1,4 +1,4 @@
-import { getAllInstituteByIdResponseDTO, Institute } from "@/api/types/institute_dto";
+import { getInstituteByPartnerTypeResponseDTO, Institute } from "@/api/types/institute_dto";
 import { InstituteContext } from "@/context/institute_context";
 import Background from "@/src/components/background";
 import RoleMainButton from "@/src/components/roleMainButton";
@@ -74,13 +74,16 @@ export default function Packages() {
     useEffect(() => { 
         async function getInstitutes() { 
             const idToken = (await AsyncStorage.getItem('idToken')) || ''
-            const response = getAllInstitutesByPartnerType(idToken)
-            response.then((res : any) => {
-                setInstitutes(res.institutes)
-                console.log(res.institutes)
-            }).catch((error) => {
-                console.log("error "+ error)
-            })
+            if (idToken === '') return
+            if (getAllInstitutesByPartnerType) {
+                const response = getAllInstitutesByPartnerType(idToken);
+                response.then((res : getInstituteByPartnerTypeResponseDTO) => {
+                    setInstitutes(res.institutes)
+                    console.log(res.institutes)
+                }).catch((error) => {
+                    console.log("error "+ error)
+                })
+            }
         }
         getInstitutes();
     }, []);
@@ -152,9 +155,9 @@ export default function Packages() {
                                                         style={{ borderRadius: 999, flexDirection: 'row', alignItems: 'center', height: '100%', width: 157 }}
                                                     >
                                                         <View className="mx-1">
-                                                            <Image source={institute.image} />
+                                                            <Image source={{ uri: institute.image }} />
                                                         </View>
-                                                        <Text className="text-white text-center text-lg mx-3">{institute.title}</Text>
+                                                        <Text className="text-white text-center text-lg mx-3">{institute.name}</Text>
                                                     </LinearGradient>
                                                 </Pressable>
                                             </View>
@@ -164,9 +167,9 @@ export default function Packages() {
                                                 className="flex-row w-[157px] bg-button_color m-2 h-[75%] justify-center items-center rounded-full"
                                             >
                                                 <View className="mx-1">
-                                                    <Image source={institute.image} />
+                                                    <Image source={{ uri: institute.image }} />
                                                 </View>
-                                                <Text className="text-white text-center text-lg mx-3">{institute.title}</Text>
+                                                <Text className="text-white text-center text-lg mx-3">{institute.name}</Text>
                                             </View>
                                         )}
                                     </TouchableOpacity>
