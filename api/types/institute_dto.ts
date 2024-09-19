@@ -1,6 +1,7 @@
 export type Institute = {
     id: number;
-    title: string;
+    name: string;
+    description: string;
     image: string;
     // Outras propriedades que façam sentido
 }
@@ -10,6 +11,7 @@ export type getAllInstituteByIdResponseDTO = {
     message: string    
 }
 
-export type getInstituteByIdResponseDTO = { 
-    
+export type getInstituteByPartnerTypeResponseDTO = { 
+    institutes: Institute[],
+    message: string    
 }
