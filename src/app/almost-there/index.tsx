@@ -22,12 +22,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function AlmostThere() {
-    const [imageType, setImageType] = useState<string>(''); // Provide a default value for imageType
+    const [imageUri, setImageUri] = useState<string | null>(null);
     const [username, setUsername] = useState<string>('');
     const [nickname, setNickname] = useState<string>('');
     const [usernameError, setUsernameError] = useState<string>('');
     const [nicknameError, setNicknameError] = useState<string>('');
-    const [profilePhoto, setProfilePhoto] = useState<string>('');
     const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
     const { finishSignUp, signIn, uploadImageProfile } = useContext(AuthContext);
 
@@ -43,20 +42,18 @@ export default function AlmostThere() {
         console.log("RESPOSTA DO PICKER " + result);
 
         if (!result.canceled) {
-            const selectedImage = result.assets[0]; // Obter o primeiro item na seleção
-            const imageUri = selectedImage.uri;
-            const imageType = imageUri.split('.').pop();
-            const formattedImageType = imageType ? `.${imageType}` : '';
-
-            console.log("IMAGEM SELECIONADA " + selectedImage.uri);
-            console.log("TYPE IMAGE ", formattedImageType);
-
-            setImageType(formattedImageType); // Definir a imagem localmente para exibição na UI
-            setProfilePhoto(imageUri); // Definir a imagem para envio ao backend    
+            const selectedImage = result.assets[0]; // Obter o primeiro item na seleção            
+            setImageUri(selectedImage.uri);
         } else {
             console.log('Cancelado');
         }
-    }
+    };
+
+    const getImageBlob = async (uri: string) => {
+        const response = await fetch(uri);
+        const blob = await response.blob();
+        return blob;
+    };
 
     function handleUsernameChange(text: string) {
         setUsername(text);
@@ -102,17 +99,19 @@ export default function AlmostThere() {
         console.log("DADOS ENVIADOS NA REQ SIGN IN " + dataSignIn);
         const result = await signIn(dataSignIn);
 
-        console.log("PROFILE PHOTO " + profilePhoto);
         console.log("NICKNAME " + nickname);
         console.log("USERNAME " + username);
-        console.log("IMAGE TYPE " + imageType);
 
         try {
             const formData = new FormData();
             formData.append('username', username);
-            formData.append('email', 'jota@email.com');
-            formData.append('profilePhoto', profilePhoto);
-            formData.append('typePhoto', imageType);
+            formData.append('email', (await AsyncStorage.getItem('email')) ?? '');
+
+            if (imageUri) {
+                const imageBlob = await getImageBlob(imageUri);
+                console.log("BLOB DA IMAGEM " + imageBlob);
+                formData.append('profilePhoto', imageBlob, 'profilePhoto.jpg');
+            }
 
             // Fazer upload da imagem para o backend
             const uploadResponse = await uploadImageProfile(formData);
@@ -153,9 +152,9 @@ export default function AlmostThere() {
                                     <TouchableOpacity onPress={pickImage}>
                                         <View className="rounded-full bg-white ">
                                             <View className="rounded-full bg-gray-400">
-                                                {profilePhoto ? (
+                                                {imageUri ? (
                                                     <Image
-                                                        source={{ uri: profilePhoto }}
+                                                        source={{ uri: imageUri }}
                                                         style={styles.image}
                                                         className="rounded-full"
                                                     />
