@@ -3,7 +3,6 @@ import { getAllInstituteByIdResponseDTO } from "@/api/types/institute_dto"
 import { createContext, PropsWithChildren } from "react"
 
 type InstituteContextType = { 
-    create: (data: object) => Promise<object>
     getAll: () => Promise<getAllInstituteByIdResponseDTO>
     getById: (id: string) => Promise<object>
 }
@@ -28,15 +27,6 @@ export const InstituteContext = createContext<InstituteContextType>(defaultInsti
 export function InstituteContextProvider({ children }: PropsWithChildren) {
   const instituteRepository = new InstituteRepositoryHttp()
 
-  async function create(data: object) {
-    try {
-      const response = await instituteRepository.create(data)
-      return response
-    } catch (error: any) {
-      return error
-    }
-  }
-
   async function getAll() {
     try {
       const response = await instituteRepository.getAll()
@@ -56,7 +46,7 @@ export function InstituteContextProvider({ children }: PropsWithChildren) {
   }
 
   return (
-    <InstituteContext.Provider value={{ create, getAll, getById }}>
+    <InstituteContext.Provider value={{ getAll, getById }}>
       {children}
     </InstituteContext.Provider>
   )
