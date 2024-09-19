@@ -49,6 +49,7 @@ export default function Index() {
       <Link href={'/forgot-password'}>Forgot Password</Link>
       <Link href={'/home'}>Home</Link>
       <Link href={'/editing-perfil'}>Editing perfil</Link>
+      <Link href={'/role-description'}>Role description</Link>
       <Link href={'/configs'}>Configs</Link>
       <Link href={'/privacy'}>Privacy</Link>
       <Link href={'/account'}>Account</Link>
