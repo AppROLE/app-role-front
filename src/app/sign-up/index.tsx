@@ -50,10 +50,6 @@ export default function SignUp() {
     }
   }
 
-  interface SignUpResponse {
-    message?: string
-  }
-
   async function changePassword() {
     verifyPassword()
 
@@ -65,26 +61,19 @@ export default function SignUp() {
     }
 
     try {
-      const response: SignUpResponse = await signUp(data)
+      const response = await signUp(data)
       console.log(response)
-      Toast.show({
-        type: 'success',
-        text1: 'Sucesso',
-        text2: response.message || 'Cadastro realizado com sucesso!',
-        visibilityTime: 3000,
-        topOffset: 0,
-      });
-      await AsyncStorage.setItem('ScreenRequestToCode', 'sign-up')
-      await AsyncStorage.setItem('user_email', email)
-      router.push('/recovery-code');
+      if (response.message) {
+        await AsyncStorage.setItem('ScreenRequestToCode', 'sign-up')
+        await AsyncStorage.setItem('user_email', email)
+        router.push('/recovery-code');
+      }
+      else {
+        console.log('Erro ao cadastrar')
+      }
     } catch (error: any) {
-      Toast.show({
-        type: 'error',
-        text1: 'Erro',
-        text2: error.message || 'Ocorreu um erro ao realizar o cadastro.',
-        visibilityTime: 3000,
-        topOffset: 0
-      })
+      console.log('Erro na request')
+      console.log(error)
     }
   }
 
