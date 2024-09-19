@@ -62,6 +62,14 @@ export default function RootLayout() {
           name="editing-perfil/index"
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          name="configs/index"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="configs/delete/index"
+          options={{ headerShown: false }}
+        />
       </Stack>
     </AuthContextProvider>
   )

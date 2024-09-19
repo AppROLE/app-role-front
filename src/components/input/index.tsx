@@ -11,14 +11,16 @@ export type RoleInputType =
   | 'hidden-password'
   | 'hidden-confirm-password'
   | 'nickname'
+  | 'none'
 
 interface RoleInputProps {
   type: RoleInputType
   value?: string
   onChangeText?: (value: string) => void
-  error: string
+  error?: string
   onFocus?: () => void;
   style?: any;
+  placeholder?: string;
 }
 
 export default function RoleInput({
@@ -27,7 +29,8 @@ export default function RoleInput({
   onChangeText,
   onFocus,
   style,
-  error
+  error,
+  placeholder
 }: RoleInputProps) {
   const [hidden, setHidden] = useState(true)
 
@@ -107,7 +110,10 @@ export default function RoleInput({
                           ? 'Confirme a senha'
                           : type === 'nickname'
                             ? 'Apelido'
-                            : ''
+                            : type === 'none'
+                            ? placeholder
+                              : ''
+
           }
           className={`w-[75%] ${!error ? 'text-white placeholder:text-[#BDBDBD]' : 'placeholder:text-red-400] text-red-400 opacity-80'} text-[16px] outline-none`}
           value={value}

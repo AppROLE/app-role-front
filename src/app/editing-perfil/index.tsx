@@ -1,15 +1,22 @@
-import Background from "@/src/components/background";
-import RoleInput from "@/src/components/input";
-import RoleMainButton from "@/src/components/roleMainButton";
-import * as ImagePicker from 'expo-image-picker';
-import { FontAwesome6 } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import { useState } from "react";
-import { TouchableOpacity, View, Text, ScrollView, Image, StyleSheet } from "react-native";
-
+import Background from '@/src/components/background'
+import RoleInput from '@/src/components/input'
+import RoleMainButton from '@/src/components/roleMainButton'
+import * as ImagePicker from 'expo-image-picker'
+import { FontAwesome6 } from '@expo/vector-icons'
+import { useRouter } from 'expo-router'
+import { useEffect, useState } from 'react'
+import {
+  TouchableOpacity,
+  View,
+  Text,
+  ScrollView,
+  Image,
+  StyleSheet,
+  TextInput
+} from 'react-native'
 
 export default function EditingPerfil() {
-  const navigation = useRouter();
+  const navigation = useRouter()
   const [userErr, setUserErr] = useState('')
   const [nickErr, setNickErr] = useState('')
   const [bioErr, setBioErr] = useState('')
@@ -33,49 +40,57 @@ export default function EditingPerfil() {
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1
-    });
+    })
 
-    console.log("RESPOSTA DO PICKER " + result);
+    console.log('RESPOSTA DO PICKER ' + result)
 
     if (!result.canceled) {
-      const selectedImage = result.assets[0]; // Obter o primeiro item na seleção
-      const imageUri = selectedImage.uri;
-      const imageType = imageUri.split('.').pop();
-      const formattedImageType = imageType ? `.${imageType}` : '';
+      const selectedImage = result.assets[0] // Obter o primeiro item na seleção
+      const imageUri = selectedImage.uri
+      const imageType = imageUri.split('.').pop()
+      const formattedImageType = imageType ? `.${imageType}` : ''
 
-      console.log("IMAGEM SELECIONADA " + selectedImage.uri);
-      console.log("TYPE IMAGE ", formattedImageType);
+      console.log('IMAGEM SELECIONADA ' + selectedImage.uri)
+      console.log('TYPE IMAGE ', formattedImageType)
 
-      setImageType(formattedImageType); // Definir a imagem localmente para exibição na UI
-      setProfileImage(imageUri); // Definir a imagem para envio ao backend    
+      setImageType(formattedImageType) // Definir a imagem localmente para exibição na UI
+      setProfileImage(imageUri) // Definir a imagem para envio ao backend
     } else {
-      console.log('Cancelado');
+      console.log('Cancelado')
     }
   }
+
+  useEffect(() => {
+    setUser('@isa.saab')
+    setNick('Isa Saab')
+    setBio('Atriz e cantora')
+    setInsta('@isa.saab')
+    setTiktok('@isa.saab')
+  }, [])
 
   const handleChooseBanner = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [6, 19],
+      aspect: [16, 9],
       quality: 1
-    });
+    })
 
-    console.log("RESPOSTA DO PICKER " + result);
+    console.log('RESPOSTA DO PICKER ' + result)
 
     if (!result.canceled) {
-      const selectedImage = result.assets[0]; // Obter o primeiro item na seleção
-      const imageUri = selectedImage.uri;
-      const imageType = imageUri.split('.').pop();
-      const formattedImageType = imageType ? `.${imageType}` : '';
+      const selectedImage = result.assets[0] // Obter o primeiro item na seleção
+      const imageUri = selectedImage.uri
+      const imageType = imageUri.split('.').pop()
+      const formattedImageType = imageType ? `.${imageType}` : ''
 
-      console.log("IMAGEM SELECIONADA " + selectedImage.uri);
-      console.log("TYPE IMAGE ", formattedImageType);
+      console.log('IMAGEM SELECIONADA ' + selectedImage.uri)
+      console.log('TYPE IMAGE ', formattedImageType)
 
-      setBannerType(formattedImageType); // Definir a imagem localmente para exibição na UI
-      setBanner(imageUri); // Definir a imagem para envio ao backend    
+      setBannerType(formattedImageType) // Definir a imagem localmente para exibição na UI
+      setBanner(imageUri) // Definir a imagem para envio ao backend
     } else {
-      console.log('Cancelado');
+      console.log('Cancelado')
     }
   }
 
@@ -84,10 +99,10 @@ export default function EditingPerfil() {
   }
 
   return (
-    <Background >
-      <View className="relative w-full flex-1 ">
+    <Background>
+      <View className="relative w-full flex-1">
         <View className="relative top-0 flex h-12 w-full flex-row items-center gap-3 border-b-2 border-b-[#2C2B2B] pb-8">
-          <View className="absolute top-[-120%] h-12 z-40">
+          <View className="absolute top-[-120%] z-40 h-12">
             <TouchableOpacity
               onPress={() => handleVoltar()}
               className="ml-5 flex h-12 w-12 items-center justify-center rounded-full bg-[#1C1C1C]"
@@ -96,15 +111,17 @@ export default function EditingPerfil() {
             </TouchableOpacity>
           </View>
           <View className="flex h-[300%] w-[100%] items-center">
-            <Text className="text-white text-3xl items-center flex h-[300%] ">Editar Perfil</Text>
+            <Text className="flex h-[300%] items-center text-3xl text-white">
+              Editar Perfil
+            </Text>
           </View>
         </View>
         <View className="flex-1">
-          <ScrollView className=" flex-1">
-            <View className="p-8 pl-10 gap-5 border-b-2 border-b-[#1C1C1C]">
-              <Text className="text-white text-2xl">Foto de perfil</Text>
+          <ScrollView className="flex-1">
+            <View className="gap-5 border-b-2 border-b-[#1C1C1C] p-8 pl-10">
+              <Text className="text-2xl text-white">Foto de perfil</Text>
               <View className="flex flex-row items-center gap-8">
-                <View className="flex h-24 w-24 rounded-full bg-[#1C1C1C] items-center justify-center">
+                <View className="flex h-24 w-24 items-center justify-center rounded-full bg-[#1C1C1C]">
                   {profileImage ? (
                     <Image
                       source={{ uri: profileImage }}
@@ -120,17 +137,18 @@ export default function EditingPerfil() {
                     />
                   )}
                 </View>
-                <TouchableOpacity onPress={pickProfilePhoto} className="flex h-12 w-12 rounded-full bg-[#1C1C1C] items-center justify-center">
+                <TouchableOpacity
+                  onPress={pickProfilePhoto}
+                  className="flex h-12 w-12 items-center justify-center rounded-full bg-[#1C1C1C]"
+                >
                   <FontAwesome6 name="pen" size={18} color="white" />
                 </TouchableOpacity>
               </View>
             </View>
-            <View className="p-8 pl-10 gap-5 border-b-2 border-b-[#1C1C1C]">
-              <Text className="text-white text-2xl">
-                Banner
-              </Text>
+            <View className="gap-5 border-b-2 border-b-[#1C1C1C] p-8 pl-10">
+              <Text className="text-2xl text-white">Banner</Text>
               <View className="flex flex-row items-center gap-8">
-                <View className="flex h-24 w-48 bg-[#1c1c1c] items-center justify-center" >
+                <View className="flex h-24 w-48 items-center justify-center bg-[#1c1c1c]">
                   {banner ? (
                     <Image
                       source={{ uri: banner }}
@@ -145,50 +163,86 @@ export default function EditingPerfil() {
                     />
                   )}
                 </View>
-                <TouchableOpacity onPress={handleChooseBanner} className="flex h-12 w-12 rounded-full bg-[#1C1C1C] items-center justify-center">
+                <TouchableOpacity
+                  onPress={handleChooseBanner}
+                  className="flex h-12 w-12 items-center justify-center rounded-full bg-[#1C1C1C]"
+                >
                   <FontAwesome6 name="pen" size={18} color="white" />
                 </TouchableOpacity>
               </View>
             </View>
-            <View className="p-8 pl-10 gap-5 border-b-2 border-b-[#1C1C1C]">
-              <Text className="text-white text-2xl">
-                Usuário
-              </Text>
+            <View className="gap-5 border-b-2 border-b-[#1C1C1C] p-8 pl-10">
+              <Text className="text-2xl text-white">Usuário</Text>
               <View className="flex flex-row items-center gap-8">
-                <RoleInput type="user" error={userErr} value={user} />
+                <View className="flex w-full flex-row items-baseline gap-2 border-b-[1px] border-[#BDBDBD] pb-1">
+                  <TextInput
+                    placeholder={user}
+                    maxLength={16}
+                    className="h-6 w-[90%] text-[16px] text-white outline-none placeholder:text-[#BDBDBD]"
+                    onChangeText={(e) => setUser(e)}
+                  />
+                  <Text className="text-white">{user.length}/16</Text>
+                </View>
               </View>
             </View>
-            <View className="p-8 pl-10 gap-5 border-b-2 border-b-[#1C1C1C]">
-              <Text className="text-white text-2xl">
-                Apelido
-              </Text>
+            <View className="gap-5 border-b-2 border-b-[#1C1C1C] p-8 pl-10">
+              <Text className="text-2xl text-white">Apelido</Text>
               <View className="flex flex-row items-center gap-8">
-                <RoleInput type="user" error={nickErr} value={nick} />
+                <View className="flex w-full flex-row items-baseline gap-2 border-b-[1px] border-[#BDBDBD] pb-1">
+                  <TextInput
+                    placeholder={nick}
+                    maxLength={20}
+                    className="h-6 w-[90%] text-[16px] text-white outline-none placeholder:text-[#BDBDBD]"
+                    onChangeText={(e) => setNick(e)}
+                  />
+                  <Text className="text-white">{nick.length}/20</Text>
+                </View>
               </View>
             </View>
-            <View className="p-8 pl-10 gap-5 border-b-2 border-b-[#1C1C1C]">
-              <Text className="text-white text-2xl">
-                Biografia
-              </Text>
+            <View className="gap-5 border-b-2 border-b-[#1C1C1C] p-8 pl-10">
+              <Text className="text-2xl text-white">Biografia</Text>
               <View className="flex flex-row items-center gap-8">
-                <RoleInput type="user" error={bioErr} value={bio} />
+                <View className="flex flex-col">
+                  <View className="flex h-20 w-full flex-row items-baseline gap-2 rounded-lg border-[2px] p-2 border-[#1c1c1c] pb-1">
+                    <TextInput
+                      placeholder={bio}
+                      maxLength={100}
+                      className="h-20 w-full text-center text-[16px] text-white outline-none placeholder:text-[#BDBDBD]"
+                      onChangeText={(e) => setBio(e)}
+                      multiline={true}
+                    />
+                  </View>
+                  <Text className="left-[86%] text-white">
+                    {bio.length}/100
+                  </Text>
+                </View>
               </View>
             </View>
-            <View className="p-8 pl-10 gap-5">
-              <Text className="text-white text-2xl">
-                Contas vinculadas
-              </Text>
-              <View className="flex flex-row items-center gap-8">
-                <View className="flex h-12 w-12 rounded-full bg-[#1C1C1C] items-center justify-center">
+            <View className="gap-5 p-8 pl-10">
+              <Text className="text-2xl text-white">Contas vinculadas</Text>
+              <View className="flex flex-row items-center gap-4">
+                <View className="flex h-12 w-12 items-center justify-center rounded-md bg-[#1C1C1C]">
                   <FontAwesome6 name="instagram" size={18} color="white" />
                 </View>
-                <RoleInput type="email" error={instaErr} value={insta} />
+                <View className="flex w-[80%] flex-row items-baseline gap-2 border-b-[1px] border-[#BDBDBD] pb-1">
+                  <TextInput
+                    placeholder={insta}
+                    className="h-6 w-full text-[16px] text-white outline-none placeholder:text-[#BDBDBD]"
+                    onChangeText={(e) => setInsta(e)}
+                  />
+                </View>
               </View>
-              <View className="flex flex-row items-center gap-8">
-                <View className="flex h-12 w-12 rounded-md bg-[#1C1C1C] items-center justify-center">
+              <View className="flex flex-row items-center gap-4">
+                <View className="flex h-12 w-12 items-center justify-center rounded-md bg-[#1C1C1C]">
                   <FontAwesome6 name="tiktok" size={18} color="white" />
                 </View>
-                <RoleInput type="email" error={tiktokErr} value={tiktok} />
+                <View className="flex w-[80%] flex-row items-baseline gap-2 border-b-[1px] border-[#BDBDBD] pb-1">
+                  <TextInput
+                    placeholder={tiktok}
+                    className="h-6 w-full text-[16px] text-white outline-none placeholder:text-[#BDBDBD]"
+                    onChangeText={(e) => setTiktok(e)}
+                  />
+                </View>
               </View>
             </View>
           </ScrollView>
@@ -202,7 +256,7 @@ export default function EditingPerfil() {
         </View>
       </View>
     </Background>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
