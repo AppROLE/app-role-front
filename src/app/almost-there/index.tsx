@@ -83,16 +83,25 @@ export default function AlmostThere() {
             setUsernameError('Campo obrigatório')
             return
         }
+
         const data: finishSignUpRequestDTO = {
             email: (await AsyncStorage.getItem('email')) ?? '',
             password: (await AsyncStorage.getItem('password')) ?? '',
             username: username,
             nickname: nickname
         }
-        console.log("DADOS ENVIADOS NA REQ " + data);
 
+        const dataSignIn = {
+            email: (await AsyncStorage.getItem('email')) ?? '',
+            password: (await AsyncStorage.getItem('password')) ?? ''
+        }
+        
+        console.log("DADOS ENVIADOS NA REQ " + data);
         const response = await finishSignUp(data);
-        // const result = await signIn(data.email, data.password);
+
+        console.log("DADOS ENVIADOS NA REQ SIGN IN " + dataSignIn);
+        const result = await signIn(dataSignIn);
+
         console.log("PROFILE PHOTO " + profilePhoto);
         console.log("NICKNAME " + nickname);
         console.log("USERNAME " + username);
@@ -118,7 +127,7 @@ export default function AlmostThere() {
             console.error("Erro ao fazer upload da imagem:", error);
         }
         
-        // console.log("SIGN IN " + result)
+        console.log("SIGN IN " + result)
         console.log("FINISH SIGNUP " + response.message)
     }
 
