@@ -2,41 +2,40 @@ import Background from '@/src/components/background'
 import { Text, View } from 'react-native'
 import RoleInput from '@/src/components/input'
 import RoleMainButton from '@/src/components/roleMainButton'
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+import { AuthContext } from '@/context/auth_context'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { router } from 'expo-router'
 
 export default function ConfirmForgotPassword() {
   const [password, setPassword] = useState('')
   const [passwordError, setPasswordError] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [confirmPasswordError, setConfirmPasswordError] = useState('')
+  const {confirmForgotPassword} = useContext(AuthContext)
 
   function verifyPassword() {
-    const specialCharacterRegex = /[!@#$%^&*(),.?":{}|<>]/
-    const uppercaseLetterRegex = /[A-Z]/
-    const lowercaseLetterRegex = /[a-z]/
-    const numberRegex = /[0-9]/
-
-    if (password.length < 6) {
-      setPasswordError('Senha muito curta!')
-    } else if (!specialCharacterRegex.test(password)) {
-      setPasswordError('A senha deve conter pelo menos um caractere especial!')
-    } else if (!uppercaseLetterRegex.test(password)) {
-      setPasswordError('A senha deve conter pelo menos uma letra maiúscula!')
-    } else if (!lowercaseLetterRegex.test(password)) {
-      setPasswordError('A senha deve conter pelo menos uma letra minúscula!')
-    } else if (!numberRegex.test(password)) {
-      setPasswordError('A senha deve conter pelo menos um número!')
-    } else if (password.trim() === '') {
-      setPasswordError('Senha inválida!')
+    const passwordRegex = /^(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{6,}$/
+  
+    if (!passwordRegex.test(password)) {
+      setPasswordError('A senha deve ter no mínimo 6 caracteres, incluindo pelo menos um caractere especial, uma letra maiúscula, uma letra minúscula e um número!')
+      return false
     } else if (password !== confirmPassword) {
       setConfirmPasswordError('Senhas não conferem!')
+      return false
     } else {
-      console.log('Senha válida!')
+      return true
     }
   }
 
-  function changePassword() {
-    verifyPassword()
+  async function changePassword() {
+    if(verifyPassword()){
+      const email = (await AsyncStorage.getItem('user_email')) || ''
+      const response = await confirmForgotPassword({email: email, newPassword: password})
+      if(response.message === 'Senha alterada com sucesso!'){
+        router.push('/sign-in')
+      }
+    }
   }
 
   function handlePasswordChange(text: string) {

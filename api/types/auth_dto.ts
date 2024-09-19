@@ -6,20 +6,36 @@ export type signUpRequestDTO = {
 }
 
 export type signUpResponseDTO = {
-  name: string,
-  email: string,
-  roleType: string,
-  nickname: string,
-  username: string,
-  message: string
-}
+    name: string,
+    email: string,
+    roleType: string,
+    nickname: string,
+    username: string,
+    message: string
+  }
 
+  export type resendCodeRequestDTO = {
+    email: string
+  }
+
+  export type resendCodeResponseDTO = {
+    message: string
+  }
 
 export type forgotPasswordRequestDTO = {
   email: string
 }
 
 export type forgotPasswordResponseDTO = {
+  message: string
+}
+
+export type confirmForgotPasswordRequestDTO = {
+  newPassword: string
+  email: string
+}
+
+export type confirmForgotPasswordResponseDTO = {
   message: string
 }
 
