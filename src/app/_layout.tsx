@@ -70,6 +70,14 @@ export default function RootLayout() {
           name="configs/delete/index"
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+            name="privacy/index"
+            options={{ headerShown: false }}
+        />
+        <Stack.Screen
+            name="account/index"
+            options={{ headerShown: false }}
+        />
       </Stack>
     </AuthContextProvider>
   )
