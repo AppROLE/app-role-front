@@ -1,11 +1,11 @@
 import { InstituteRepositoryHttp } from "@/api/repositories/institute_repository_http"
-import { getAllInstituteByIdResponseDTO } from "@/api/types/institute_dto"
+import { getAllInstituteByIdResponseDTO, getInstituteByPartnerTypeResponseDTO } from "@/api/types/institute_dto"
 import { createContext, PropsWithChildren } from "react"
 
 type InstituteContextType = { 
     getAll: () => Promise<getAllInstituteByIdResponseDTO>
     getById: (id: string) => Promise<object>
-    getAllInstitutesByPartnerType?: (idToken: string) => Promise<object>
+    getAllInstitutesByPartnerType?: (idToken: string) => Promise<getInstituteByPartnerTypeResponseDTO>
 }
 
 const defaultInstituteContext = { 
@@ -19,7 +19,10 @@ const defaultInstituteContext = {
         return {}
     },
     getAllInstituteByPartnerType: async (_idToken: string) => {
-        return {}
+        return {
+           institutes: [],
+            message: ''
+        }
     }
 }
 
