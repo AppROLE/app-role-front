@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage"
 import { http } from "../http"
 import { createReviewRequestDTO, createReviewResponseDTO } from "../types/review_dto"
 
@@ -6,10 +7,16 @@ import { createReviewRequestDTO, createReviewResponseDTO } from "../types/review
 export class ReviewRepositoryHttp {
     async createReview(data: createReviewRequestDTO) {
         try {
-            const response = await http.post('/review', data)
+            const idToken = await AsyncStorage.getItem('idToken')
+            if (!idToken) {
+                throw new Error('Token não encontrado')
+            }
+            const response = await http.post('/create-review', data, {
+                headers: {'Authorization': `Bearer ${idToken}`}
+            })
             return response.data as createReviewResponseDTO
         } catch (error: any) {
-            return error.response.data
+            throw new Error(error)
         }
     }
 }
