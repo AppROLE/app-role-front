@@ -61,9 +61,9 @@ export type signInRequestDTO = {
 }
 
 export type signInResponseDTO = {
-  access_token: string
-  id_token: string
-  refresh_token: string
+  accessToken: string
+  idToken: string
+  refreshToken: string
 }
 
 export type confirmCodeResponseDTO = {
