@@ -19,9 +19,12 @@ import RoleInput from '@/src/components/input';
 import { AuthContext } from '@/context/auth_context';
 import { finishSignUpRequestDTO } from '@/api/types/auth_dto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { router } from 'expo-router';
+import * as FileSystem from 'expo-file-system';
 
 
 export default function AlmostThere() {
+    const [imageType, setImageType] = useState<string>('');
     const [imageUri, setImageUri] = useState<string | null>(null);
     const [username, setUsername] = useState<string>('');
     const [nickname, setNickname] = useState<string>('');
@@ -39,21 +42,67 @@ export default function AlmostThere() {
             quality: 1
         });
 
-        console.log("RESPOSTA DO PICKER " + result);
+        console.log("RESPOSTA DO PICKER ", result);
 
         if (!result.canceled) {
-            const selectedImage = result.assets[0]; // Obter o primeiro item na seleção            
-            setImageUri(selectedImage.uri);
+            const selectedImage = result.assets[0];
+            const imageUri = selectedImage.uri;
+            const imageType = imageUri.split('.').pop();
+            const formattedImageType = imageType ? `.${imageType}` : ''; // Obter o primeiro item na seleção      
+            setImageUri(imageUri);
+            setImageType(formattedImageType);
         } else {
             console.log('Cancelado');
         }
     };
 
-    const getImageBlob = async (uri: string) => {
-        const response = await fetch(uri);
-        const blob = await response.blob();
-        return blob;
+    const uriToBuffer = async (uri: string) => {
+        // const response = await fetch(uri);
+        // console.log("RESPONSE ", response);
+        // const arrayBuffer = await response.arrayBuffer();
+        // console.log("ARRAY BUFFER ", arrayBuffer);
+        // const buffer = Buffer.from(arrayBuffer);
+        // console.log("BUFFER ", buffer);
+        // return buffer;
+        try {
+            const fileInfo = await FileSystem.getInfoAsync(uri, { size: true });
+            if (fileInfo.exists) {
+                const binaryData = await FileSystem.readAsStringAsync(uri, {
+                    encoding: FileSystem.EncodingType.Base64, // Lê o arquivo como base64
+                });
+                const buffer = Buffer.from(binaryData, 'base64'); // Converte base64 para buffer
+                return buffer;
+            } else {
+                throw new Error('Arquivo não encontrado');
+            }
+        } catch (error) {
+            console.error('Erro ao converter URI para buffer:', error);
+            throw error;
+        }
+
     };
+
+    // const uriToBuffer = async (uri: string) => {
+    //     const response = await fetch(uri);
+    //     const arrayBuffer = await response.arrayBuffer();
+    //     const buffer = Buffer.from(arrayBuffer); // Converte para buffer
+    //     return buffer;
+    //   };
+
+    // const getImageBuffer = async (uri: string) => {
+    //     const response = await fetch(uri);
+    //     console.log("RESPONSE DA IMAGEM ", response);
+
+    //     if (!response.ok) {
+    //         throw new Error('Network response was not ok');
+    //     }
+
+    //     const arrayBuffer = await response.arrayBuffer(); // Converta a resposta em ArrayBuffer
+    //     const buffer = Buffer.from(arrayBuffer); // Converta o ArrayBuffer para Buffer
+
+    //     console.log("BUFFER DA IMAGEM ", buffer);
+    //     return buffer;
+    // };
 
     function handleUsernameChange(text: string) {
         setUsername(text);
@@ -69,7 +118,7 @@ export default function AlmostThere() {
         async function loginVerify() {
             const response = await AsyncStorage.getItem('token');
             if (response) {
-                console.log("TOKEN NO STORAGE " + response);
+                console.log("TOKEN NO STORAGE ", response);
             }
         }
         loginVerify();
@@ -88,46 +137,46 @@ export default function AlmostThere() {
             nickname: nickname
         }
 
+        const email = await AsyncStorage.getItem('email');
+        const password = await AsyncStorage.getItem('password');
+        if (!email) throw new Error('Email não encontrado no AsyncStorage');
+        if (!password) throw new Error('Senha não encontrada no AsyncStorage');
+
         const dataSignIn = {
-            email: (await AsyncStorage.getItem('email')) ?? '',
-            password: (await AsyncStorage.getItem('password')) ?? ''
+            email,
+            password
         }
-        
-        console.log("DADOS ENVIADOS NA REQ " + data);
+
+        console.log("DADOS ENVIADOS NA REQ ", data);
         const response = await finishSignUp(data);
 
-        console.log("DADOS ENVIADOS NA REQ SIGN IN " + dataSignIn);
+        const formData = new FormData();
+        if (imageUri) {
+            const buffer = await uriToBuffer(imageUri);
+            const file = new File([buffer], `image${imageType}`, { type: `image/${imageType.split('.').pop()}` });
+            formData.append('profilePhoto', file);
+        }
+        formData.append('username', username);
+        formData.append('email', email);
+        formData.append('typePhoto', imageType);
+
+        // Fazer upload da imagem para o backend
+        const uploadResponse = await uploadImageProfile(formData);
+        console.log(uploadResponse);
+        if (Object.keys(uploadResponse).length === 0) {
+            console.error("Erro ao fazer upload da imagem");
+            return;
+        }
+
+        console.log("DADOS ENVIADOS NA REQ SIGN IN ", dataSignIn);
         const result = await signIn(dataSignIn);
 
-        console.log("NICKNAME " + nickname);
-        console.log("USERNAME " + username);
 
-        try {
-            const formData = new FormData();
-            formData.append('username', username);
-            formData.append('email', (await AsyncStorage.getItem('email')) ?? '');
-
-            if (imageUri) {
-                const imageBlob = await getImageBlob(imageUri);
-                console.log("BLOB DA IMAGEM " + imageBlob);
-                formData.append('profilePhoto', imageBlob, 'profilePhoto.jpg');
-            }
-
-            // Fazer upload da imagem para o backend
-            const uploadResponse = await uploadImageProfile(formData);
-            console.log(uploadResponse);
-            if (Object.keys(uploadResponse).length === 0) {
-                console.error("Erro ao fazer upload da imagem");
-                return;
-            }
-            console.log("Upload concluído:", uploadResponse);
-            console.log("FORM DATA " + formData)
-        } catch (error) {
-            console.error("Erro ao fazer upload da imagem:", error);
-        }
-        
-        console.log("SIGN IN " + result)
-        console.log("FINISH SIGNUP " + response.message)
+        console.log("Upload concluído:", uploadResponse);
+        console.log("FORM DATA ", formData)
+        console.log("SIGN IN ", result)
+        console.log("FINISH SIGNUP ", response.message)
+        router.replace("/home");
     }
 
     return (
