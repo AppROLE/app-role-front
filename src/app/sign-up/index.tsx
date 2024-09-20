@@ -76,6 +76,7 @@ export default function SignUp() {
       });
       await AsyncStorage.setItem('ScreenRequestToCode', 'sign-up')
       await AsyncStorage.setItem('user_email', email)
+      await AsyncStorage.setItem('user_password', password)
       router.push('/recovery-code');
     } catch (error: any) {
       Toast.show({
