@@ -59,13 +59,13 @@ export class AuthRepositoryHttp {
 
   async uploadImageProfile(formData: FormData) {
     try {
-      const response = await http.post('/upload-image-profile', formData, {
+      const response = await http.post('/upload-profile-photo', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
-      console.log("RESPOSTA DA REQ IMAGE PROFILE" + response);
-      return response;
+      console.log("RESPOSTA DA REQ IMAGE PROFILE ", response.data);
+      return response.data;
     } catch (error: any) {
       console.log(error);
       return error.response.data;
