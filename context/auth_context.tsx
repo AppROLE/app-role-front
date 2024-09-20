@@ -20,9 +20,9 @@ type AuthContextType = {
 const defaultAuthContext = {
   signIn: async (_data: signInRequestDTO) => {
     return {
-      access_token: '',
-      id_token: '',
-      refresh_token: ''
+      accessToken: '',
+      idToken: '',
+      refreshToken: ''
     }
   },
   signUp: async (_data: signUpRequestDTO) => {
@@ -66,10 +66,10 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
   async function signIn(data: signInRequestDTO) {
     try {
       const response = await authRepository.signIn(data)
-      if (response.access_token) {
-        await AsyncStorage.setItem('access_token', response.access_token)
-        await AsyncStorage.setItem('id_token', response.id_token)
-        await AsyncStorage.setItem('refresh_token', response.refresh_token)
+      if (response.accessToken) {
+        await AsyncStorage.setItem('accessToken', response.accessToken)
+        await AsyncStorage.setItem('idToken', response.idToken)
+        await AsyncStorage.setItem('refreshToken', response.refreshToken)
         router.replace('/(tabs)/home')
         return ''
       }
