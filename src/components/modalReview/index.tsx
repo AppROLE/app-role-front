@@ -1,18 +1,17 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useContext, useState } from "react";
-import { Modal, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Keyboard, KeyboardAvoidingView, Modal, Platform, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import RoleMainButton from "../roleMainButton";
 import Toast from "react-native-toast-message";
 import { createReviewRequestDTO, createReviewResponseDTO } from "@/api/types/review_dto";
 import { ReviewContext } from "@/context/review_context";
 
-interface ModalReviewProps { 
+interface ModalReviewProps {
     visible: boolean;
     onClose: () => void;
 }
 
 export default function ModalReview({ visible, onClose }: ModalReviewProps) {
-    const [modalVisible, setModalVisible] = useState(false);
     const [selectedStars, setSelectedStars] = useState(0);
     const stars = [1, 2, 3, 4, 5];
     const [reviewText, setReviewText] = useState("");
@@ -22,10 +21,12 @@ export default function ModalReview({ visible, onClose }: ModalReviewProps) {
 
     async function create() {
         const data: createReviewRequestDTO = {
-            reviewed_at: new Date().getTime(),
+            instituteId: '0368ec3a-d1da-4fc1-80cf-92d6416be8ad',
+            reviewedAt: new Date().getTime(),
             star: selectedStars,
-            comment: reviewText
+            review: reviewText
         }
+
         if (reviewText.length === 0) {
             alert('Por favor, digite uma avaliação')
             return
@@ -34,10 +35,9 @@ export default function ModalReview({ visible, onClose }: ModalReviewProps) {
             alert('A avaliação não pode ter mais de 250 caracteres')
             return
         }
-        console.log("DADOS ENVIADOS NA REQ CREATE " + data)
+
         try {
             const response: createReviewResponseDTO = await createReview(data);
-            console.log("RESPOSTA DA REQ CREATE " + response)
             Toast.show({
                 type: 'success',
                 text1: 'Sucesso',
@@ -64,57 +64,61 @@ export default function ModalReview({ visible, onClose }: ModalReviewProps) {
             animationType="fade"
             onRequestClose={onClose}
         >
-            <View className="flex-1 justify-end items-center bg-black/70">
-                <View className="flex-end bg-background rounded-t-3xl p-3 h-[45%] w-full">
-                    <View className="flex-row flex items-center justify-center p-3">
-                        <TouchableOpacity className="rounded-full bg-button_color mr-5 absolute left-[12px] top-[12px]" onPress={onClose}>
-                            <Ionicons name="arrow-back" size={24} color='#fff' className="p-2" />
-                        </TouchableOpacity>
-                        <Text className="text-3xl text-white">
-                            Escreva sua Review
-                        </Text>
-                    </View>
-                    <View className="w-full mt-5">
-                        <Text className="text-white text-center text-lg">
-                            Como foi a sua experiência nesse ROLE?
-                        </Text>
-                        <Text className="text-white text-center text-lg">Conta pra gente!</Text>
-                    </View>
-                    <View className="flex-row items-center justify-center mt-5">
-                        {stars.map((star) => (
-                            <TouchableOpacity key={star} onPress={() => setSelectedStars(star)}>
-                                <Ionicons
-                                    name={star <= selectedStars ? 'star' : 'star-outline'}
-                                    size={32}
-                                    color="#fff"
-                                    className="mr-2"
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
+                    <View className="flex-1 justify-end items-center bg-black/70">
+                        <View className="flex-end bg-background rounded-t-3xl p-3 h-[45%] w-full">
+                            <View className="flex-row flex items-center justify-center p-3">
+                                <TouchableOpacity className="rounded-full bg-button_color mr-5 absolute left-[12px] top-[12px]" onPress={onClose}>
+                                    <Ionicons name="arrow-back" size={24} color='#fff' className="p-2" />
+                                </TouchableOpacity>
+                                <Text className="text-3xl text-white">
+                                    Escreva sua Review
+                                </Text>
+                            </View>
+                            <View className="w-full mt-5">
+                                <Text className="text-white text-center text-lg">
+                                    Como foi a sua experiência nesse ROLE?
+                                </Text>
+                                <Text className="text-white text-center text-lg">Conta pra gente!</Text>
+                            </View>
+                            <View className="flex-row items-center justify-center mt-5">
+                                {stars.map((star) => (
+                                    <TouchableOpacity key={star} onPress={() => setSelectedStars(star)}>
+                                        <Ionicons
+                                            name={star <= selectedStars ? 'star' : 'star-outline'}
+                                            size={32}
+                                            color="#fff"
+                                            className="mr-2"
 
+                                        />
+                                    </TouchableOpacity>
+                                ))}
+                            </View>
+                            <View className="w-[90%] mx-auto mt-5 bg-button_color rounded-lg p-3">
+                                <TextInput
+                                    className="text-white"
+                                    multiline
+                                    maxLength={maxChars}
+                                    placeholder="Digite sua avaliação"
+                                    placeholderTextColor="#888"
+                                    value={reviewText}
+                                    onChangeText={(text) => setReviewText(text)}
                                 />
-                            </TouchableOpacity>
-                        ))}
+                                {/* Contador de caracteres */}
+                                <Text className="text-white text-right text-xs">
+                                    {reviewText.length}/{maxChars}
+                                </Text>
+                            </View>
+                            <View className="w-[80%] mx-auto mt-10">
+                                <RoleMainButton type="gradient" buttonFunction={() => create()}>
+                                    <Text className="text-white text-md">Publicar</Text>
+                                </RoleMainButton>
+                            </View>
+                        </View>
                     </View>
-                    <View className="w-[90%] mx-auto mt-5 bg-button_color rounded-lg p-3">
-                        <TextInput
-                            className="text-white"
-                            multiline
-                            maxLength={maxChars}
-                            placeholder="Digite sua avaliação"
-                            placeholderTextColor="#888"
-                            value={reviewText}
-                            onChangeText={(text) => setReviewText(text)}
-                        />
-                        {/* Contador de caracteres */}
-                        <Text className="text-white text-right text-xs">
-                            {reviewText.length}/{maxChars}
-                        </Text>
-                    </View>
-                    <View className="w-[80%] mx-auto mt-10">
-                        <RoleMainButton type="gradient" buttonFunction={() => create()}>
-                            <Text className="text-white text-md">Publicar</Text>
-                        </RoleMainButton>
-                    </View>
-                </View>
-            </View>
+                </KeyboardAvoidingView>
+            </TouchableWithoutFeedback>
         </Modal>
     )
 }
