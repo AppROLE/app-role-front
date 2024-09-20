@@ -11,7 +11,7 @@ import { confirmCodeRequestDTO } from '../types/auth_dto'
 export class AuthRepositoryHttp {
   async signIn(data: signInRequestDTO) {
     try {
-      const response = await http.post(`/sign-in`, data)
+      const response = await http.post(`/sign-in`, data)      
       return response.data as signInResponseDTO
     } catch (error: any) {
       return error.response.data
@@ -46,13 +46,8 @@ export class AuthRepositoryHttp {
       if (response?.status === 409) { 
         alert('Usuário já cadastrado');
       }
-
-      console.log("RESPOSTA DA REQ FINISH SIGN UP");
-      console.log(response.data);
-
       return response.data as finishSignUpRequestDTO;
     } catch (error: any) {
-      console.log(error)
       return error.response.data
     }
   }
@@ -64,10 +59,8 @@ export class AuthRepositoryHttp {
           'Content-Type': 'multipart/form-data'
         }
       });
-      console.log("RESPOSTA DA REQ IMAGE PROFILE ", response.data);
       return response.data;
     } catch (error: any) {
-      console.log(error);
       return error.response.data;
     }
   }
