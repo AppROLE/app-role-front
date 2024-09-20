@@ -105,7 +105,7 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
   async function finishSignUp(data: finishSignUpRequestDTO) {
     try {
       const response = await authRepository.finishSignUp(data)
-      console.log("RESPOSTA DA REQ FINISH SIGN UP CONTEXT" + response);
+      console.log("RESPOSTA DA REQ FINISH SIGN UP CONTEXT ", response);
       await AsyncStorage.removeItem('email');
       await AsyncStorage.removeItem('password');
       return response
@@ -117,14 +117,13 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
   async function uploadImageProfile(formData: FormData) {
     try {
       const response = await authRepository.uploadImageProfile(formData);
-      console.log("RESPOSTA DO UPLOAD IMAGE PROFILE CONTEXT" + response);
+      console.log("RESPOSTA DO UPLOAD IMAGE PROFILE CONTEXT ", response);
       return response;
     } catch (error: any) {
       console.log(error);
       return error;
     }
   }
-
 
   async function confirmCode(email: string, code: string) {
     try {
