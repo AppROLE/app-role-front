@@ -17,9 +17,9 @@ export default function ComfirmedListModal({ visible, onClose }: ModalReviewProp
     const { getAllConfirmedUsers } = useContext(EventContext);  
 
     const comfirmed = [
-        { id: 1, profilePhoto: require('../../../assets/images/profile1 (1).png'), username: 'João', nickname: 'jotape', comfirmed: true },
-        { id: 2, profilePhoto: require('../../../assets/images/profile2 (1).png'), username: 'Gabriel', nickname: 'gabs', comfirmed: true },
-        { id: 3, profilePhoto: require('../../../assets/images/profile3 (1).png'), username: 'Rodrigo', nickname: 'digos', comfirmed: false }
+        { event_id: 1, iamge: require('../../../assets/images/profile1 (1).png'), username: 'João', nickname: 'jotape', comfirmed: true },
+        { event_id: 2, image: require('../../../assets/images/profile2 (1).png'), username: 'Gabriel', nickname: 'gabs', comfirmed: true },
+        { event_id: 3, image: require('../../../assets/images/profile3 (1).png'), username: 'Rodrigo', nickname: 'digos', comfirmed: false }
     ]
 
     useEffect(() => {
@@ -56,14 +56,14 @@ export default function ComfirmedListModal({ visible, onClose }: ModalReviewProp
                             </View>
                         </View>
                         <ScrollView className="w-full mt-8">
-                            {users.map((user) => (
+                            {comfirmed.map((user) => (
                                 <View className="w-full bg-button_color mt-5 rounded-full" key={user.event_id}>
                                     <View
                                         className="w-full flex-row items-center justify-between rounded-full p-2"
                                     >
                                         <Image
                                             source={user.image}
-                                            className={`w-16 h-16 rounded-full mr-4 ${user.confirmed ? 'border-2 border-green-500' : ''}`}
+                                            className={`w-16 h-16 rounded-full mr-4 ${user.comfirmed ? 'border-2 border-green-500' : ''}`}
                                             resizeMode="cover"
                                         />
                                         <View className="flex-1">
