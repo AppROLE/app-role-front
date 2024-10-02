@@ -69,3 +69,14 @@ export type signInResponseDTO = {
 export type confirmCodeResponseDTO = {
   message: string
 }
+
+export type Friends = {
+  user_id: string;
+  username: string;
+  profilePhoto: string;
+  nickname: string;
+}
+
+export type getFriendsResponseDTO = { 
+  friends: Friends[]; 
+}
