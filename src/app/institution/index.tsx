@@ -248,5 +248,5 @@ export default function institutionScreen() {
         </View>
       </View>
     </Background>
-  )
-}
+  )      
+}      
