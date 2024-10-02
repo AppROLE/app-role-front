@@ -1,8 +1,9 @@
 
 export type createReviewRequestDTO = { 
-    reviewed_at: number
+    instituteId: string
+    reviewedAt: number
     star: number
-    comment: string
+    review: string
 }
 
 export type createReviewResponseDTO = {

@@ -20,9 +20,9 @@ type AuthContextType = {
 const defaultAuthContext = {
   signIn: async (_data: signInRequestDTO) => {
     return {
-      access_token: '',
-      id_token: '',
-      refresh_token: ''
+      accessToken: '',
+      idToken: '',
+      refreshToken: ''
     }
   },
   signUp: async (_data: signUpRequestDTO) => {
@@ -66,10 +66,10 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
   async function signIn(data: signInRequestDTO) {
     try {
       const response = await authRepository.signIn(data)
-      if (response.access_token) {
-        await AsyncStorage.setItem('access_token', response.access_token)
-        await AsyncStorage.setItem('id_token', response.id_token)
-        await AsyncStorage.setItem('refresh_token', response.refresh_token)
+      if (response.accessToken) {
+        await AsyncStorage.setItem('accessToken', response.accessToken)
+        await AsyncStorage.setItem('idToken', response.idToken)
+        await AsyncStorage.setItem('refreshToken', response.refreshToken)
         router.replace('/(tabs)/home')
         return ''
       }
@@ -105,7 +105,7 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
   async function finishSignUp(data: finishSignUpRequestDTO) {
     try {
       const response = await authRepository.finishSignUp(data)
-      console.log("RESPOSTA DA REQ FINISH SIGN UP CONTEXT" + response);
+      console.log("RESPOSTA DA REQ FINISH SIGN UP CONTEXT ", response);
       await AsyncStorage.removeItem('email');
       await AsyncStorage.removeItem('password');
       return response
@@ -117,14 +117,13 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
   async function uploadImageProfile(formData: FormData) {
     try {
       const response = await authRepository.uploadImageProfile(formData);
-      console.log("RESPOSTA DO UPLOAD IMAGE PROFILE CONTEXT" + response);
+      console.log("RESPOSTA DO UPLOAD IMAGE PROFILE CONTEXT ", response);
       return response;
     } catch (error: any) {
       console.log(error);
       return error;
     }
   }
-
 
   async function confirmCode(email: string, code: string) {
     try {
