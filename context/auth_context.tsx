@@ -1,6 +1,7 @@
 import { confirmCodeResponseDTO, signUpRequestDTO, finishSignUpRequestDTO, finishSignUpResponseDTO, 
   signInRequestDTO, signInResponseDTO, confirmForgotPasswordResponseDTO, forgotPasswordResponseDTO,
-  confirmForgotPasswordRequestDTO,} from '@/api/types/auth_dto'
+  confirmForgotPasswordRequestDTO,
+  getFriendsResponseDTO,} from '@/api/types/auth_dto'
 import { createContext, PropsWithChildren } from 'react'
 import { AuthRepositoryHttp } from '@/api/repositories/auth_repository_http'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -15,6 +16,7 @@ type AuthContextType = {
   finishSignUp: (data: finishSignUpRequestDTO) => Promise<finishSignUpResponseDTO>
   uploadImageProfile: (formData: FormData) => Promise<object>
   confirmCode: (email: string, code: string) => Promise<confirmCodeResponseDTO>
+  getFriends: (idToken: string) => Promise<getFriendsResponseDTO>
 }
 
 const defaultAuthContext = {
@@ -53,6 +55,12 @@ const defaultAuthContext = {
   },
   confirmForgotPassword: async (_data: confirmForgotPasswordRequestDTO) => {
     return {
+      message: ''
+    }
+  },
+  getFriends: async (_idToken: string) => { 
+    return {
+      friends: [],
       message: ''
     }
   }
@@ -156,8 +164,17 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
     }
   }
 
+  async function getFriends(idToken: string) { 
+    try{
+      const response = await authRepository.getFriends(idToken);
+      return response;
+    } catch (error: any) {
+      return error
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ signIn, signUp, forgotPassword, confirmCode, finishSignUp, uploadImageProfile, confirmForgotPassword, resendCode }}>
+    <AuthContext.Provider value={{ signIn, signUp, forgotPassword, confirmCode, finishSignUp, uploadImageProfile, confirmForgotPassword, resendCode, getFriends }}>
       {children}
     </AuthContext.Provider>
   )
