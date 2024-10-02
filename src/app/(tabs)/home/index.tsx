@@ -4,10 +4,11 @@ import RoleCard from "@/src/components/roleCard";
 import RoleEmphasis from "@/src/components/roleEmphasis";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useContext, useEffect, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Dimensions, ScrollView, FlatList } from "react-native";
 import Carousel from 'react-native-reanimated-carousel';
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
+
+import { UserContext } from "@/context/user_context";
 
 export default function Home() {
     const [scrollDisabled, setScrollDisabled] = useState(false);
@@ -196,6 +197,8 @@ export default function Home() {
     ])
     const [activeSlide, setActiveSlide] = useState(0);
     const [loadLock, setLoadLock] = useState(false);
+    const { getPhrase } = useContext(UserContext);
+    const [phrase, setPhrase] = useState('');
 
     const [typesRole, setTypesRole] = useState([
         {
@@ -320,8 +323,17 @@ export default function Home() {
         }
     }
 
+    async function getThePhrase() {
+        const response = await getPhrase();
+        setPhrase(response.phrase);
+    }
+
+    useEffect(() => {
+        getThePhrase()
+    }, [])
+
     return (
-        <Background text="Home" scrollable lockScroll={scrollDisabled} function1={loadMoreRoles}>
+        <Background text={phrase} scrollable lockScroll={scrollDisabled} function1={loadMoreRoles}>
             <Text className="text-white text-3xl font-bold text-center mb-4">Role Bombando</Text>
             <View className="px-12 mb-10">
                 <Carousel
@@ -424,7 +436,7 @@ export default function Home() {
                         </LinearGradient>
                     </TouchableOpacity>
                     {loadLock && (
-                        <View className="flex justify-center w-full h-1 bg-white">
+                        <View className="flex justify-center w-full h-1 bg-transparent">
                         </View>
                     )}
                 </View>
