@@ -92,4 +92,21 @@ export class AuthRepositoryHttp {
       return error.response.data
     }
   }
+
+  async getFriends(idToken: string) {
+    try {
+      const response = await http.get('/get-friends', {
+        headers: {
+          'Authorization': `Bearer ${idToken}`
+        }
+      });
+      if (response.status === 200 && response.data.message === 'Nenhum amigo encontrado') {
+        alert(response.data.message)
+        return []
+      }
+      return response.data;
+    } catch (error: any) {
+      return error.response.data;
+    }
+  }
 }
