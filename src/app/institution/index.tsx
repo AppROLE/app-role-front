@@ -189,12 +189,17 @@ export default function institutionScreen() {
       local: 'Itaim'
     }
   ])
+  const institute = {
+    title: 'Mahau bar',
+    descriptions: 'O Deck mais charmoso de São Paulo \nViva o inesquecível #MahauBar'
+  }
+
   const [scrollDisabled, setScrollDisabled] = useState(false)
   const [loadLock, setLoadLock] = useState(false)
   function loadMoreRoles() {
     setLoadLock(!loadLock)
     if (loadLock) {
-      setRoles((prevRoles) => [...prevRoles, ...prevRoles])
+      setRoles(prevRoles => [...prevRoles, ...prevRoles])
       setLoadLock(false)
     } else {
       setLoadLock(true)
@@ -205,17 +210,13 @@ export default function institutionScreen() {
     navigate.back()
   }
   return (
-    <Background
-      scrollable
-      lockScroll={scrollDisabled}
-      function1={loadMoreRoles}
-    >
+    <Background scrollable lockScroll={scrollDisabled} function1={loadMoreRoles}>
       <View className="flex w-full flex-col items-center justify-center">
         <View className="flex w-full flex-col items-center justify-center border-b-2 border-[#1c1c1c] pb-6">
           <View className="flex h-14 w-[90%] flex-row items-center justify-between rounded-full bg-[#1c1c1c]">
             <View className="flex flex-row items-center">
               <View className="ml-4 h-10 w-10 rounded-full bg-white" />
-              <Text className="ml-4 text-3xl text-white">Mahau Bar</Text>
+              <Text className="ml-4 text-3xl text-white">{institute.title}</Text>
             </View>
             <View className="mr-4 h-10 w-10 rounded-full bg-white" />
           </View>
@@ -226,13 +227,8 @@ export default function institutionScreen() {
             >
               <FontAwesome6 name="arrow-left" size={18} color="white" />
             </TouchableOpacity>
-            <View className="w-68 flex flex-col">
-              <Text className="text-sm text-white">
-                O Deck mais charmoso de São Paulo
-              </Text>
-              <Text className="text-sm text-white">
-                Viva o inesquecível #MahauBar
-              </Text>
+            <View className="w-68 flex flex-col pr-4">
+              <Text className="text-wrap text-sm text-white">{institute.descriptions}</Text>
             </View>
           </View>
         </View>
@@ -248,5 +244,5 @@ export default function institutionScreen() {
         </View>
       </View>
     </Background>
-  )      
-}      
+  )
+}
