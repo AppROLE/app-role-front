@@ -1,6 +1,7 @@
 import { confirmCodeResponseDTO, signUpRequestDTO, finishSignUpRequestDTO, finishSignUpResponseDTO, 
   signInRequestDTO, signInResponseDTO, confirmForgotPasswordResponseDTO, forgotPasswordResponseDTO,
-  confirmForgotPasswordRequestDTO,} from '@/api/types/auth_dto'
+  confirmForgotPasswordRequestDTO,
+  deleteAccountResponseDTO,} from '@/api/types/auth_dto'
 import { createContext, PropsWithChildren } from 'react'
 import { AuthRepositoryHttp } from '@/api/repositories/auth_repository_http'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -15,6 +16,8 @@ type AuthContextType = {
   finishSignUp: (data: finishSignUpRequestDTO) => Promise<finishSignUpResponseDTO>
   uploadImageProfile: (formData: FormData) => Promise<object>
   confirmCode: (email: string, code: string) => Promise<confirmCodeResponseDTO>
+  deleteAccount: () => Promise<deleteAccountResponseDTO>
+  
 }
 
 const defaultAuthContext = {
@@ -52,6 +55,11 @@ const defaultAuthContext = {
     }
   },
   confirmForgotPassword: async (_data: confirmForgotPasswordRequestDTO) => {
+    return {
+      message: ''
+    }
+  },
+  deleteAccount: async () => {
     return {
       message: ''
     }
@@ -156,8 +164,17 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
     }
   }
 
+  async function deleteAccount() {
+    try {
+      const response = await authRepository.deleteAccount();
+      return response;
+    } catch (error: any) {
+      return error;
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ signIn, signUp, forgotPassword, confirmCode, finishSignUp, uploadImageProfile, confirmForgotPassword, resendCode }}>
+    <AuthContext.Provider value={{ signIn, signUp, forgotPassword, confirmCode, finishSignUp, uploadImageProfile, confirmForgotPassword, resendCode, deleteAccount }}>
       {children}
     </AuthContext.Provider>
   )
