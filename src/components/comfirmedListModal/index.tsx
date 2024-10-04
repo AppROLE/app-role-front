@@ -7,7 +7,8 @@ import { Keyboard, Modal, Text, TouchableOpacity, View, Image } from "react-nati
 import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
 import { PresenceContext } from "@/context/presence_context";
 import { AuthContext } from "@/context/auth_context";
-import { Friends } from "@/api/types/auth_dto";
+import { UserContext } from "@/context/user_context";
+import { Friends } from "@/api/types/user_dto";
 
 interface ModalReviewProps {
     visible: boolean;
@@ -19,7 +20,7 @@ export default function ComfirmedListModal({ visible, onClose, eventId }: ModalR
     const [presence, setPresence] = useState<(Presence & {profilePhoto?: ImageSourcePropType})[]>([]);
     const [friends, setFriends] = useState<(Friends)[]>([]);
     const { getAllPresence} = useContext(PresenceContext);  
-    const { getFriends } = useContext(AuthContext);
+    const { getFriends } = useContext(UserContext);
 
     // const comfirmed = [
     //     { event_id: 1, iamge: require('../../../assets/images/profile1 (1).png'), username: 'João', nickname: 'jotape', comfirmed: true },

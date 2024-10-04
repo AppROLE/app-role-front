@@ -14,3 +14,7 @@ export type getAllConfirmedUsersResponseDTO = {
    users: Presence[];
    message: string;
 }
+
+export type confirmEventResponseDTO = { 
+    message: string;
+}

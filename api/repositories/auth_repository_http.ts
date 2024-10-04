@@ -92,22 +92,6 @@ export class AuthRepositoryHttp {
       return error.response.data
     }
   }
-
-
-  async getFriends() {
-    try {
-      const idToken = await AsyncStorage.getItem('idToken') || '';
-      if (idToken === '') return; 
-      const response = await http.get('/get-friends', {
-        headers: {
-          'Authorization': `Bearer ${idToken}`
-        }
-      });
-      return response.data;
-    } catch (error: any) {
-      return error.response.data;
-    }
-  }
   
   async deleteAccount() {
     try {
