@@ -221,7 +221,7 @@ export default function SearchingFilters() {
                 <View className="ml-4 mt-4">
                   <FontAwesome6 name="calendar" size={20} color="white" />
                 </View>
-                <Text className="ml-2 mt-4 text-lg text-white">Data</Text>
+                <Text className="ml-2 mt-4 text-lg text-white font-sans">Data</Text>
               </View>
               <View className="mx-2 mt-2 flex flex-row flex-wrap">
                 <AnimatedOption
@@ -240,7 +240,7 @@ export default function SearchingFilters() {
                   <View className="ml-4 mt-4">
                     <FontAwesome6 name={filter.icon} size={20} color="white" />
                   </View>
-                  <Text className="ml-2 mt-4 text-lg text-white">
+                  <Text className="ml-2 mt-4 text-lg text-white font-sans">
                     {filter.title}
                   </Text>
                 </View>
@@ -267,12 +267,12 @@ export default function SearchingFilters() {
         <View className="fixed bottom-0 z-40 flex h-[16%] w-full flex-row items-center justify-evenly border-t-2 border-t-[#2C2B2B] bg-background pb-6">
           <View className="flex w-[40%]">
             <RoleMainButton type="simple" buttonFunction={handleClearFilters}>
-              <Text className="text-white">Limpar Filtros</Text>
+              <Text className="text-white font-sans">Limpar Filtros</Text>
             </RoleMainButton>
           </View>
           <View className="flex w-[40%]">
             <RoleMainButton type="gradient">
-              <Text className="text-white">Pesquisar</Text>
+              <Text className="text-white font-sans">Pesquisar</Text>
             </RoleMainButton>
           </View>
         </View>
