@@ -10,6 +10,5 @@ export type getAllInstituteByIdResponseDTO = {
 }
 
 export type getInstituteByPartnerTypeResponseDTO = { 
-    institutes: Institute[],
-    message: string    
+    institutes: Institute[],    
 }
