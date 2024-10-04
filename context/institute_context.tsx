@@ -21,7 +21,6 @@ const defaultInstituteContext = {
     getAllInstitutesByPartnerType: async (_idToken: string) => {
         return {
             institutes: [],
-            message: ''
         }
     }
 }
