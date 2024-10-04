@@ -3,16 +3,26 @@ import { ReviewContext } from "@/context/review_context";
 import Background from "@/src/components/background";
 import ModalReview from "@/src/components/modalReview";
 import { Ionicons } from "@expo/vector-icons";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Modal, SafeAreaView, Text, Image, TouchableOpacity, View, TouchableWithoutFeedback, Keyboard } from "react-native";
 import ComfirmedListModal from "@/src/components/comfirmedListModal";
+import RoleMainButton from "@/src/components/roleMainButton";
+import { UserContext } from "@/context/user_context";
+import { getProfileResponseDTO } from "@/api/types/user_dto";
+import { PresenceContext } from "@/context/presence_context";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+interface RoleDescriptionProps { 
+    eventId: string;
+}
 
 
-
-
-export default function RoleDescription() {
+export default function RoleDescription({ eventId }: RoleDescriptionProps) {
     const [modalVisible, setModalVisible] = useState(false);
     const [comfirmedListModalVisible, setConfirmedListModalVisible] = useState(false);
+    const [profilePhoto, setProfilePhoto] = useState<string | undefined>();
+    const { getProfile } = useContext(UserContext);
+    const { confirmEvent } = useContext(PresenceContext);
     const stars = [1, 2, 3, 4, 5];
 
     const avatars = [
@@ -22,6 +32,31 @@ export default function RoleDescription() {
     ];
 
     const maxParticipantsToShow = 3;
+
+    async function fetchGetProfile() {
+        const response = await getProfile();
+        const final = response as getProfileResponseDTO;
+        if (response) {
+            setProfilePhoto(final.profilePhoto);
+            return response;
+        }
+    }
+
+    async function fetchConfirmEvent() {
+        const promoterCode = await AsyncStorage.getItem('promoterCode') || '';
+        if (promoterCode === '') return;
+        const response = await confirmEvent(eventId, profilePhoto, promoterCode);
+        if (response) {
+            alert(response.message);
+            return response;
+        }
+    }
+
+    
+
+    useEffect(() => { 
+        fetchGetProfile();
+    }, [])
 
     return (
         <>
@@ -75,6 +110,11 @@ export default function RoleDescription() {
                         visible={modalVisible}
                         onClose={() => setModalVisible(false)}
                     />
+                    <RoleMainButton type='gradient' buttonFunction={fetchConfirmEvent} >
+                        <Text className="text-white text-lg font-sans">
+                            Confirmar Presença
+                        </Text>
+                    </RoleMainButton>
                 </SafeAreaView>
             </Background>
         </>
