@@ -42,13 +42,14 @@ export default function RoleDescription() {
                                 </View>
                             </View>
                             <View className="mt-12">
-                                <Text className="text-[#DFA9FD] text-md mt-5">Lista de confirmados</Text>
+                                <Text className="text-[#DFA9FD] text-md mt-5 font-sans">Lista de confirmados</Text>
                             </View>
                         </View>
                     </TouchableOpacity>
                     <ComfirmedListModal
                         visible={comfirmedListModalVisible}
                         onClose={() => setConfirmedListModalVisible(false)}
+                        eventId={"1"}
                     />
                     <View>
                         <TouchableOpacity className="flex-row items-center bg-[#1C1C1C] rounded-full px-4 py-2" onPress={() => setModalVisible(true)}>
@@ -65,7 +66,7 @@ export default function RoleDescription() {
                                 ))}
                             </View>
                             <View className="w-px h-6 bg-white mx-3"></View>
-                            <Text className="text-sm text-white">
+                            <Text className="text-sm text-white font-sans">
                                 Deixe sua Avaliação
                             </Text>
                         </TouchableOpacity>
