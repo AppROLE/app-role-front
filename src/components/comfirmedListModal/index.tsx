@@ -70,7 +70,7 @@ export default function ComfirmedListModal({ visible, onClose, eventId }: ModalR
                                 <Ionicons name="arrow-back" size={22} color='#fff' className="p-2" />
                             </TouchableOpacity>
                             <View className="flex justify-center items-center ">
-                                <Text className="text-2xl text-white">
+                                <Text className="text-2xl text-white font-sansBold">
                                     Lista de Confirmados
                                 </Text>
                             </View>
@@ -87,10 +87,10 @@ export default function ComfirmedListModal({ visible, onClose, eventId }: ModalR
                                             resizeMode="cover"
                                         />
                                         <View className="flex-1">
-                                            <Text className="text-white font-bold text-xl">
+                                            <Text className="text-white font-sansBold text-xl">
                                                 {user.username}
                                             </Text>
-                                            <Text className="text-gray-400 text-md">
+                                            <Text className="text-gray-400 text-md font-sans">
                                                 @{user.nickname}
                                             </Text>
                                         </View>
