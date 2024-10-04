@@ -17,6 +17,7 @@ module.exports = {
         button_color: '#1C1C1C',
         line_gray: '#2C2B2B',
         sub_text: '#8E8E8E',
+        sub_title: '#BDBDBD',
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif']
