@@ -1,16 +1,18 @@
 import { PresenceRepositoryHttp } from "@/api/repositories/presence_repository_http"
 import { getAllConfirmedUsersResponseDTO } from "@/api/types/presence_dto"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 import { createContext } from "react"
 
 
 type PresenceContextType = {
-    getAllPresence: (idToken: string, eventId: string) => Promise<getAllConfirmedUsersResponseDTO>
+    getAllPresence: (eventId: string) => Promise<getAllConfirmedUsersResponseDTO>
 }
 
 const defaultPresenceContext = { 
     getAllPresence: async () => {
         return {
-            users: []
+            users: [],
+            message: ''
         }
     }
 }
@@ -21,9 +23,9 @@ export const PresenceContext = createContext<PresenceContextType>(defaultPresenc
 export function PresenceContextProvider({ children }: any) {
     const presenceRepository = new PresenceRepositoryHttp()
 
-    async function getAllPresence(idToken: string, eventId: string) {
+    async function getAllPresence(eventId: string) {
         try {
-            const response = await presenceRepository.getAllPresences(idToken, eventId)
+            const response = await presenceRepository.getAllPresences(eventId)
             return response
         } catch (error: any) {
             return error
@@ -31,7 +33,7 @@ export function PresenceContextProvider({ children }: any) {
     }
 
     return (
-        <PresenceContext.Provider value={{ getAllPresence, }}>
+        <PresenceContext.Provider value={{ getAllPresence }}>
             {children}
         </PresenceContext.Provider>
     )
