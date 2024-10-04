@@ -1,7 +1,7 @@
 import {
   confirmCodeResponseDTO, signUpRequestDTO, finishSignUpRequestDTO, finishSignUpResponseDTO,
   signInRequestDTO, signInResponseDTO, confirmForgotPasswordResponseDTO, forgotPasswordResponseDTO,
-  confirmForgotPasswordRequestDTO, getFriendsResponseDTO, deleteAccountResponseDTO,
+  confirmForgotPasswordRequestDTO, deleteAccountResponseDTO,
 } from '@/api/types/auth_dto'
 import { createContext, PropsWithChildren } from 'react'
 import { AuthRepositoryHttp } from '@/api/repositories/auth_repository_http'
@@ -17,7 +17,6 @@ type AuthContextType = {
   finishSignUp: (data: finishSignUpRequestDTO) => Promise<finishSignUpResponseDTO>
   uploadImageProfile: (formData: FormData) => Promise<object>
   confirmCode: (email: string, code: string) => Promise<confirmCodeResponseDTO>
-  getFriends: () => Promise<getFriendsResponseDTO>
   deleteAccount: () => Promise<deleteAccountResponseDTO>
 
 }
@@ -59,11 +58,6 @@ const defaultAuthContext = {
   confirmForgotPassword: async (_data: confirmForgotPasswordRequestDTO) => {
     return {
       message: ''
-    }
-  },
-  getFriends: async () => {
-    return {
-      friends: [],
     }
   },
   deleteAccount: async () => {
@@ -171,15 +165,6 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
     }
   }
 
-  async function getFriends() {
-    try {
-      const response = await authRepository.getFriends();
-      return response;
-    } catch (error: any) {
-      return error
-    }
-  }
-
   async function deleteAccount() {
     try {
       const response = await authRepository.deleteAccount();
@@ -192,7 +177,7 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
 
   return (
 
-    <AuthContext.Provider value={{ signIn, signUp, forgotPassword, confirmCode, finishSignUp, uploadImageProfile, confirmForgotPassword, resendCode, getFriends, deleteAccount }}>
+    <AuthContext.Provider value={{ signIn, signUp, forgotPassword, confirmCode, finishSignUp, uploadImageProfile, confirmForgotPassword, resendCode, deleteAccount }}>
 
       {children}
     </AuthContext.Provider>
