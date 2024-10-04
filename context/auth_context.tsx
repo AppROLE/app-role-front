@@ -1,7 +1,8 @@
-import { confirmCodeResponseDTO, signUpRequestDTO, finishSignUpRequestDTO, finishSignUpResponseDTO, 
+import {
+  confirmCodeResponseDTO, signUpRequestDTO, finishSignUpRequestDTO, finishSignUpResponseDTO,
   signInRequestDTO, signInResponseDTO, confirmForgotPasswordResponseDTO, forgotPasswordResponseDTO,
-  confirmForgotPasswordRequestDTO,
-  deleteAccountResponseDTO,} from '@/api/types/auth_dto'
+  confirmForgotPasswordRequestDTO, getFriendsResponseDTO, deleteAccountResponseDTO,
+} from '@/api/types/auth_dto'
 import { createContext, PropsWithChildren } from 'react'
 import { AuthRepositoryHttp } from '@/api/repositories/auth_repository_http'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -16,8 +17,9 @@ type AuthContextType = {
   finishSignUp: (data: finishSignUpRequestDTO) => Promise<finishSignUpResponseDTO>
   uploadImageProfile: (formData: FormData) => Promise<object>
   confirmCode: (email: string, code: string) => Promise<confirmCodeResponseDTO>
+  getFriends: () => Promise<getFriendsResponseDTO>
   deleteAccount: () => Promise<deleteAccountResponseDTO>
-  
+
 }
 
 const defaultAuthContext = {
@@ -40,7 +42,7 @@ const defaultAuthContext = {
     return {
       message: ''
     }
-  }, 
+  },
   finishSignUp: async (_data: finishSignUpRequestDTO) => {
     return {
       message: ''
@@ -57,6 +59,11 @@ const defaultAuthContext = {
   confirmForgotPassword: async (_data: confirmForgotPasswordRequestDTO) => {
     return {
       message: ''
+    }
+  },
+  getFriends: async () => {
+    return {
+      friends: [],
     }
   },
   deleteAccount: async () => {
@@ -141,7 +148,7 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
       return error
     }
   }
-  
+
   async function confirmForgotPassword(data: confirmForgotPasswordRequestDTO) {
     try {
       const response = await authRepository.confirmForgotPassword(data)
@@ -164,17 +171,29 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
     }
   }
 
+  async function getFriends() {
+    try {
+      const response = await authRepository.getFriends();
+      return response;
+    } catch (error: any) {
+      return error
+    }
+  }
+
   async function deleteAccount() {
     try {
       const response = await authRepository.deleteAccount();
       return response;
     } catch (error: any) {
       return error;
+
     }
   }
 
   return (
-    <AuthContext.Provider value={{ signIn, signUp, forgotPassword, confirmCode, finishSignUp, uploadImageProfile, confirmForgotPassword, resendCode, deleteAccount }}>
+
+    <AuthContext.Provider value={{ signIn, signUp, forgotPassword, confirmCode, finishSignUp, uploadImageProfile, confirmForgotPassword, resendCode, getFriends, deleteAccount }}>
+
       {children}
     </AuthContext.Provider>
   )

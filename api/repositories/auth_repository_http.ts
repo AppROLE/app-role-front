@@ -93,6 +93,22 @@ export class AuthRepositoryHttp {
     }
   }
 
+
+  async getFriends() {
+    try {
+      const idToken = await AsyncStorage.getItem('idToken') || '';
+      if (idToken === '') return; 
+      const response = await http.get('/get-friends', {
+        headers: {
+          'Authorization': `Bearer ${idToken}`
+        }
+      });
+      return response.data;
+    } catch (error: any) {
+      return error.response.data;
+    }
+  }
+  
   async deleteAccount() {
     try {
       const response = await http.delete('/delete-account', {headers: {Authorization: `Bearer ${await AsyncStorage.getItem('idToken')}`}})
@@ -101,5 +117,8 @@ export class AuthRepositoryHttp {
       return error.response.data
     }
   }
-
 }
+
+
+
+

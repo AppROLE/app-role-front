@@ -68,7 +68,7 @@ export default function ModalReview({ visible, onClose }: ModalReviewProps) {
                 <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
                     <View className="flex-1 justify-end items-center bg-black/70">
                         <View className="flex-end bg-background rounded-t-3xl p-3 h-[45%] w-full">
-                            <View className="flex-row flex items-center justify-center p-3">
+                            <View className="flex-row flex items-center justify-center pt-[15px]">
                                 <TouchableOpacity className="rounded-full bg-button_color mr-5 absolute left-[12px] top-[12px]" onPress={onClose}>
                                     <Ionicons name="arrow-back" size={24} color='#fff' className="p-2" />
                                 </TouchableOpacity>
