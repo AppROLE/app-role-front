@@ -2,25 +2,28 @@ import { ReviewRepositoryHttp } from "@/api/repositories/review_repository_http"
 import { createReviewRequestDTO, createReviewResponseDTO, getAllReviewsByEventResponseDTO } from "@/api/types/review_dto";
 import { createContext, PropsWithChildren } from "react";
 
-type ReviewContextType = { 
+type ReviewContextType = {
     createReview: (data: createReviewRequestDTO) => Promise<createReviewResponseDTO>
     getAllReviewsByEvent: (eventId: string) => Promise<getAllReviewsByEventResponseDTO>
 }
 
-const defaultReviewContext = { 
+const defaultReviewContext = {
     createReview: async (_data: createReviewRequestDTO) => {
         return {
             message: ''
         }
     },
     getAllReviewsByEvent: async (_eventId: string) => {
-        return []
+        return {
+            reviews: [],
+            message: ''
+        }
     }
 }
 
 export const ReviewContext = createContext<ReviewContextType>(defaultReviewContext)
 
-export default function ReviewContextProvider({ children }: PropsWithChildren) { 
+export default function ReviewContextProvider({ children }: PropsWithChildren) {
     const reviewRepository = new ReviewRepositoryHttp()
 
     async function createReview(data: createReviewRequestDTO) {
