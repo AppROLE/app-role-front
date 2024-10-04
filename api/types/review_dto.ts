@@ -10,12 +10,17 @@ export type createReviewResponseDTO = {
     message: string;
 }
 
-export type getAllReviewsByEventResponseDTO = {
+export type Reviews = {
     instituteId: string;
     eventId: string;
     nickname: string;
     reviewedAt: number;
     star: number;
-    review: string;
+    comment: string;
     profilePhoto: string;
-}[]
+}
+
+export type getAllReviewsByEventResponseDTO = {
+    reviews: Reviews[];
+    message: string;
+}
