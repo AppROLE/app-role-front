@@ -7,3 +7,4 @@ export const http = axios.create({
 export const httpEvent = axios.create({
   baseURL: process.env.EXPO_PUBLIC_API_EVENT_URL
 })
+

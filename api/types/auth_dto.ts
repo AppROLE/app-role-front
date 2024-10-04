@@ -70,6 +70,7 @@ export type confirmCodeResponseDTO = {
   message: string
 }
 
+
 export type Friends = {
   user_id: string;
   username: string;
@@ -80,3 +81,8 @@ export type Friends = {
 export type getFriendsResponseDTO = { 
   friends: Friends[]; 
 }
+
+export type deleteAccountResponseDTO = {
+  message: string
+}
+
