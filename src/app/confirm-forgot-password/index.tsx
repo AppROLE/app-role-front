@@ -53,7 +53,7 @@ export default function ConfirmForgotPassword() {
       <Background>
         <View className="w-full">
           <View>
-            <Text className="text-center text-[22px] font-bold text-white">
+            <Text className="text-center text-[22px] font-sansBold text-white">
               Crie sua nova senha
             </Text>
           </View>
@@ -73,7 +73,7 @@ export default function ConfirmForgotPassword() {
           </View>
           <View className="px-[8%]">
             <RoleMainButton type="gradient" buttonFunction={changePassword}>
-              <Text className="text-white">Trocar Senha</Text>
+              <Text className="text-white font-sans">Trocar Senha</Text>
             </RoleMainButton>
           </View>
         </View>
