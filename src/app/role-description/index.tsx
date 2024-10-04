@@ -34,7 +34,7 @@ export default function RoleDescription({ eventId }: RoleDescriptionProps) {
         { id: 3, uri: require('../../../assets/images/profile3 (1).png') },
     ];
 
-    const data ={
+    const data = {
         avatar: require('../../../assets/images/profile1 (1).png'),
         nickname: "João",
         star: 5,
@@ -45,22 +45,34 @@ export default function RoleDescription({ eventId }: RoleDescriptionProps) {
     const maxParticipantsToShow = 3;
 
     async function fetchGetProfile() {
-        const response = await getProfile();
-        const final = response as getProfileResponseDTO;
-        if (response) {
-            setProfilePhoto(final.profilePhoto);
-            return response;
+        try {
+            const response = await getProfile();
+            const final = response as getProfileResponseDTO;
+            console.log("RESPOSTA DO GETPROFILE ", final);
+            if (response) {
+                setProfilePhoto(final.profilePhoto);
+                return response;
+            }
+        } catch (error: any) {
+            console.error("Erro ao buscar perfil: ", error);
+            throw new Error("Erro ao buscar perfil: ", error);
         }
     }
 
     async function fetchConfirmEvent() {
-        const promoterCode = await AsyncStorage.getItem('promoterCode') || '';
-        if (promoterCode === '') return;
-        const response = await confirmEvent(eventId, profilePhoto, promoterCode);
-        if (response) {
-            alert(response.message);
-            return response;
+        try {
+            const promoterCode = await AsyncStorage.getItem('promoterCode') || '';
+            if (promoterCode === '') return;
+            const response = await confirmEvent(eventId, profilePhoto, promoterCode);
+            console.log("RESPOSTA DA CONFIRMEVENT ", response);
+            if (response) {
+                return response;
+            }
+        } catch (error: any) {
+            console.error("Erro ao confirmar presença: ", error);
+            throw new Error("Erro ao confirmar presença: ", error);
         }
+
     }
 
 
@@ -122,25 +134,32 @@ export default function RoleDescription({ eventId }: RoleDescriptionProps) {
                         onClose={() => setModalVisible(false)}
                     />
                     <View className="mt-10">
-                        <Text className="text-lg font-bold text-white">Reviews</Text>
-                        <View className="bg-button_color p-4 rounded-3xl flex-row">
-                            {/* Avatar */}
-                            <Image
-                                source={{ uri: data.avatar }}
-                                className="w-12 h-12 rounded-full mr-4"
-                                resizeMode="cover"
-                            />
-
-                            {/* Text Content */}
+                        <Text className="text-xl font-bold text-white">Reviews</Text>
+                        <View className="bg-button_color p-4 rounded-3xl flex-row mt-5">
                             <View className="flex-1">
-                                {/* User Info */}
                                 <View className="flex-row items-center justify-between">
-                                    <View>
-                                        <Text className="text-white font-bold text-base">{data.nickname}</Text>
-                                        <Text className="text-sub_text text-xs">@{data.username}</Text>
+                                    <View className="flex-row ">
+                                        <Image
+                                            source={data.avatar}
+                                            className="w-10 h-10 rounded-full mr-4 self-start"
+                                            resizeMode="cover"
+                                        />
+                                        <View className="flex justify-center self-start">
+                                            <Text className="text-white font-bold text-base">{data.nickname}</Text>
+                                            <Text className="text-sub_text text-xs">@{data.username}</Text>
+                                        </View>
                                     </View>
-                                    <View className="flex-row">
-                                        <Text>{data.star}</Text>
+                                    <View className="flex-row self-stretch">
+                                        {stars.map((star) => (
+                                            <Ionicons
+                                                name='star-outline'
+                                                size={14}
+                                                color="#fff"
+                                                className="mr-1"
+                                                key={star}
+                                            />
+
+                                        ))}
                                     </View>
                                 </View>
                                 <Text className="text-sub_text text-sm mt-2">
@@ -152,7 +171,7 @@ export default function RoleDescription({ eventId }: RoleDescriptionProps) {
                             <Text className="text-md text-[#DFA9FD]">Ver todas as reviews</Text>
                         </TouchableOpacity>
                     </View>
-                    <ModalReviewList 
+                    <ModalReviewList
                         visible={modalReviewListVisible}
                         onClose={() => setModalReviewListVisible(false)}
                         eventId={eventId}
