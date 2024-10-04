@@ -11,8 +11,10 @@ import { UserContext } from "@/context/user_context";
 import { getProfileResponseDTO } from "@/api/types/user_dto";
 import { PresenceContext } from "@/context/presence_context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import ReviewCard from "@/src/components/modalReviewList";
+import ModalReviewList from "@/src/components/modalReviewList";
 
-interface RoleDescriptionProps { 
+interface RoleDescriptionProps {
     eventId: string;
 }
 
@@ -20,6 +22,7 @@ interface RoleDescriptionProps {
 export default function RoleDescription({ eventId }: RoleDescriptionProps) {
     const [modalVisible, setModalVisible] = useState(false);
     const [comfirmedListModalVisible, setConfirmedListModalVisible] = useState(false);
+    const [modalReviewListVisible, setModalReviewListVisible] = useState(false);
     const [profilePhoto, setProfilePhoto] = useState<string | undefined>();
     const { getProfile } = useContext(UserContext);
     const { confirmEvent } = useContext(PresenceContext);
@@ -30,6 +33,14 @@ export default function RoleDescription({ eventId }: RoleDescriptionProps) {
         { id: 2, uri: require('../../../assets/images/profile2 (1).png') },
         { id: 3, uri: require('../../../assets/images/profile3 (1).png') },
     ];
+
+    const data ={
+        avatar: require('../../../assets/images/profile1 (1).png'),
+        nickname: "João",
+        star: 5,
+        username: "jotape",
+        review: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vitae nulla sit amet nunc.",
+    }
 
     const maxParticipantsToShow = 3;
 
@@ -52,16 +63,16 @@ export default function RoleDescription({ eventId }: RoleDescriptionProps) {
         }
     }
 
-    
 
-    useEffect(() => { 
+
+    useEffect(() => {
         fetchGetProfile();
     }, [])
 
     return (
         <>
             <Background>
-                <SafeAreaView>
+                <SafeAreaView className="flex-1">
                     <TouchableOpacity onPress={() => setConfirmedListModalVisible(true)} className="w-full self-end">
                         <View className="flex items-center mb-12 ">
                             <View className="flex-row absolute justify-center items-center">
@@ -73,7 +84,7 @@ export default function RoleDescription({ eventId }: RoleDescriptionProps) {
                                     />
                                 ))}
                                 <View className="w-8 h-8 ml-4 rounded-full bg-[#333] absolute left-[100px] flex items-center justify-center">
-                                    <Ionicons name="add" size={18} color="#fff"  />
+                                    <Ionicons name="add" size={18} color="#fff" />
                                 </View>
                             </View>
                             <View className="mt-12">
@@ -110,11 +121,49 @@ export default function RoleDescription({ eventId }: RoleDescriptionProps) {
                         visible={modalVisible}
                         onClose={() => setModalVisible(false)}
                     />
-                    <RoleMainButton type='gradient' buttonFunction={fetchConfirmEvent} >
-                        <Text className="text-white text-lg font-sans">
-                            Confirmar Presença
-                        </Text>
-                    </RoleMainButton>
+                    <View className="mt-10">
+                        <Text className="text-lg font-bold text-white">Reviews</Text>
+                        <View className="bg-button_color p-4 rounded-3xl flex-row">
+                            {/* Avatar */}
+                            <Image
+                                source={{ uri: data.avatar }}
+                                className="w-12 h-12 rounded-full mr-4"
+                                resizeMode="cover"
+                            />
+
+                            {/* Text Content */}
+                            <View className="flex-1">
+                                {/* User Info */}
+                                <View className="flex-row items-center justify-between">
+                                    <View>
+                                        <Text className="text-white font-bold text-base">{data.nickname}</Text>
+                                        <Text className="text-sub_text text-xs">@{data.username}</Text>
+                                    </View>
+                                    <View className="flex-row">
+                                        {data.star}
+                                    </View>
+                                </View>
+                                <Text className="text-sub_text text-sm mt-2">
+                                    {data.review}
+                                </Text>
+                            </View>
+                        </View>
+                        <TouchableOpacity className="items-center mt-5" onPress={() => setModalReviewListVisible(true)}>
+                            <Text className="text-md text-[#DFA9FD]">Ver todas as reviews</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <ModalReviewList 
+                        visible={modalReviewListVisible}
+                        onClose={() => setModalReviewListVisible(false)}
+                        eventId={eventId}
+                    />
+                    <View className="mt-20">
+                        <RoleMainButton type='gradient' buttonFunction={fetchConfirmEvent} >
+                            <Text className="text-white text-lg font-sans">
+                                Confirmar Presença
+                            </Text>
+                        </RoleMainButton>
+                    </View>
                 </SafeAreaView>
             </Background>
         </>
