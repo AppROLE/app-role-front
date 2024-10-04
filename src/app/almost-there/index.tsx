@@ -125,10 +125,10 @@ export default function AlmostThere() {
                     <ScrollView contentContainerStyle={{ paddingBottom: 90 }}>
                         <View className="w-full items-center">
                             <View>
-                                <Text className="text-3xl text-white">Estamos quase lá...</Text>
+                                <Text className="text-3xl text-white font-sans">Estamos quase lá...</Text>
                             </View>
                             <View className="mb-5 mt-10 rounded-full bg-button_color">
-                                <Text className="p-2 text-xl text-white">
+                                <Text className="p-2 text-xl text-white font-sans">
                                     Adicione uma foto de perfil!
                                 </Text>
                             </View>
@@ -181,7 +181,7 @@ export default function AlmostThere() {
                             </View>
                             <View className="w-[80%] gap-5">
                                 <View className="mx-auto mt-14 w-[250px] items-center rounded-full bg-button_color">
-                                    <Text className="p-2 text-xl text-white">
+                                    <Text className="p-2 text-xl text-white font-sans">
                                         Escolha seu @ de usuário!
                                     </Text>
                                 </View>
@@ -192,7 +192,7 @@ export default function AlmostThere() {
                                     onChangeText={handleUsernameChange}
                                 />
                                 <View className="mx-auto w-[250px] items-center rounded-full bg-button_color">
-                                    <Text className="p-2 text-xl text-white">
+                                    <Text className="p-2 text-xl text-white font-sans">
                                         Como seus amigos te chamam?
                                     </Text>
                                 </View>
@@ -208,14 +208,14 @@ export default function AlmostThere() {
                                 </View>
                             </View>
                             <View className="my-6 flex w-[80%]">
-                                <Text className="mb-5 text-center text-2xl text-white">
+                                <Text className="mb-5 text-center text-2xl text-white font-sans">
                                     Preparado(a)?
                                 </Text>
                                 <RoleMainButton
                                     type="gradient"
                                     buttonFunction={handleFinishSignUp}
                                 >
-                                    <Text className="text-white">BORA</Text>
+                                    <Text className="text-white font-sans">BORA</Text>
                                 </RoleMainButton>
                             </View>
                         </View>
