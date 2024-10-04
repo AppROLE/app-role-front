@@ -140,7 +140,7 @@ export default function RoleDescription({ eventId }: RoleDescriptionProps) {
                                         <Text className="text-sub_text text-xs">@{data.username}</Text>
                                     </View>
                                     <View className="flex-row">
-                                        {data.star}
+                                        <Text>{data.star}</Text>
                                     </View>
                                 </View>
                                 <Text className="text-sub_text text-sm mt-2">
