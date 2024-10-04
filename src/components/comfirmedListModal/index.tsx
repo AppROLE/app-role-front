@@ -12,9 +12,10 @@ import { Friends } from "@/api/types/auth_dto";
 interface ModalReviewProps {
     visible: boolean;
     onClose: () => void;
+    eventId: string;
 }
 
-export default function ComfirmedListModal({ visible, onClose }: ModalReviewProps) {
+export default function ComfirmedListModal({ visible, onClose, eventId }: ModalReviewProps) {
     const [presence, setPresence] = useState<(Presence & {profilePhoto?: ImageSourcePropType})[]>([]);
     const [friends, setFriends] = useState<(Friends)[]>([]);
     const { getAllPresence} = useContext(PresenceContext);  
@@ -27,21 +28,14 @@ export default function ComfirmedListModal({ visible, onClose }: ModalReviewProp
     // ]
 
     async function get() {
-        const idToken = (await AsyncStorage.getItem('idToken')) || ''
-        if (idToken === '') return;
-        const response = await getFriends(idToken);
+        const response = await getFriends();
         if (response) {
             setFriends(response.friends);
         } 
     }
 
     async function fetchAllConfirmedUsers() {
-        const idToken = (await AsyncStorage.getItem('idToken')) || ''
-        if (idToken === '') return;
-        const eventId = (await AsyncStorage.getItem('eventId')) || ''
-        if (eventId === '') return;
-
-        const response = await getAllPresence(idToken, eventId);
+        const response = await getAllPresence(eventId);
         if (response) {
             setPresence(response.users);
         }
