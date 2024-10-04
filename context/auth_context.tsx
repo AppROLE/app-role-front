@@ -16,7 +16,7 @@ type AuthContextType = {
   finishSignUp: (data: finishSignUpRequestDTO) => Promise<finishSignUpResponseDTO>
   uploadImageProfile: (formData: FormData) => Promise<object>
   confirmCode: (email: string, code: string) => Promise<confirmCodeResponseDTO>
-  getFriends: (idToken: string) => Promise<getFriendsResponseDTO>
+  getFriends: () => Promise<getFriendsResponseDTO>
 }
 
 const defaultAuthContext = {
@@ -58,7 +58,7 @@ const defaultAuthContext = {
       message: ''
     }
   },
-  getFriends: async (_idToken: string) => { 
+  getFriends: async () => { 
     return {
       friends: [],
       message: ''
@@ -164,9 +164,9 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
     }
   }
 
-  async function getFriends(idToken: string) { 
+  async function getFriends() { 
     try{
-      const response = await authRepository.getFriends(idToken);
+      const response = await authRepository.getFriends();
       return response;
     } catch (error: any) {
       return error
