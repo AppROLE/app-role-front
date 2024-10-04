@@ -334,7 +334,7 @@ export default function Home() {
 
     return (
         <Background text={phrase} scrollable lockScroll={scrollDisabled} function1={loadMoreRoles}>
-            <Text className="text-white text-3xl font-bold text-center mb-4">Role Bombando</Text>
+            <Text className="text-white text-3xl font-sansBold text-center mb-4">Role Bombando</Text>
             <View className="px-12 mb-10">
                 <Carousel
                     loop
@@ -380,12 +380,12 @@ export default function Home() {
                 </View>
             </View>
             <View className="px-12 flex flex-col gap-4">
-                <Text className="text-white text-3xl font-bold">Explore</Text>
+                <Text className="text-white text-3xl font-sansBold">Explore</Text>
                 {roles.slice(0, 5).map((role, index) => (
                     <RoleCard key={`id${role.idRole}ind${index}`} {...role} />
                 ))}
                 <View>
-                    <Text className="text-white text-2xl font-bold mt-3 mb-2">Categorias</Text>
+                    <Text className="text-white text-2xl font-sansBold mt-3 mb-2">Categorias</Text>
                     <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{marginBottom: 16}}>
                         {typesRole.map((type, index) => (
                             <View key={`viewtype-${type.name}-${index}`}>
@@ -398,7 +398,7 @@ export default function Home() {
                     <RoleCard key={`id${role.idRole}ind${index}`} {...role} />
                 ))}
                 <View>
-                    <Text className="text-white text-2xl font-bold mt-3 mb-2">Gênero Musical</Text>
+                    <Text className="text-white text-2xl font-sansBold mt-3 mb-2">Gênero Musical</Text>
                     <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{marginBottom: 16}}>
                         {musicRole.map((music, index) => (
                             <CategoryMusicalCard key={`music-${music.name}-${index}`} {...music} />
@@ -409,8 +409,8 @@ export default function Home() {
                     <RoleCard key={`id${role.idRole}ind${index}`} {...role} />
                 ))}
                 <View className="mt-8 pb-8">
-                    <Text className="text-lg text-[#BDBDBD] text-center">Não encontrou o que procurava?</Text>
-                    <Text className="text-lg text-[#BDBDBD] text-center">Utilieze os nossos <Text className="font-bold text-white">Filtros!</Text></Text>
+                    <Text className="text-lg text-[#BDBDBD] text-center font-sans">Não encontrou o que procurava?</Text>
+                    <Text className="text-lg text-[#BDBDBD] text-center font-sans">Utilieze os nossos <Text className="font-sansBold text-white">Filtros!</Text></Text>
                     <TouchableOpacity className="flex justify-center w-full rounded-2xl py-4">
                         <LinearGradient
                         colors={gradientColors}
