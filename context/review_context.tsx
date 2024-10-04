@@ -1,9 +1,10 @@
 import { ReviewRepositoryHttp } from "@/api/repositories/review_repository_http";
-import { createReviewRequestDTO, createReviewResponseDTO } from "@/api/types/review_dto";
+import { createReviewRequestDTO, createReviewResponseDTO, getAllReviewsByEventResponseDTO } from "@/api/types/review_dto";
 import { createContext, PropsWithChildren } from "react";
 
 type ReviewContextType = { 
     createReview: (data: createReviewRequestDTO) => Promise<createReviewResponseDTO>
+    getAllReviewsByEvent: (eventId: string) => Promise<getAllReviewsByEventResponseDTO>
 }
 
 const defaultReviewContext = { 
@@ -11,6 +12,9 @@ const defaultReviewContext = {
         return {
             message: ''
         }
+    },
+    getAllReviewsByEvent: async (_eventId: string) => {
+        return []
     }
 }
 
@@ -28,8 +32,17 @@ export default function ReviewContextProvider({ children }: PropsWithChildren) {
         }
     }
 
+    async function getAllReviewsByEvent(eventId: string) {
+        try {
+            const response = await reviewRepository.getAllReviewsByEvent(eventId)
+            return response
+        } catch (error: any) {
+            return error
+        }
+    }
+
     return (
-        <ReviewContext.Provider value={{ createReview }}>
+        <ReviewContext.Provider value={{ createReview, getAllReviewsByEvent }}>
             {children}
         </ReviewContext.Provider>
     )
