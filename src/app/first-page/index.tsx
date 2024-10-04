@@ -99,17 +99,17 @@ export default function FirstPage() {
                     />
                 ))}
             </View>
-            <View className="items-center pb-20">
-                <Text className="text-white text-xl">Suas melhores histórias começam aqui.</Text>
-                <Text className="text-white text-xl mt-2">Bora dar um <Text className="font-bold text-white text-xl ">ROLE</Text>?</Text>
+            <View className="items-center pb-20 ">
+                <Text className="text-white font-sans text-xl">Suas melhores histórias começam aqui.</Text>
+                <Text className="text-white text-xl font-sans mt-2">Bora dar um <Text className="font-sansBold text-white text-xl ">ROLE</Text>?</Text>
                 
                 <View className="w-[80%] mt-8">
                     <RoleMainButton type="gradient" buttonFunction={() => handlePress(router)}>
-                        <Text className="text-white text-base">Cadastre-se</Text>
+                        <Text className="text-white font-sans text-base">Cadastre-se</Text>
                     </RoleMainButton> 
                 </View> 
                 <View className="mt-16">
-                    <Text className="text-[#BDBDBD]">Já possui uma conta?  <Link href={'/sign-in'} className="text-[#D8A9FF]">Entrar</Link></Text>
+                    <Text className="text-[#BDBDBD] font-sans">Já possui uma conta?  <Link href={'/sign-in'} className="text-[#D8A9FF] font-sans">Entrar</Link></Text>
                 </View>
             </View>
         </View>
