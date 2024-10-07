@@ -1,22 +1,17 @@
-import { Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
-import {
-    FlatList,
-    Modal,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
-} from "react-native";
 import ReviewCard from "@/src/components/reviewCard";
 import Svg from "@/src/components/svg";
+import { Reviews } from "@/api/types/review_dto";
+import { ReviewContext } from "@/context/review_context";
+import { useContext, useEffect, useState } from "react";
+import { Modal, FlatList, ScrollView, Image, Text, TouchableOpacity, View } from "react-native";
 
 interface ModalReviewProps {
     visible: boolean;
     onClose: () => void;
+    eventId: string;
 }
 
-export default function ModalReviewList({ visible, onClose }: ModalReviewProps) {
+export default function ModalReviewList({ visible, onClose, eventId }: ModalReviewProps) {
 
     const json = [
         {
@@ -45,11 +40,53 @@ export default function ModalReviewList({ visible, onClose }: ModalReviewProps) 
         },
     ]
 
+    // const reviews = [
+    //     {
+    //         id: 1,
+    //         profilePhoto: require('../../../assets/images/profile1 (1).png'),
+    //         nickname: 'User1',
+    //         username: 'user1',
+    //         comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vitae nulla sit amet',
+    //         stars: 4
+    //     },
+    //     {
+    //         id: 2,
+    //         profilePhoto: require('../../../assets/images/profile2 (1).png'),
+    //         nickname: 'User2',
+    //         username: 'user2',
+    //         comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vitae nulla sit amet',
+    //         stars: 5
+    //     },
+    //
+    // ];
+
+    const { getAllReviewsByEvent } = useContext(ReviewContext);
+    const [review, setReview] = useState<(Reviews)[]>([]);
+
+    async function fetchGetReviews() {
+        try {
+            const response = await getAllReviewsByEvent(eventId);
+            console.log("RESPOSTA DO GETREVIEWS ", response);
+            if (response) {
+                setReview(response.reviews || []); // Garantir que seja um array
+                return response;
+            }
+        } catch (error: any) {
+            console.error("Erro ao buscar reviews: ", error);
+            throw new Error("Erro ao buscar reviews: ", error);
+        }
+    }
+
+
+    useEffect(() => {
+        fetchGetReviews();
+    }, []);
+
     return (
         <Modal
             transparent={true}
             visible={visible}
-            animationType="fade"
+            animationType="slide"
             onRequestClose={onClose}
         >
             <View className="flex-1 justify-end items-center bg-black/70">
