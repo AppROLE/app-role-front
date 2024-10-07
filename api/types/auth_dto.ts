@@ -69,3 +69,8 @@ export type signInResponseDTO = {
 export type confirmCodeResponseDTO = {
   message: string
 }
+
+export type deleteAccountResponseDTO = {
+  message: string
+}
+
