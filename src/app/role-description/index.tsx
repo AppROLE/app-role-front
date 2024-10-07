@@ -19,7 +19,6 @@ export default function RoleDescription({ eventId }: RoleDescriptionProps) {
     const [modalListVisible, setModalListVisible] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [comfirmedListModalVisible, setConfirmedListModalVisible] = useState(false);
-    const [modalReviewListVisible, setModalReviewListVisible] = useState(false);
     const [profilePhoto, setProfilePhoto] = useState<string | undefined>();
     const { getProfile } = useContext(UserContext);
     const { confirmEvent } = useContext(PresenceContext);

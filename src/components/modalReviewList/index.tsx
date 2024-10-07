@@ -3,7 +3,7 @@ import Svg from "@/src/components/svg";
 import { Reviews } from "@/api/types/review_dto";
 import { ReviewContext } from "@/context/review_context";
 import { useContext, useEffect, useState } from "react";
-import { Modal, FlatList, ScrollView, Image, Text, TouchableOpacity, View } from "react-native";
+import { Modal, FlatList, Text, TouchableOpacity, View } from "react-native";
 
 interface ModalReviewProps {
     visible: boolean;
