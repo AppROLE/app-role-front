@@ -253,7 +253,7 @@ export default function SearchingFilters() {
                           filter.title === 'Avaliação'
                             ? filter.selected === optionIndex
                             : Array.isArray(filter.selected) &&
-                              filter.selected.includes(optionIndex)
+                            filter.selected.includes(optionIndex)
                         }
                         onPress={() => handleOptionSelect(index, optionIndex)}
                       />
@@ -264,16 +264,18 @@ export default function SearchingFilters() {
             ))}
           </ScrollView>
         </View>
-        <View className="fixed bottom-0 z-40 flex h-[16%] w-full flex-row items-center justify-evenly border-t-2 border-t-[#2C2B2B] bg-background pb-6">
-          <View className="flex w-[40%]">
-            <RoleMainButton type="simple" buttonFunction={handleClearFilters}>
-              <Text className="text-white">Limpar Filtros</Text>
-            </RoleMainButton>
-          </View>
-          <View className="flex w-[40%]">
-            <RoleMainButton type="gradient">
-              <Text className="text-white">Pesquisar</Text>
-            </RoleMainButton>
+        <View className="flex w-full h-[20%] py-4 border-t-2 border-t-[#2C2B2B] bg-background">
+          <View className="flex flex-row justify-evenly items-center">
+            <View className="w-[40%]">
+              <RoleMainButton type="simple" buttonFunction={handleClearFilters}>
+                <Text className="text-white text-center">Limpar Filtros</Text>
+              </RoleMainButton>
+            </View>
+            <View className="w-[40%]">
+              <RoleMainButton type="gradient">
+                <Text className="text-white text-center">Pesquisar</Text>
+              </RoleMainButton>
+            </View>
           </View>
         </View>
 
