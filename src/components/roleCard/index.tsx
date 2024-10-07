@@ -16,12 +16,12 @@ export default function RoleCard({data, image, title, type, stars, local, idRole
     const {width, height} = Dimensions.get('window');
     
     function handleRole() {
-        // router.replace(`/role/${idRole}`)
-        router.replace('/')
+        router.replace(`/event-description`)
+        // router.replace('/')
     }
 
     return (
-        <TouchableOpacity className="flex flex-row bg-[#1C1C1C] rounded-2xl" style={{height: height*0.14}}>
+        <TouchableOpacity className="flex flex-row bg-[#1C1C1C] rounded-2xl" style={{height: height*0.14}} onPress={handleRole}>
             <View className="absolute top-2 left-2 z-10 bg-[#121212]/70 px-2 py-1 rounded-lg">
                 <Text className="text-white text-base">16 DEZ</Text>
             </View>
