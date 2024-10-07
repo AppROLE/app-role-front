@@ -4,7 +4,7 @@ import RoleCard from '@/src/components/roleCard'
 import RoleEmphasis from '@/src/components/roleEmphasis'
 import { FontAwesome6 } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
-import { SetStateAction, useState } from 'react'
+import { SetStateAction, useContext, useEffect, useState } from 'react'
 import {
   View,
   Text,
@@ -15,7 +15,8 @@ import {
   FlatList
 } from 'react-native'
 import Carousel from 'react-native-reanimated-carousel'
-import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry'
+
+import { UserContext } from '@/context/user_context'
 
 export default function Home() {
   const [scrollDisabled, setScrollDisabled] = useState(false)
@@ -204,6 +205,8 @@ export default function Home() {
   ])
   const [activeSlide, setActiveSlide] = useState(0)
   const [loadLock, setLoadLock] = useState(false)
+  const { getPhrase } = useContext(UserContext)
+  const [phrase, setPhrase] = useState('')
 
   const [typesRole, setTypesRole] = useState([
     {
@@ -294,18 +297,15 @@ export default function Home() {
   const [carrosselData, setCarrosselData] = useState([
     {
       id: '1',
-      image:
-        'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png'
+      image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png'
     },
     {
       id: '2',
-      image:
-        'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png'
+      image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png'
     },
     {
       id: '3',
-      image:
-        'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png'
+      image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png'
     }
   ])
 
@@ -331,16 +331,18 @@ export default function Home() {
     }
   }
 
+  async function getThePhrase() {
+    const response = await getPhrase()
+    setPhrase(response.phrase)
+  }
+
+  useEffect(() => {
+    getThePhrase()
+  }, [])
+
   return (
-    <Background
-      text="Home"
-      scrollable
-      lockScroll={scrollDisabled}
-      function1={loadMoreRoles}
-    >
-      <Text className="mb-4 text-center text-3xl font-bold text-white">
-        Role Bombando
-      </Text>
+    <Background text={phrase} scrollable lockScroll={scrollDisabled} function1={loadMoreRoles}>
+      <Text className="mb-4 text-center text-3xl font-bold text-white">Role Bombando</Text>
       <View className="mb-10 px-12">
         <Carousel
           loop
@@ -352,7 +354,7 @@ export default function Home() {
           autoPlayInterval={5000}
           data={carrosselData}
           onScrollBegin={() => setScrollDisabled(true)} // Desabilita o scroll da tela
-          onScrollEnd={(index) => endScroll(index)} // Atualiza o slide ativo
+          onScrollEnd={index => endScroll(index)} // Atualiza o slide ativo
           scrollAnimationDuration={1000}
           renderItem={({ item }) => (
             <View style={{ marginHorizontal: 10 }}>
@@ -375,12 +377,7 @@ export default function Home() {
       <View className="mb-12 px-12">
         <View className="flex flex-row items-center rounded-full bg-[#1C1C1C] px-2 py-1">
           <View className="w-[12%]">
-            <FontAwesome6
-              name="magnifying-glass"
-              size={24}
-              color="#BEBEBE"
-              solid
-            />
+            <FontAwesome6 name="magnifying-glass" size={24} color="#BEBEBE" solid />
           </View>
           <View className="w-[78%]">
             <TextInput
@@ -400,9 +397,7 @@ export default function Home() {
           <RoleCard key={`id${role.idRole}ind${index}`} {...role} />
         ))}
         <View>
-          <Text className="mb-2 mt-3 text-2xl font-bold text-white">
-            Categorias
-          </Text>
+          <Text className="mb-2 mt-3 text-2xl font-bold text-white">Categorias</Text>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -410,10 +405,7 @@ export default function Home() {
           >
             {typesRole.map((type, index) => (
               <View key={`viewtype-${type.name}-${index}`}>
-                <CategoryMusicalCard
-                  key={`cardtype-${type.name}-${index}`}
-                  {...type}
-                />
+                <CategoryMusicalCard key={`cardtype-${type.name}-${index}`} {...type} />
               </View>
             ))}
           </ScrollView>
@@ -422,19 +414,14 @@ export default function Home() {
           <RoleCard key={`id${role.idRole}ind${index}`} {...role} />
         ))}
         <View>
-          <Text className="mb-2 mt-3 text-2xl font-bold text-white">
-            Gênero Musical
-          </Text>
+          <Text className="mb-2 mt-3 text-2xl font-bold text-white">Gênero Musical</Text>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
             style={{ marginBottom: 16 }}
           >
             {musicRole.map((music, index) => (
-              <CategoryMusicalCard
-                key={`music-${music.name}-${index}`}
-                {...music}
-              />
+              <CategoryMusicalCard key={`music-${music.name}-${index}`} {...music} />
             ))}
           </ScrollView>
         </View>
@@ -442,12 +429,9 @@ export default function Home() {
           <RoleCard key={`id${role.idRole}ind${index}`} {...role} />
         ))}
         <View className="mt-8 pb-8">
+          <Text className="text-center text-lg text-[#BDBDBD]">Não encontrou o que procurava?</Text>
           <Text className="text-center text-lg text-[#BDBDBD]">
-            Não encontrou o que procurava?
-          </Text>
-          <Text className="text-center text-lg text-[#BDBDBD]">
-            Utilieze os nossos{' '}
-            <Text className="font-bold text-white">Filtros!</Text>
+            Utilieze os nossos <Text className="font-bold text-white">Filtros!</Text>
           </Text>
           <TouchableOpacity className="flex w-full justify-center rounded-2xl py-4">
             <LinearGradient
@@ -473,9 +457,7 @@ export default function Home() {
               <Text className="text-lg text-white">Filtrar</Text>
             </LinearGradient>
           </TouchableOpacity>
-          {loadLock && (
-            <View className="flex h-1 w-full justify-center bg-white"></View>
-          )}
+          {loadLock && <View className="flex h-1 w-full justify-center bg-transparent"></View>}
         </View>
       </View>
     </Background>

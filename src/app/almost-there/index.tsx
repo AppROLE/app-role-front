@@ -1,66 +1,63 @@
-import Background from '@/src/components/background';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useContext, useEffect, useState } from 'react';
+import Background from '@/src/components/background'
+import Ionicons from '@expo/vector-icons/Ionicons'
+import { LinearGradient } from 'expo-linear-gradient'
+import { useContext, useEffect, useState } from 'react'
 import {
     Image,
-    Pressable,
     Text,
-    TextInput,
     TouchableOpacity,
     View,
     StyleSheet,
     SafeAreaView,
     ScrollView
 } from 'react-native'
-import * as ImagePicker from 'expo-image-picker';
-import RoleMainButton from '@/src/components/roleMainButton';
-import RoleInput from '@/src/components/input';
-import { AuthContext } from '@/context/auth_context';
-import { finishSignUpRequestDTO } from '@/api/types/auth_dto';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import * as ImagePicker from 'expo-image-picker'
+import RoleMainButton from '@/src/components/roleMainButton'
+import RoleInput from '@/src/components/input'
+import { AuthContext } from '@/context/auth_context'
+import { finishSignUpRequestDTO } from '@/api/types/auth_dto'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { router } from 'expo-router'
 
 export default function AlmostThere() {
-    const [imageType, setImageType] = useState<string>(''); // Provide a default value for imageType
-    const [username, setUsername] = useState<string>('');
-    const [nickname, setNickname] = useState<string>('');
-    const [usernameError, setUsernameError] = useState<string>('');
-    const [nicknameError, setNicknameError] = useState<string>('');
-    const [profilePhoto, setProfilePhoto] = useState<string>('');
-    const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
-    const { finishSignUp, signIn, uploadImageProfile } = useContext(AuthContext);
+    const [files, setFiles] = useState<any>(null)
+    const [imageType, setImageType] = useState<string>('')
+    const [imageUri, setImageUri] = useState<string | null>(null)
+    const [username, setUsername] = useState<string>('')
+    const [nickname, setNickname] = useState<string>('')
+    const [usernameError, setUsernameError] = useState<string>('')
+    const [nicknameError, setNicknameError] = useState<string>('')
+    const [isInputFocused, setIsInputFocused] = useState<boolean>(false)
+    const { finishSignUp, signIn, uploadImageProfile } = useContext(AuthContext)
 
     const pickImage = async () => {
-        // No permissions request is necessary for launching the image library
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
             aspect: [4, 3],
             quality: 1
-        });
-
-        console.log("RESPOSTA DO PICKER " + result);
+        })
 
         if (!result.canceled) {
-            const selectedImage = result.assets[0]; // Obter o primeiro item na seleção
-            const imageUri = selectedImage.uri;
-            const imageType = imageUri.split('.').pop();
-            const formattedImageType = imageType ? `.${imageType}` : '';
-
-            console.log("IMAGEM SELECIONADA " + selectedImage.uri);
-            console.log("TYPE IMAGE ", formattedImageType);
-
-            setImageType(formattedImageType); // Definir a imagem localmente para exibição na UI
-            setProfilePhoto(imageUri); // Definir a imagem para envio ao backend    
+            const selectedImage = result.assets[0]
+            const imageUri = selectedImage.uri
+            const imageType = imageUri.split('.').pop()
+            const formattedImageType = imageType ? `.${imageType}` : '' // Obter o primeiro item na seleção
+            setImageUri(imageUri)
+            setImageType(formattedImageType)
+            setFiles({
+                uri: selectedImage.uri,
+                name: selectedImage.uri.split('/').pop(), // Pega o nome do arquivo da URI
+                type: "image/jpeg"
+            });
         } else {
-            console.log('Cancelado');
+            console.log('Cancelado')
         }
     }
 
     function handleUsernameChange(text: string) {
-        setUsername(text);
-        if (username) setUsernameError(''); // Reseta o erro ao digitar
+        setUsername(text)
+        if (username) setUsernameError('') // Reseta o erro ao digitar
     }
 
     function handleNicknameChange(text: string) {
@@ -70,64 +67,63 @@ export default function AlmostThere() {
 
     useEffect(() => {
         async function loginVerify() {
-            const response = await AsyncStorage.getItem('token');
+            const response = await AsyncStorage.getItem('token')
             if (response) {
-                console.log("TOKEN NO STORAGE " + response);
+                console.log('TOKEN NO STORAGE ', response)
             }
         }
-        loginVerify();
-    }, []);
+        loginVerify()
+    }, [])
 
     async function handleFinishSignUp() {
         if (username === '') {
             setUsernameError('Campo obrigatório')
             return
         }
+
         const data: finishSignUpRequestDTO = {
             email: (await AsyncStorage.getItem('email')) ?? '',
             password: (await AsyncStorage.getItem('password')) ?? '',
             username: username,
             nickname: nickname
         }
-        console.log("DADOS ENVIADOS NA REQ " + data);
 
-        const response = await finishSignUp(data);
-        // const result = await signIn(data.email, data.password);
-        console.log("PROFILE PHOTO " + profilePhoto);
-        console.log("NICKNAME " + nickname);
-        console.log("USERNAME " + username);
-        console.log("IMAGE TYPE " + imageType);
+        const email = await AsyncStorage.getItem('email')
+        const password = await AsyncStorage.getItem('password')
+        if (!email) throw new Error('Email não encontrado no AsyncStorage')
+        if (!password) throw new Error('Senha não encontrada no AsyncStorage')
 
-        try {
-            const formData = new FormData();
-            formData.append('username', username);
-            formData.append('email', 'jota@email.com');
-            formData.append('profilePhoto', profilePhoto);
-            formData.append('typePhoto', imageType);
-
-            // Fazer upload da imagem para o backend
-            const uploadResponse = await uploadImageProfile(formData);
-            console.log(uploadResponse);
-            if (Object.keys(uploadResponse).length === 0) {
-                console.error("Erro ao fazer upload da imagem");
-                return;
-            }
-            console.log("Upload concluído:", uploadResponse);
-            console.log("FORM DATA " + formData)
-        } catch (error) {
-            console.error("Erro ao fazer upload da imagem:", error);
+        const dataSignIn = {
+            email,
+            password
         }
-        
-        // console.log("SIGN IN " + result)
-        console.log("FINISH SIGNUP " + response.message)
+
+        const response = await finishSignUp(data)
+        const formData = new FormData()
+        if (files) {
+            formData.append('files', {
+                uri: files.uri,
+                name: files.name,
+                type: files.type,
+            })
+        }
+
+        formData.append('username', username)
+        formData.append('email', email)
+        formData.append('typePhoto', '.jpeg')
+
+        const uploadResponse = await uploadImageProfile(formData)
+        const result = await signIn(dataSignIn)
+
+        router.replace('/home')
     }
 
     return (
         <>
             <Background>
-                <SafeAreaView className='w-full flex-1 '>
+                <SafeAreaView className="w-full flex-1">
                     <ScrollView contentContainerStyle={{ paddingBottom: 90 }}>
-                        <View className='w-full items-center'>
+                        <View className="w-full items-center">
                             <View>
                                 <Text className="text-3xl text-white">Estamos quase lá...</Text>
                             </View>
@@ -136,17 +132,17 @@ export default function AlmostThere() {
                                     Adicione uma foto de perfil!
                                 </Text>
                             </View>
-                            <View className='relative flex items-center'>
+                            <View className="relative flex items-center">
                                 <LinearGradient
                                     style={{ borderRadius: 999, padding: 5 }}
                                     colors={['#5A189A', '#9C4EDC', '#DFA9FD']}
                                 >
                                     <TouchableOpacity onPress={pickImage}>
-                                        <View className="rounded-full bg-white ">
+                                        <View className="rounded-full bg-white">
                                             <View className="rounded-full bg-gray-400">
-                                                {profilePhoto ? (
+                                                {imageUri ? (
                                                     <Image
-                                                        source={{ uri: profilePhoto }}
+                                                        source={{ uri: imageUri }}
                                                         style={styles.image}
                                                         className="rounded-full"
                                                     />
@@ -165,16 +161,21 @@ export default function AlmostThere() {
 
                                 <TouchableOpacity
                                     onPress={pickImage}
-                                    className="absolute "
+                                    className="absolute"
                                     style={{
-                                        top: 75,  // Ajuste fino da posição vertical do lápis
+                                        top: 75, // Ajuste fino da posição vertical do lápis
                                         left: 85, // Ajuste fino da posição horizontal do lápis
                                         borderRadius: 999,
-                                        padding: 10, // Espaçamento ao redor do ícone
+                                        padding: 10 // Espaçamento ao redor do ícone
                                     }}
                                 >
-                                    <View className="bg-button_color rounded-full">
-                                        <Ionicons name="pencil" size={22} color="white" className="p-2" />
+                                    <View className="rounded-full bg-button_color">
+                                        <Ionicons
+                                            name="pencil"
+                                            size={22}
+                                            color="white"
+                                            className="p-2"
+                                        />
                                     </View>
                                 </TouchableOpacity>
                             </View>
@@ -210,7 +211,10 @@ export default function AlmostThere() {
                                 <Text className="mb-5 text-center text-2xl text-white">
                                     Preparado(a)?
                                 </Text>
-                                <RoleMainButton type="gradient" buttonFunction={handleFinishSignUp}>
+                                <RoleMainButton
+                                    type="gradient"
+                                    buttonFunction={handleFinishSignUp}
+                                >
                                     <Text className="text-white">BORA</Text>
                                 </RoleMainButton>
                             </View>

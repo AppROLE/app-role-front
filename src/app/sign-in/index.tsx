@@ -8,11 +8,11 @@ import Background from '@/src/components/background'
 import RoleMainButton from '@/src/components/roleMainButton'
 import RoleInput from '@/src/components/input'
 import { useEffect, useState, useContext } from 'react'
-
 import * as WebBrowser from 'expo-web-browser'
 import * as Google from 'expo-auth-session/providers/google'
 
 WebBrowser.maybeCompleteAuthSession()
+
 import { AuthContext } from '@/context/auth_context'
 
 export default function Index() {

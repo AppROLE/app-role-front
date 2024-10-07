@@ -1,9 +1,12 @@
+import { getInstituteByPartnerTypeResponseDTO, Institute } from "@/api/types/institute_dto";
+import { InstituteContext } from "@/context/institute_context";
 import Background from "@/src/components/background";
 import RoleMainButton from "@/src/components/roleMainButton";
 import { FontAwesome6 } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Animated, Image, KeyboardAvoidingView, Linking, Platform, Pressable, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 
@@ -13,6 +16,8 @@ export default function Packages() {
     const [selectedCard, setSelectedCard] = useState<number | null>(null);
     const [date, setDate] = useState('');
     const [isDateFocused, setIsDateFocused] = useState(false);
+    const { getAllInstitutesByPartnerType } = useContext(InstituteContext);
+    const [institutes, setInstitutes] = useState<Institute[]>([]);
 
     const data = [
         { id: 1, imageSource: require('@/assets/images/aniversarios.png'), grayImageSource: require('@/assets/images/aniversarioGray.png'), label: 'Aniversário' },
@@ -38,7 +43,6 @@ export default function Packages() {
         { id: 6, image: require('@/assets/images/galeria.png'), title: 'Galleria Bar 6', phoneNumber: '+5511987654326' },
         { id: 7, image: require('@/assets/images/galeria.png'), title: 'Galleria Bar 7', phoneNumber: '+5511987654327' }
     ];
-
 
     const handleDateChange = (input: string) => {
         // Remove tudo que não seja número
@@ -66,6 +70,23 @@ export default function Packages() {
             }
         }
     };
+
+    useEffect(() => { 
+        async function getInstitutes() { 
+            const idToken = (await AsyncStorage.getItem('idToken')) || ''
+            if (idToken === '') return
+            if (getAllInstitutesByPartnerType) {
+                const response = getAllInstitutesByPartnerType(idToken);
+                response.then((res : getInstituteByPartnerTypeResponseDTO) => {
+                    setInstitutes(res.institutes)
+                    console.log(res.institutes)
+                }).catch((error) => {
+                    console.log("error "+ error)
+                })
+            }
+        }
+        getInstitutes();
+    }, []);
 
     return (
         <Background>
@@ -121,34 +142,34 @@ export default function Packages() {
                         </View>
                         <ScrollView className="w-full flex flex-1 mt-5 ">
                             <View className="flex flex-wrap flex-row justify-start ml-10">
-                                {cards.map((card) => (
-                                    <TouchableOpacity className="flex h-[76px]" onPress={() => handleSelectCard(card.id)}>
-                                        {selectedCard === card.id ? (
+                                {institutes.map((institute : Institute) => (
+                                    <TouchableOpacity className="flex h-[76px]" onPress={() => handleSelectCard(institute.id)}>
+                                        {selectedCard === institute.id ? (
                                             <View
                                                 className="flex-row  bg-button_color m-2 h-[75%] justify-center items-center rounded-full"
                                             >
-                                                <Pressable onPress={() => handleSelectCard(card.id)}>
+                                                <Pressable onPress={() => handleSelectCard(institute.id)}>
                                                     <LinearGradient
-                                                        key={card.id}
+                                                        key={institute.id}
                                                         colors={["#5A189A", "#9C4EDC"]}
                                                         style={{ borderRadius: 999, flexDirection: 'row', alignItems: 'center', height: '100%', width: 157 }}
                                                     >
                                                         <View className="mx-1">
-                                                            <Image source={card.image} />
+                                                            <Image source={{ uri: institute.image }} />
                                                         </View>
-                                                        <Text className="text-white text-center text-lg mx-3">{card.title}</Text>
+                                                        <Text className="text-white text-center text-lg mx-3">{institute.name}</Text>
                                                     </LinearGradient>
                                                 </Pressable>
                                             </View>
                                         ) : (
                                             <View
-                                                key={card.id}
+                                                key={institute.id}
                                                 className="flex-row w-[157px] bg-button_color m-2 h-[75%] justify-center items-center rounded-full"
                                             >
                                                 <View className="mx-1">
-                                                    <Image source={card.image} />
+                                                    <Image source={{ uri: institute.image }} />
                                                 </View>
-                                                <Text className="text-white text-center text-lg mx-3">{card.title}</Text>
+                                                <Text className="text-white text-center text-lg mx-3">{institute.name}</Text>
                                             </View>
                                         )}
                                     </TouchableOpacity>

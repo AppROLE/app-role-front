@@ -5,14 +5,28 @@ import {
   ScrollView,
 } from 'react-native';
 import Background from '@/src/components/background';
-import React from "react";
+import React, {useState} from "react";
 import Svg from "@/src/components/svg";
 import RoleInput from "@/src/components/input";
 import BigButton from "@/src/components/bigButton";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 export default function Account() {
   const [phone, setPhone] = React.useState('');
   const [cpf, setCpf] = React.useState('');
+
+  const insets = useSafeAreaInsets(); // Obtem as margens seguras do dispositivo
+  const [viewHeight, setViewHeight] = useState(0);
+
+  const handleLayout = (event:any) => {
+    const { height } = event.nativeEvent.layout;
+    setViewHeight(height);
+  };
+
+  const tabBarHeightWithSafeArea = viewHeight - 20;
+  const tabBarHeightWithoutSafeArea = 0;
+
+  const tabBarHeight = insets.bottom > 0 ? tabBarHeightWithoutSafeArea : tabBarHeightWithSafeArea;
 
   function handlePhoneChange(text: string) {
     setPhone(text);
@@ -33,20 +47,21 @@ export default function Account() {
   return (
     <Background>
       <View className="w-full flex-1">
-        <View className="flex flex-row h-12 w-full items-center gap-3 border-b-2 border-b-line_gray">
+        <View className="relative flex flex-row h-12 w-full items-center gap-3 border-b-2 border-b-line_gray">
           <TouchableOpacity
-              className="ml-5 flex h-12 w-12 items-center justify-center rounded-full bg-button_color mb-8"
+              className="absolute flex h-12 w-12 items-center justify-center rounded-full bg-button_color bottom-4 left-6"
           >
             <Svg
                 uri={process.env.EXPO_PUBLIC_URL_S3 + "/left_arrow.svg"}
             />
           </TouchableOpacity>
           <View className="flex-1 h-full mb-8">
-            <Text className="text-white text-center text-3xl font-bold">
+            <Text className="absolute left-1/2 transform -translate-x-1/2 text-white text-3xl font-bold">
               Conta
             </Text>
           </View>
         </View>
+
         <ScrollView>
           <View className="pl-6 gap-6 pt-6 items-start border-b-2 border-b-line_gray">
             <Text className="text-white text-lg font-bold">
@@ -113,7 +128,7 @@ export default function Account() {
             </TouchableOpacity>
           </View>
         </ScrollView>
-        <View className="flex justify-end items-center py-4 bg-button_color">
+        <View onLayout={handleLayout} className="absolute flex justify-end items-center py-4 bg-button_color w-full" style={{bottom: tabBarHeight}}>
           <BigButton buttonFunction={onSave}>
             <Text className="text-white text-lg">
               Salvar

@@ -9,7 +9,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 export default function Index() {
   const [buttonDisabled, setButtonDisabled] = useState(false)
 
-
   function teste() {
     console.log('teste')
     // setButtonDisabled(true)
@@ -29,18 +28,20 @@ export default function Index() {
 
   return (
     <View className="flex h-full w-full items-center justify-center bg-blue-100">
-      <Text className="text-2xl font-bold text-red-500">
-        EH FRONTAS DO APP ROLE
-      </Text>
+      <Text className="text-2xl font-bold text-red-500">EH FRONTAS DO APP ROLE</Text>
       <Link href={'/first-page'}>First Page</Link>
       <Link href={'/opening'}>Opening</Link>
       <Link href={'/sign-in'}>Sign In</Link>
       <Link href={'/sign-up'}>Sign Up</Link>
       <TouchableOpacity>
-        <Link href={{
-          pathname: '/almost-there',
-          params: { emaiu: 'joao@email', passwordi: '123456' },
-        }}>Almost there</Link>
+        <Link
+          href={{
+            pathname: '/almost-there',
+            params: { emaiu: 'joao@email', passwordi: '123456' }
+          }}
+        >
+          Almost there
+        </Link>
       </TouchableOpacity>
       <Link href={'/confirm-forgot-password'}>Confirm Forgot Password</Link>
       <Link href={'/sign-up'}>Sign Up</Link>
@@ -49,8 +50,11 @@ export default function Index() {
       <Link href={'/forgot-password'}>Forgot Password</Link>
       <Link href={'/home'}>Home</Link>
       <Link href={'/editing-perfil'}>Editing perfil</Link>
+      <Link href={'/role-description'}>Role description</Link>
       <Link href={'/configs'}>Configs</Link>
       <Link href={'/institution'}>Institution</Link>
+      <Link href={'/privacy'}>Privacy</Link>
+      <Link href={'/account'}>Account</Link>
       {/* View para testar os components */}
       <View className="my-5 w-full bg-[#121212]">
         {/* <RoleMainButton type='gradient' buttonFunction={teste} disabled={buttonDisabled}>
