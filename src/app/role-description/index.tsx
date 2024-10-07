@@ -1,28 +1,24 @@
-import { createReviewRequestDTO, createReviewResponseDTO } from "@/api/types/review_dto";
-import { ReviewContext } from "@/context/review_context";
 import Background from "@/src/components/background";
-import ModalReview from "@/src/components/modalReview";
-import { Ionicons } from "@expo/vector-icons";
-import { useContext, useEffect, useState } from "react";
-import { Modal, SafeAreaView, Text, Image, TouchableOpacity, View, TouchableWithoutFeedback, Keyboard } from "react-native";
+import ModalReview from "@/src/components/modalReview";import ReviewCard from "@/src/components/reviewCard";
+import Svg from "@/src/components/svg";
+import ModalReviewList from "@/src/components/modalReviewList";
+import React, { useContext, useEffect, useState } from "react";
+import { SafeAreaView, Text, Image, TouchableOpacity, View } from "react-native";
 import ComfirmedListModal from "@/src/components/comfirmedListModal";
 import RoleMainButton from "@/src/components/roleMainButton";
 import { UserContext } from "@/context/user_context";
 import { getProfileResponseDTO } from "@/api/types/user_dto";
 import { PresenceContext } from "@/context/presence_context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import ReviewCard from "@/src/components/modalReviewList";
-import ModalReviewList from "@/src/components/modalReviewList";
 
 interface RoleDescriptionProps {
     eventId: string;
 }
 
-
 export default function RoleDescription({ eventId }: RoleDescriptionProps) {
+    const [modalListVisible, setModalListVisible] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [comfirmedListModalVisible, setConfirmedListModalVisible] = useState(false);
-    const [modalReviewListVisible, setModalReviewListVisible] = useState(false);
     const [profilePhoto, setProfilePhoto] = useState<string | undefined>();
     const { getProfile } = useContext(UserContext);
     const { confirmEvent } = useContext(PresenceContext);
@@ -75,8 +71,6 @@ export default function RoleDescription({ eventId }: RoleDescriptionProps) {
 
     }
 
-
-
     useEffect(() => {
         fetchGetProfile();
     }, [])
@@ -96,7 +90,9 @@ export default function RoleDescription({ eventId }: RoleDescriptionProps) {
                                     />
                                 ))}
                                 <View className="w-8 h-8 ml-4 rounded-full bg-[#333] absolute left-[100px] flex items-center justify-center">
-                                    <Ionicons name="add" size={18} color="#fff" />
+                                    <Text className="text-white">
+                                        +
+                                    </Text>
                                 </View>
                             </View>
                             <View className="mt-12">
@@ -109,18 +105,38 @@ export default function RoleDescription({ eventId }: RoleDescriptionProps) {
                         onClose={() => setConfirmedListModalVisible(false)}
                         eventId={"1"}
                     />
+
+                    <ModalReview
+                        visible={modalVisible}
+                        onClose={() => setModalVisible(false)}
+                    />
+                    <ModalReviewList
+                        visible={modalListVisible}
+                        onClose={() => setModalListVisible(false)}
+                        eventId={eventId}
+                    />
+                    <View className="w-11/12">
+                        <Text className="text-2xl font-bold text-white mb-3 ">Reviews</Text>
+
+                        {/* IMAGE TEM QUE TIPAR NO CARD (preciso saber o tipo da imagem na request) */}
+                        <ReviewCard image={process.env.EXPO_PUBLIC_URL_S3 + "/images/profile_default.png"}
+                                    opacity={0} nickname={data.nickname} at={data.username} stars={4} full={false} onOpen={() => setModalListVisible(!modalListVisible)}
+                                    review={data.review}></ReviewCard>
+
+                        <View className="items-center mb-4">
+                            <Text className="text-LILAC font-light" onPress={() => setModalListVisible(true)}>
+                                Ver todas as reviews</Text>
+                        </View>
+                    </View>
                     <View>
                         <TouchableOpacity className="flex-row items-center bg-[#1C1C1C] rounded-full px-4 py-2" onPress={() => setModalVisible(true)}>
-                            <View className="flex-row">
-                                {stars.map((star) => (
-                                    <Ionicons
-                                        name='star-outline'
-                                        size={20}
-                                        color="#fff"
-                                        className="mr-1"
-                                        key={star}
+                            <View className="flex-row gap-2">
+                                {stars.map(() => (
+                                    <Svg
+                                        uri={process.env.EXPO_PUBLIC_URL_S3 + "/star_empty.svg"}
+                                        width="16"
+                                        height="16"
                                     />
-
                                 ))}
                             </View>
                             <View className="w-px h-6 bg-white mx-3"></View>
@@ -129,53 +145,6 @@ export default function RoleDescription({ eventId }: RoleDescriptionProps) {
                             </Text>
                         </TouchableOpacity>
                     </View>
-                    <ModalReview
-                        visible={modalVisible}
-                        onClose={() => setModalVisible(false)}
-                    />
-                    <View className="mt-10">
-                        <Text className="text-xl font-bold text-white">Reviews</Text>
-                        <View className="bg-button_color p-4 rounded-3xl flex-row mt-5">
-                            <View className="flex-1">
-                                <View className="flex-row items-center justify-between">
-                                    <View className="flex-row ">
-                                        <Image
-                                            source={data.avatar}
-                                            className="w-10 h-10 rounded-full mr-4 self-start"
-                                            resizeMode="cover"
-                                        />
-                                        <View className="flex justify-center self-start">
-                                            <Text className="text-white font-bold text-base">{data.nickname}</Text>
-                                            <Text className="text-sub_text text-xs">@{data.username}</Text>
-                                        </View>
-                                    </View>
-                                    <View className="flex-row self-stretch">
-                                        {stars.map((star) => (
-                                            <Ionicons
-                                                name='star-outline'
-                                                size={14}
-                                                color="#fff"
-                                                className="mr-1"
-                                                key={star}
-                                            />
-
-                                        ))}
-                                    </View>
-                                </View>
-                                <Text className="text-sub_text text-sm mt-2">
-                                    {data.review}
-                                </Text>
-                            </View>
-                        </View>
-                        <TouchableOpacity className="items-center mt-5" onPress={() => setModalReviewListVisible(true)}>
-                            <Text className="text-md text-[#DFA9FD]">Ver todas as reviews</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <ModalReviewList
-                        visible={modalReviewListVisible}
-                        onClose={() => setModalReviewListVisible(false)}
-                        eventId={eventId}
-                    />
                     <View className="mt-20">
                         <RoleMainButton type='gradient' buttonFunction={fetchConfirmEvent} >
                             <Text className="text-white text-lg font-sans">

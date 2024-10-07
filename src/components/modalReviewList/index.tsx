@@ -1,8 +1,9 @@
+import ReviewCard from "@/src/components/reviewCard";
+import Svg from "@/src/components/svg";
 import { Reviews } from "@/api/types/review_dto";
 import { ReviewContext } from "@/context/review_context";
-import { Ionicons } from "@expo/vector-icons";
 import { useContext, useEffect, useState } from "react";
-import { Modal, ScrollView, Image, Text, TouchableOpacity, View } from "react-native";
+import { Modal, FlatList, Text, TouchableOpacity, View } from "react-native";
 
 interface ModalReviewProps {
     visible: boolean;
@@ -11,46 +12,58 @@ interface ModalReviewProps {
 }
 
 export default function ModalReviewList({ visible, onClose, eventId }: ModalReviewProps) {
+
+    const json = [
+        {
+            "id": 1,
+            "nickname": "Isabela",
+            "at": "isa.saab",
+            "stars": 4,
+            "review": "Foi incrível! Música e bebida muito boas. O único problema que eu tive foi com a fila de entrada kkk mas eu estava com as minhas amigas que marcamos pelo app ROLE!",
+            "image": process.env.EXPO_PUBLIC_URL_S3 + "/images/profile_default.png"
+        },
+        {
+            "id": 2,
+            "nickname": "Zoletti",
+            "at": "zozo",
+            "stars": 5,
+            "review": "Segura o App ROLE",
+            "image": process.env.EXPO_PUBLIC_URL_S3 + "/images/profile_default.png"
+        },
+        {
+            "id": 3,
+            "nickname": "Lucão",
+            "at": "luca",
+            "stars": 3,
+            "review": "Cade o PIX?",
+            "image": process.env.EXPO_PUBLIC_URL_S3 + "/images/profile_default.png"
+        },
+    ]
+
+    // const reviews = [
+    //     {
+    //         id: 1,
+    //         profilePhoto: require('../../../assets/images/profile1 (1).png'),
+    //         nickname: 'User1',
+    //         username: 'user1',
+    //         comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vitae nulla sit amet',
+    //         stars: 4
+    //     },
+    //     {
+    //         id: 2,
+    //         profilePhoto: require('../../../assets/images/profile2 (1).png'),
+    //         nickname: 'User2',
+    //         username: 'user2',
+    //         comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vitae nulla sit amet',
+    //         stars: 5
+    //     },
+    //
+    // ];
+
     const { getAllReviewsByEvent } = useContext(ReviewContext);
     const [review, setReview] = useState<(Reviews)[]>([]);
-    const reviews = [
-        {
-            id: 1,
-            profilePhoto: require('../../../assets/images/profile1 (1).png'),
-            nickname: 'User1',
-            username: 'user1',
-            comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vitae nulla sit amet',
-            stars: 4
-        },
-        {
-            id: 2,
-            profilePhoto: require('../../../assets/images/profile2 (1).png'),
-            nickname: 'User2',
-            username: 'user2',
-            comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vitae nulla sit amet',
-            stars: 5
-        },
-        
-    ];
 
-    const renderStars = (rating: number) => {
-        const totalStars = 5;
-        return (
-            <View className="flex-row self-stretch">
-                {[...Array(totalStars)].map((_, index) => (
-                    <Ionicons
-                        key={index}
-                        name={index < rating ? 'star' : 'star-outline'} 
-                        size={16}
-                        color={index < rating ? '#fff' : '#fff'}  
-                        className="mr-1"
-                    />
-                ))}
-            </View>
-        );
-    };
-
-    async function fetchGetReviews() { 
+    async function fetchGetReviews() {
         try {
             const response = await getAllReviewsByEvent(eventId);
             console.log("RESPOSTA DO GETREVIEWS ", response);
@@ -65,60 +78,44 @@ export default function ModalReviewList({ visible, onClose, eventId }: ModalRevi
     }
 
 
-    useEffect(() => { 
+    useEffect(() => {
         fetchGetReviews();
     }, []);
 
     return (
-        <>
-            <Modal
-                transparent={true}
-                visible={visible}
-                animationType="slide"
-                onRequestClose={onClose}
-            >
-                <View className="flex-1 justify-end items-center bg-black/70">
-                    <View className="flex-end bg-background rounded-t-[50px] p-3 h-[695px] w-full">
-                        <View className="flex-row items-center justify-center pt-[15px]">
-                            <TouchableOpacity className="rounded-full bg-button_color mr-5 absolute left-[10px] top-[12px]" onPress={onClose}>
-                                <Ionicons name="arrow-back" size={22} color='#fff' className="p-2" />
-                            </TouchableOpacity>
-                            <View className="flex justify-center items-center ">
-                                <Text className="text-2xl text-white">
-                                    Reviews
-                                </Text>
-                            </View>
-                        </View>    
-                            <ScrollView className="flex-1 w-full p-4 mt-5">
-                                {reviews.map((data) => (
-                                    <View className="w-full ">
-                                        <View className="bg-button_color p-4 rounded-3xl flex-row mt-5" key={data.id}>
-                                            <View className="flex-1">
-                                                <View className="flex-row items-center justify-between">
-                                                    <View className="flex-row ">
-                                                        <Image
-                                                            source={data.profilePhoto}  // Certifique-se de passar uma URI correta para as imagens
-                                                            className="w-10 h-10 rounded-full mr-4 self-start"
-                                                            resizeMode="cover"
-                                                        />
-                                                        <View className="flex justify-center self-start">
-                                                            <Text className="text-white font-bold text-base">{data.nickname}</Text>
-                                                            <Text className="text-sub_text text-xs">@{data.username}</Text>
-                                                        </View>
-                                                    </View>
-                                                  {renderStars(data.stars)}
-                                                </View>
-                                                <Text className="text-sub_text text-sm mt-2">
-                                                    {data.comment}
-                                                </Text>
-                                            </View>
-                                        </View>
-                                    </View>
-                                ))}
-                            </ScrollView>
+        <Modal
+            transparent={true}
+            visible={visible}
+            animationType="slide"
+            onRequestClose={onClose}
+        >
+            <View className="flex-1 justify-end items-center bg-black/70">
+                <View className="flex-end bg-background rounded-t-3xl p-3 h-[80%] w-full">
+                    <View className="relative flex flex-row h-24 w-full items-center gap-3 mb-3">
+                        <TouchableOpacity
+                            onPress={onClose}
+                            className="absolute flex h-12 w-12 items-center justify-center rounded-full bg-button_color left-6"
+                        >
+                            <Svg
+                                uri={process.env.EXPO_PUBLIC_URL_S3 + "/left_arrow.svg"}
+                            />
+                        </TouchableOpacity>
+                        <View className="flex-1 justify-center">
+                            <Text className="absolute left-1/2 transform -translate-x-1/2 text-white text-3xl font-bold">
+                                Reviews
+                            </Text>
                         </View>
                     </View>
-            </Modal>
-        </>
+                    <FlatList
+                        data={json}
+                        keyExtractor={(item) => item.id.toString()}
+                        renderItem={
+                            ({item}) => <ReviewCard full={true} image={item.image}
+                            stars={item.stars} nickname={item.nickname} at={item.at} review={item.review} opacity={1}/>
+                        }
+                    />
+                </View>
+            </View>
+        </Modal>
     )
 }

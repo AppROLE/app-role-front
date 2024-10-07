@@ -1,7 +1,8 @@
 import Background from "@/src/components/background";
 import {Text, TouchableOpacity, View, FlatList} from "react-native";
-import { useState } from "react";
+import React, { useState } from "react";
 import FriendCard from "@/src/components/friendCard";
+import Svg from "@/src/components/svg";
 
 export default function Favorites() {
     const json = [
@@ -36,10 +37,20 @@ export default function Favorites() {
     return (
         <Background>
             <View className="items-start h-full w-full">
-                <View className='flex-row justify-between w-full px-8'>
-                    {/* BARRA DE PESQUISA E BOTÃO DE VOLTAR */}
+                <View className="relative flex flex-row h-12 w-full items-center gap-3 border-b-2 border-b-line_gray">
+                    <TouchableOpacity
+                        className="absolute flex h-12 w-12 items-center justify-center rounded-full bg-button_color
+                        bottom-4 left-6"
+                    >
+                        <Svg
+                            uri={process.env.EXPO_PUBLIC_URL_S3 + "/left_arrow.svg"}
+                        />
+                    </TouchableOpacity>
+                    <View className="flex-1 h-full mb-8">
+                        {/* BARRA DE PESQUISA */}
+                    </View>
                 </View>
-                <View className="border-t-line_gray border-2 mt-8 p-10 w-full">
+                <View className="p-10 w-full">
                     <FlatList
                         data={friends}
                         keyExtractor={(item) => item.id.toString()}
