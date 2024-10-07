@@ -84,6 +84,10 @@ export default function RootLayout() {
             name="account/index"
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+            name="event-description/index"
+            options={{ headerShown: false }}
+          />
         </Stack>
       </ReviewContextProvider>
     </AuthContextProvider>
