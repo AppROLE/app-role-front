@@ -1,5 +1,7 @@
+import ModalListaConfirmados from "@/src/components/modalListaConfirmados";
 import ModalReview from "@/src/components/modalReview";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useState, useRef } from "react";
 import { View, Text, Image, ScrollView, TouchableOpacity, Animated, Easing } from "react-native";
 
@@ -25,6 +27,7 @@ export default function EventDescription() {
         { id: 6, image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png' },
     ]);
     const [modalVisible, setModalVisible] = useState(false);
+    const [modalList, setModalList] = useState(false);
     const stars = [1, 2, 3, 4, 5];
     const [reviews, setReviews] = useState([
         { 
@@ -39,16 +42,16 @@ export default function EventDescription() {
             id: 2,
             imageProfile: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png', 
             userName: 'Gabriel Marola', 
-            at: '@merolinhaSapeca',
-            opnion: 'Mamei um negão no banheiro, foi demais!',
+            at: '@merolinhaG',
+            opnion: 'lorem epsilum!',
             stars: 5,
         },
         {
             id: 3,
             imageProfile: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png', 
-            userName: 'Yurão Boquinha de veludo',
-            at: '@yurinhoCadela',
-            opnion: 'MAMEEEEEEIIIIII TODO MUNDOOOOOO, MAS N ME CHUBARAM 1 ESTRALA',
+            userName: 'Yurão',
+            at: '@yurinho.aabb',
+            opnion: 'lorem epsilum',
             stars: 1
         },
     ]);
@@ -57,6 +60,46 @@ export default function EventDescription() {
     const [openGalletyModal, setOpenGalleryModal] = useState(false)
     const [imageSize, setImageSize] = useState(true)
     const animatedHeight = useRef(new Animated.Value(40)).current;
+    const [typePartner, setTypePartner] = useState('global');
+    const [confirmedPeople, setConfirmedPeople] = useState([
+        {
+            id: 1,
+            name: 'Isabella',
+            at: '@isa.saab',
+            image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png',
+            friends: true,
+        },
+        {
+            id: 2,
+            name: 'Gabriel Marola',
+            at: '@merolinhaG',
+            image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png',
+            friends: true,
+        },
+        {
+            id: 3,
+            name: 'Yurão',
+            at: '@yurinho.aabb',
+            image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png',
+            friends: false,
+        },
+        {
+            id: 4,
+            name: 'Izaque',
+            at: '@izaq.vine',
+            image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png',
+            friends: true,
+        }
+    ]);
+    const [packagesImages, setPackagesImages] = useState([
+        { id: 1, image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png' },
+        { id: 2, image: 'https://placehold.co/600x400' },
+        { id: 3, image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png' },
+    ]);
+    const [buttonCondition, setButtonCondition] = useState(false);
+    const gradientColors = buttonCondition
+        ? ['rgba(90, 24, 154, 0.25)', 'rgba(156, 78, 220, 0.25)'] // Cores do gradiente com brilho reduzido
+        : ['#5A189A', '#9C4EDC']; // Cores normais do gradiente
 
     function priceDesign(value: number) {
         const tempPrice = '$'.repeat(value);
@@ -76,7 +119,7 @@ export default function EventDescription() {
     }
 
     function handleScrollScreen(event: any) {
-        if (event.nativeEvent.contentOffset.y > 100) {
+        if (event.nativeEvent.contentOffset.y > 10) {
             setImageSize(false);
         } else {
             setImageSize(true);
@@ -115,7 +158,7 @@ npm install -g expo-cli
     }, []);
 
     return (
-        <View className="bg-red-400 w-full h-full flex-1">
+        <View className="bg-background w-full h-full flex-1">
             {/* Image */}
             <Animated.View
                 style={{
@@ -159,7 +202,7 @@ npm install -g expo-cli
             </Animated.View>
             {/* Content */}
             <ScrollView contentContainerStyle={{ paddingBottom: 100 }} className="p-8" onScroll={handleScrollScreen}>
-                {/* Description */}
+                {/* Details */}
                 <View className="flex flex-row justify-between">
                     <View className="flex flex-col gap-2 w-1/2">
                         <View>
@@ -190,6 +233,42 @@ npm install -g expo-cli
                         </View>
                     </View>
                     <View className="flex flex-col gap-4 w-1/2 items-end">
+                        {/* {typePartner === 'promoter' || typePartner === 'global' && ( */}
+                            <View className="w-36 rounded-xl items-center justify-center flex flex-row">
+                                {confirmedPeople.length <= 3 ? (
+                                    confirmedPeople.slice(0, 3).map((person, index) => (
+                                        <>
+                                            <TouchableOpacity key={`viewperson-${person.id}-${index}`} className="w-12 h-12 rounded-full flex flex-row"  onPress={() => setModalList(true)}>
+                                                <Image source={{ uri: person.image }} style={{ width: '100%', height: '100%', borderRadius: 9999 }} />
+                                            </TouchableOpacity>
+                                            <TouchableOpacity onPress={() => setModalList(true)}>
+                                                <Text className="text-purple-500 text-lg">Lista de confirmados</Text>
+                                            </TouchableOpacity>
+                                        </>
+                                    ))
+                                )
+                                :
+                                (
+                                    <View className="flex flex-col">
+                                        <View className="flex flex-row items-center">
+                                            {confirmedPeople.slice(0, 3).map((person, index) => (
+                                                <TouchableOpacity key={`viewperson-${person.id}-${index}`} style={{zIndex: confirmedPeople.length - index}}
+                                                    className={`w-12 h-12 rounded-full flex flex-row ${index > 0 && 'ml-[-12]'}`}
+                                                    onPress={() => setModalList(true)}>
+                                                    <Image source={{ uri: person.image }} style={{ width: '100%', height: '100%', borderRadius: 9999, borderColor: '#000', borderWidth: 3 }} />
+                                                </TouchableOpacity>
+                                            ))}
+                                            <TouchableOpacity className="w-4 h-4 rounded-full flex justify-center items-center bg-[#1D1D1D]" onPress={() => setModalList(true)}>
+                                                <Text className="text-white text-xs" style={{lineHeight: 12}}>+</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                        <TouchableOpacity onPress={() => setModalList(true)}>
+                                            <Text className="text-purple-500 text-sm">Lista de confirmados</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                )}
+                            </View>
+                        {/* )} */}
                         <View className="w-36 py-3 bg-[#1C1C1C] rounded-xl items-center">
                             <View className="flex flex-row gap-2">
                                 <FontAwesome name="calendar" size={24} color="white" />
@@ -204,6 +283,11 @@ npm install -g expo-cli
                             <Text className="text-white text-lg">22:00</Text>
                         </View>
                     </View>
+                    <ModalListaConfirmados
+                        visible={modalList}
+                        onClose={() => setModalList(false)}
+                        people={confirmedPeople}
+                    />
                 </View>
                 {/* Description */}
                 <View>
@@ -230,7 +314,18 @@ npm install -g expo-cli
                         {features.map((type, index) => (
                             <View key={`viewtype-${type.name}-${index}`} className="mx-2">
                                 <View className="bg-[#1C1C1C] rounded-xl px-2 py-1 flex flex-col gap-2 items-center min-w-32">
-                                    <FontAwesome name="question" size={20} color="purple" />
+                                    <FontAwesome name={type.name == 'Estacionamento' ? 'question' :
+                                                        type.name == 'Fumódromo' ? 'question' :
+                                                        type.name == 'Valet' ? 'question' :
+                                                        type.name == 'Área Aberta' ? 'question' :
+                                                        type.name == 'Welcome Shot' ? 'question' :
+                                                        type.name == 'Mesas' ? 'question' :
+                                                        type.name == 'Open Bar' ? 'question' :
+                                                        type.name == 'Ao Vivo' ? 'question' :
+                                                        type.name == 'Esquenta' ? 'question' :
+                                                        type.name == 'After' ? 'question' : 'question'
+                                    } 
+                                    size={20} color="purple" />
                                     <Text className="text-purple-500 text-base">{type.name}</Text>
                                 </View>
                             </View>
@@ -245,6 +340,27 @@ npm install -g expo-cli
                         <FontAwesome name="question" size={24} color="white" />
                     </TouchableOpacity>
                 </View>
+                {/* Packages */}
+                {typePartner === 'global' && (
+                    <View className="mt-8">
+                        <Text className="text-white text-2xl font-bold mb-2">Pacotes</Text>
+                        <View className="flex flex-row gap-2">
+                            {packagesImages.map((packageImage, index) => (
+                                <TouchableOpacity key={`viewpackage-${packageImage.id}-${index}`} className="w-[32%] h-20 bg-[#1C1C1C] rounded-xl">
+                                    <Image 
+                                        source={{ uri: packageImage.image }} 
+                                        className="w-full h-full rounded-xl" 
+                                        resizeMode="cover"
+                                    />
+                                </TouchableOpacity>                            
+                            ))}
+                        </View>
+                        <TouchableOpacity className="flex flex-row bg-[#1C1C1C] items-center justify-center gap-2 py-2 rounded-lg mt-3">
+                            <Text className="text-[#BDBDBD] text-lg mt-2" style={{lineHeight: 16}}>Ver pacotes</Text>
+                            <FontAwesome name="question" size={24} color="white" />
+                        </TouchableOpacity>
+                    </View>
+                )}
                 {/* Gallery */}
                 <View className="mt-8">
                     <Text className="text-white text-2xl font-bold mb-2">Galeria</Text>
@@ -393,10 +509,30 @@ npm install -g expo-cli
                 </View>
             </ScrollView>
             {/* Footer */}
-            <View className="absolute bottom-0 w-full flex flex-row justify-center items-center bg-black pt-4">
-                <View className="w-10/12 bg-purple-500 mb-2 py-1 rounded-full">
-                    <Text className="text-center text-white">CONFIRMAR ROLE</Text>
-                </View>
+            <View className="absolute bottom-0 w-full flex flex-row justify-center items-center bg-[#1C1C1C] pt-4 pb-2">
+                <TouchableOpacity
+                    disabled = {buttonCondition}
+                    className="drop-shadow-2xl shadow-[#9C4EDC4D] text-white text-[16px] w-10/12 self-center p-0"
+                    activeOpacity={0.9}
+                >
+                    <LinearGradient
+                        colors={gradientColors}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 1 }}
+                        style={{
+                            paddingVertical: 4,
+                            borderRadius: 20,
+                            alignItems: 'center',
+                            shadowColor: 'rgba(156, 78, 220, 1)',
+                            shadowOffset: { width: 0, height: 7 },
+                            shadowOpacity: 1,
+                            shadowRadius: 11,
+                            elevation: 10,
+                        }}
+                    >
+                        <Text className="text-center text-white">{typePartner === 'global' ? 'CONFIRMAR ROLE' : typePartner === 'promoter' ? 'POR NOME NA LISTA' : 'EU VOU'}</Text>
+                    </LinearGradient>
+                </TouchableOpacity>
             </View>
             {/* Gallery Modal */}
             {openGalletyModal && (
