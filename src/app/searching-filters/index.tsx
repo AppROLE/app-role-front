@@ -9,7 +9,6 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  Platform
 } from 'react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import Svg from '@/src/components/svg'
