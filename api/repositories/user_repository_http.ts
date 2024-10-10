@@ -4,7 +4,7 @@ import { getPhraseResponseDTO } from "../types/user_dto";
 
 
 export class UserRepositoryHttp {
-  async getProfile() { 
+   async getProfile() { 
     try {
       const idToken = await AsyncStorage.getItem('idToken') || '';
       if (idToken === '') return; 
