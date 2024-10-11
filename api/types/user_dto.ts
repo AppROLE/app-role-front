@@ -18,6 +18,8 @@ export type getProfileResponseDTO = {
     name: string;
     backgroundPhoto?: string;
     username: string;
+    linkInstagram?: string;
+    linkTiktok?: string;
     biography?: string;
     profilePhoto?: string;
     nickname: string;

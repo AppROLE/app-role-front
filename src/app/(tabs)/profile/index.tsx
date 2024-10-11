@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity, Linking, Alert } from "react-native";
 import { SvgUri } from "react-native-svg";
 import MenuHamburguer from "@/src/components/menuHamburguer";
 import RoleMainButton from "@/src/components/roleMainButton";
@@ -7,7 +7,7 @@ import { useRouter } from "expo-router";
 import { UserRepositoryHttp } from "@/api/repositories/user_repository_http"; // ajuste o caminho conforme necessário
 
 export default function Profile() {
-  const navigation = useRouter();''
+  const navigation = useRouter();
   
   // Instanciar a classe UserRepositoryHttp
   const userRepository = new UserRepositoryHttp();
@@ -20,6 +20,8 @@ export default function Profile() {
     biography: '',
     profilePhoto: '',
     backgroundPhoto: '',
+    linkInstagram: '',
+    linkTiktok: '',
     followers: 0,
     following: 0
   });
@@ -48,6 +50,18 @@ export default function Profile() {
 
   function handleProcurar() {
     navigation.push('/home');
+  }
+
+  // Função para abrir links
+  function openLink(link: string) {
+    if (link) {
+      Linking.openURL(link).catch(err => {
+        console.error("Erro ao abrir link:", err);
+        Alert.alert("Erro", "Não foi possível abrir o link.");
+      });
+    } else {
+      Alert.alert("Erro", "Link não disponível.");
+    }
   }
 
   return (
@@ -88,14 +102,14 @@ export default function Profile() {
           <View 
             className="bg-[#1C1C1C] flex flex-row gap-6"
             style={{paddingVertical: 8, paddingHorizontal: 30, borderRadius: 20}}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => openLink(profileData.linkTiktok)}>
                 <SvgUri
                   uri={process.env.EXPO_PUBLIC_URL_S3 + '/tiktok.svg'}
                   width={30}
                   height={30}
                 />
               </TouchableOpacity>
-              <TouchableOpacity className="top-[2px]">
+              <TouchableOpacity className="top-[2px]" onPress={() => openLink(profileData.linkInstagram)}>
                 <SvgUri
                   uri={process.env.EXPO_PUBLIC_URL_S3 + '/instagram.svg'}
                   width={26}
