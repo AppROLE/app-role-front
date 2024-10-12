@@ -5,6 +5,8 @@ import { View, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import UserContextProvider from '@/context/user_context';
+import {useEffect, useState} from "react";
+import { UserRepositoryHttp } from "@/api/repositories/user_repository_http"; // ajuste o caminho conforme necessário
 
 export default function TabLayout() {
     const insets = useSafeAreaInsets(); // Obtem as margens seguras do dispositivo
@@ -15,6 +17,32 @@ export default function TabLayout() {
 
     // Use a altura adequada com base no insets.bottom
     const tabBarHeight = insets.bottom > 0 ? tabBarHeightWithoutSafeArea : tabBarHeightWithSafeArea;
+
+    // Instanciar a classe UserRepositoryHttp
+    const userRepository = new UserRepositoryHttp();
+
+    // Estados para armazenar os dados do perfil
+    const [profileData, setProfileData] = useState({
+        profilePhoto: '',
+    });
+
+    async function fetchProfile() {
+        try {
+            const profile = await userRepository.getProfile();
+            if (profile) {
+                setProfileData(profile);
+            }
+        } catch (error) {
+            console.error("Erro ao buscar perfil:", error);
+        }
+    }
+
+    console.log(profileData)
+
+    // useEffect para carregar os dados quando o componente for montado
+    useEffect(() => {
+        fetchProfile();
+    }, []);
 
     return (
         <UserContextProvider>
@@ -88,8 +116,8 @@ export default function TabLayout() {
                                         justifyContent: 'center',
                                     }}>
                                         <Image
-                                            source={{ uri: 'https://placehold.co/600x400' }}
-                                            style={{ width: 24, height: 24, borderRadius: 12 }}
+                                            source={{ uri: profileData.profilePhoto || process.env.EXPO_PUBLIC_URL_S3 + '/images/profile_default.png' }}
+                                            className="rounded-full w-8 h-8"
                                         />
                                     </View>
                                 </LinearGradient>
