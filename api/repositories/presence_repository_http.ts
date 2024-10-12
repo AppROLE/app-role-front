@@ -8,15 +8,15 @@ export class PresenceRepositoryHttp {
         try {
             const idToken = await AsyncStorage.getItem('idToken') || ''
             if (idToken === '') return;
-            const response = await httpEvent.get(`/get-all-presences?eventId=${eventId}`, {
+            const response = await httpEvent.get(`/get-all-presences-by-event-id?eventId=${eventId}`, {
                 headers: {
                     Authorization: `Bearer ${idToken}`
                 }
             });
-            console.log("RESPOSTA DA REQUEST", response)
+            console.log("RESPOSTA DA REQUEST", response.data)
             return response.data
         } catch (error: any) {
-            console.log("ERRO NA REQUEST", error)
+            console.log("ERRO NA REQUEST", error.response.data.message)
             return error.response.data.message
         }
     }
