@@ -26,7 +26,7 @@ export default function Packages() {
         // Adicione mais objetos conforme necessário
     ];
 
-    const partnerType = "GLOBAL_PARTNER"
+    const partnerType = "PROMOTER_PARTNER"
 
 
     const handleSelect = (id: number) => {
@@ -56,7 +56,7 @@ export default function Packages() {
   
     const handleWhatsAppRedirect = () => {
         if (selectedCard !== null) {
-            const selectedPhoneNumber = institutes.find(institute=> institute.instituteId === selectedCard)?.phoneNumber;
+            const selectedPhoneNumber = institutes.find(institute=> institute.instituteId === selectedCard)?.phone;
             if (selectedPhoneNumber) {
                 const url = `https://wa.me/${selectedPhoneNumber.replace(/[^0-9]/g, '')}`;
                 Linking.openURL(url);
