@@ -25,8 +25,7 @@ export class PresenceRepositoryHttp {
         try {
             const idToken = await AsyncStorage.getItem('idToken') || ''
             if (idToken === '') return;
-            const response = await httpEvent.post('/confirm-presence', {
-                eventId,
+            const response = await httpEvent.post(`/confirm-event?eventId=${eventId}`, {
                 profilePhoto,
                 promoterCode
             }, {
@@ -34,12 +33,7 @@ export class PresenceRepositoryHttp {
                     Authorization: `Bearer ${idToken}`
                 }
             });
-            console.log("RESPOSTA DA REQUEST", response)
-            Toast.show({
-                type: 'success',
-                text1: 'Presença confirmada',
-                text2: 'Você confirmou presença no evento'
-            })
+            console.log("RESPOSTA DA REQUEST", response.data)
             return response.data
         } catch (error: any) {
             // console.log("ERRO NA REQUEST", error.response.data.message)
