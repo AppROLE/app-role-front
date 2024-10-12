@@ -5,7 +5,8 @@ export type Institute = {
     intituteType: string;
     partnerType: string;
     price: number;
-    photosUrl: string;
+    photosUrl: string[];
+    logoPhoto: string;
 }
 
 export type getAllInstituteByIdResponseDTO = { 
