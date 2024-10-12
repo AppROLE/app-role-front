@@ -8,65 +8,19 @@ import { Modal, FlatList, Text, TouchableOpacity, View } from "react-native";
 interface ModalReviewProps {
     visible: boolean;
     onClose: () => void;
-    eventId: string;
+    // eventId: string;
 }
 
-export default function ModalReviewList({ visible, onClose, eventId }: ModalReviewProps) {
-
-    const json = [
-        {
-            "id": 1,
-            "nickname": "Isabela",
-            "at": "isa.saab",
-            "stars": 4,
-            "review": "Foi incrível! Música e bebida muito boas. O único problema que eu tive foi com a fila de entrada kkk mas eu estava com as minhas amigas que marcamos pelo app ROLE!",
-            "image": process.env.EXPO_PUBLIC_URL_S3 + "/images/profile_default.png"
-        },
-        {
-            "id": 2,
-            "nickname": "Zoletti",
-            "at": "zozo",
-            "stars": 5,
-            "review": "Segura o App ROLE",
-            "image": process.env.EXPO_PUBLIC_URL_S3 + "/images/profile_default.png"
-        },
-        {
-            "id": 3,
-            "nickname": "Lucão",
-            "at": "luca",
-            "stars": 3,
-            "review": "Cade o PIX?",
-            "image": process.env.EXPO_PUBLIC_URL_S3 + "/images/profile_default.png"
-        },
-    ]
-
-    // const reviews = [
-    //     {
-    //         id: 1,
-    //         profilePhoto: require('../../../assets/images/profile1 (1).png'),
-    //         nickname: 'User1',
-    //         username: 'user1',
-    //         comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vitae nulla sit amet',
-    //         stars: 4
-    //     },
-    //     {
-    //         id: 2,
-    //         profilePhoto: require('../../../assets/images/profile2 (1).png'),
-    //         nickname: 'User2',
-    //         username: 'user2',
-    //         comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vitae nulla sit amet',
-    //         stars: 5
-    //     },
-    //
-    // ];
-
+export default function ModalReviewList({ visible, onClose }: ModalReviewProps) {
     const { getAllReviewsByEvent } = useContext(ReviewContext);
     const [review, setReview] = useState<(Reviews)[]>([]);
 
+
     async function fetchGetReviews() {
         try {
+            const eventId = "d942a349-f74a-4d94-b591-ffb1fd143ad8";
             const response = await getAllReviewsByEvent(eventId);
-            console.log("RESPOSTA DO GETREVIEWS ", response);
+            console.log("RESPOSTA DO GET REVIEWS ", response);
             if (response) {
                 setReview(response.reviews || []); // Garantir que seja um array
                 return response;
@@ -107,11 +61,11 @@ export default function ModalReviewList({ visible, onClose, eventId }: ModalRevi
                         </View>
                     </View>
                     <FlatList
-                        data={json}
-                        keyExtractor={(item) => item.id.toString()}
+                        data={review}
+                        keyExtractor={(item) => item.eventId}
                         renderItem={
-                            ({item}) => <ReviewCard full={true} image={item.image}
-                            stars={item.stars} nickname={item.nickname} at={item.at} review={item.review} opacity={1}/>
+                            ({item}) => <ReviewCard full={true} image={item.profilePhoto}
+                            stars={item.star} nickname={item.nickname} username={item.username} review={item.comment} opacity={1}/>
                         }
                     />
                 </View>
