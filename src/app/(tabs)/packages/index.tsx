@@ -54,15 +54,15 @@ export default function Packages() {
     };
 
   
-    // const handleWhatsAppRedirect = () => {
-    //     if (selectedCard !== null) {
-    //         const selectedPhoneNumber = institutes.find(institute=> institute.instituteId === selectedCard)?.name;
-    //         if (selectedPhoneNumber) {
-    //             const url = `https://wa.me/${selectedPhoneNumber.replace(/[^0-9]/g, '')}`;
-    //             Linking.openURL(url);
-    //         }
-    //     }
-    // };
+    const handleWhatsAppRedirect = () => {
+        if (selectedCard !== null) {
+            const selectedPhoneNumber = institutes.find(institute=> institute.instituteId === selectedCard)?.phoneNumber;
+            if (selectedPhoneNumber) {
+                const url = `https://wa.me/${selectedPhoneNumber.replace(/[^0-9]/g, '')}`;
+                Linking.openURL(url);
+            }
+        }
+    };
 
     async function getInstitutes() { 
         const idToken = (await AsyncStorage.getItem('idToken')) || ''
@@ -147,7 +147,7 @@ export default function Packages() {
                                                         style={{ borderRadius: 999, flexDirection: 'row', alignItems: 'center', height: '100%', width: 157 }}
                                                     >
                                                         <View className="mx-1">
-                                                            <Image source={{ uri: institute.logoPhoto }} />
+                                                            <Image source={ institute.logoPhoto ? { uri: institute.logoPhoto } : { uri: process.env.EXPO_PUBLIC_URL_S3 + "/images/profile_default.png"}} />
                                                         </View>
                                                         <Text className="text-white text-center text-lg mx-3">{institute.name}</Text>
                                                     </LinearGradient>
@@ -159,7 +159,7 @@ export default function Packages() {
                                                 className="flex-row w-[157px] bg-button_color m-2 h-[75%] justify-center items-center rounded-full"
                                             >
                                                 <View className="mx-1">
-                                                    <Image source={{ uri: institute.logoPhoto}} />
+                                                    <Image source={ institute.logoPhoto ? { uri: institute.logoPhoto } : { uri: process.env.EXPO_PUBLIC_URL_S3 + "/images/profile_default.png"}} />
                                                 </View>
                                                 <Text className="text-white text-center text-lg mx-3">{institute.name}</Text>
                                             </View>
@@ -190,7 +190,7 @@ export default function Packages() {
                             </LinearGradient>
                         </View>
                         <View className="w-[85%] mx-10 mt-10">
-                            <RoleMainButton type="gradient" >
+                            <RoleMainButton type="gradient" buttonFunction={handleWhatsAppRedirect} >
                                 <View className="flex flex-row items-center gap-3">
                                     <FontAwesome6 name="whatsapp" size={24} color="white" />
                                     <Text className="text-white">Fale com o estabelecimento</Text>
