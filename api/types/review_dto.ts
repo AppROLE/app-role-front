@@ -1,5 +1,6 @@
 
 export type createReviewRequestDTO = { 
+    eventId: string;
     instituteId: string;
     reviewedAt: number;
     star: number;
@@ -14,6 +15,7 @@ export type Reviews = {
     instituteId: string;
     eventId: string;
     nickname: string;
+    username: string;
     reviewedAt: number;
     star: number;
     comment: string;
