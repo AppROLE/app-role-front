@@ -1,8 +1,11 @@
 export type Institute = {
-    id: number;
+    instituteId: string;
     name: string;
     description: string;
-    image: string;
+    intituteType: string;
+    partnerType: string;
+    price: number;
+    photosUrl: string;
 }
 
 export type getAllInstituteByIdResponseDTO = { 
@@ -11,4 +14,5 @@ export type getAllInstituteByIdResponseDTO = {
 
 export type getInstituteByPartnerTypeResponseDTO = { 
     institutes: Institute[],    
+    message: string
 }
