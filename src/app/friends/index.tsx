@@ -3,8 +3,13 @@ import {Text, TouchableOpacity, View, FlatList} from "react-native";
 import React, { useState } from "react";
 import FriendCard from "@/src/components/friendCard";
 import Svg from "@/src/components/svg";
+import SearchingBarInput from "@/src/components/searchingBarInput";
+import {useRouter} from "expo-router";
 
 export default function Favorites() {
+    const [search, setSearch] = useState('')
+    const navigation = useRouter()
+
     const json = [
         {
             "id": 1,
@@ -33,24 +38,25 @@ export default function Favorites() {
     ]
 
     const [friends, setFriends] = useState(json)
+    function handleVoltar() {
+        navigation.back()
+    }
 
     return (
         <Background>
             <View className="items-start h-full w-full">
-                <View className="relative flex flex-row h-12 w-full items-center gap-3 border-b-2 border-b-line_gray">
+                <View className="absolute top-0 flex h-12 w-full flex-row items-center gap-3 border-b-2 border-b-[#2C2B2B] pb-8">
                     <TouchableOpacity
-                        className="absolute flex h-12 w-12 items-center justify-center rounded-full bg-button_color
-                        bottom-4 left-6"
+                        onPress={() => handleVoltar()}
+                        className="ml-5 flex h-12 w-12 items-center justify-center rounded-full bg-[#1C1C1C]"
                     >
                         <Svg
-                            uri={process.env.EXPO_PUBLIC_URL_S3 + "/left_arrow.svg"}
+                            uri={process.env.EXPO_PUBLIC_URL_S3 + '/left_arrow.svg'}
                         />
                     </TouchableOpacity>
-                    <View className="flex-1 h-full mb-8">
-                        {/* BARRA DE PESQUISA */}
-                    </View>
+                    <SearchingBarInput search={search} setSearch={setSearch} />
                 </View>
-                <View className="p-10 w-full">
+                <View className="p-10 mt-8 w-full">
                     <FlatList
                         data={friends}
                         keyExtractor={(item) => item.id.toString()}
