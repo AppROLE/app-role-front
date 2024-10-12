@@ -5,7 +5,7 @@ import { createContext, PropsWithChildren } from "react"
 type InstituteContextType = { 
     getAll: () => Promise<getAllInstituteByIdResponseDTO>
     getById: (id: string) => Promise<object>
-    getAllInstitutesByPartnerType: (idToken: string) => Promise<getInstituteByPartnerTypeResponseDTO>
+    getAllInstitutesByPartnerType: (idToken: string, partnerType: string) => Promise<getInstituteByPartnerTypeResponseDTO>
 }
 
 const defaultInstituteContext = { 
@@ -18,9 +18,10 @@ const defaultInstituteContext = {
     getById: async (_id: string) => {
         return {}
     },
-    getAllInstitutesByPartnerType: async (_idToken: string) => {
+    getAllInstitutesByPartnerType: async (_idToken: string, _partnerType: string) => {
         return {
             institutes: [],
+            message: ''
         }
     }
 }
@@ -48,9 +49,9 @@ export function InstituteContextProvider({ children }: PropsWithChildren) {
     }
   }
 
-  async function getAllInstitutesByPartnerType(idToken: string) { 
+  async function getAllInstitutesByPartnerType(idToken: string, partnerType: string) { 
     try { 
-      const response = await instituteRepository.getAllInstitutesByPartnerType(idToken)
+      const response = await instituteRepository.getAllInstitutesByPartnerType(idToken, partnerType)
       return response
     } catch (error: any) { 
       return error
