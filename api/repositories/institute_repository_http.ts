@@ -1,4 +1,4 @@
-import { http } from "../http"
+import { http, httpEvent } from "../http"
 
 
 export class InstituteRepositoryHttp {
@@ -20,13 +20,18 @@ export class InstituteRepositoryHttp {
     }
   }
 
-  async getAllInstitutesByPartnerType(idToken: string) { 
+  async getAllInstitutesByPartnerType(idToken: string, partnerType: string) { 
     try { 
-      const response = await http.get('/get-institute-by-partnertype', {
+
+      console.log('idToken:', idToken);
+      console.log('partnerType:', partnerType);
+  
+      const response = await httpEvent.get(`/get-all-institutes-by-partner-type?partnerType=${partnerType}`, {
         headers: {
-          Authorization: `Bearer ${idToken}` 
+          Authorization: `Bearer ${idToken}`,
         }
       });
+      console.log("RESPOSTA DA REQUEST", response)
       return response.data
     } catch (error: any) { 
       return error.response.data
