@@ -42,7 +42,7 @@ export class PresenceRepositoryHttp {
             })
             return response.data
         } catch (error: any) {
-            console.log("ERRO NA REQUEST", error.response.data.message)
+            // console.log("ERRO NA REQUEST", error.response.data.message)
             return error.response.data.message
         }
     }
