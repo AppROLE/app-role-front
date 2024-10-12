@@ -23,7 +23,7 @@ export default function RoleDescription() {
     const { getProfile } = useContext(UserContext);
     const { confirmEvent } = useContext(PresenceContext);
     const stars = [1, 2, 3, 4, 5];
-    const eventId = "d942a349-f74a-4d94-b591-ffb1fd143ad8";
+    const eventId = "50a7a9cb-ac7b-4c97-b987-47113ecbaf2b";
 
     const avatars = [
         { id: 1, uri: require('../../../assets/images/profile1 (1).png') },
@@ -59,10 +59,9 @@ export default function RoleDescription() {
     async function fetchConfirmEvent() {
         try {
             const promoterCode = await AsyncStorage.getItem('promoterCode') || '';
-            if (promoterCode === '') return;
-            console.log("PROMOTER CODE ", promoterCode);
-            console.log("PROFILE PHOTO ", profilePhoto);
-            console.log("EVENT ID ", eventId);
+            if(profilePhoto === "") {
+                setProfilePhoto(process.env.EXPO_PUBLIC_URL_S3 + "/images/profile_default.png");
+            }
             const response = await confirmEvent(eventId, profilePhoto, promoterCode);
             console.log("RESPOSTA DA CONFIRM EVENT ", response);
             if (response) {
