@@ -37,16 +37,6 @@ export default function Packages() {
         setSelectedCard(prevSelectedCard => (prevSelectedCard === id ? null : id));
     }
 
-    // const cards = [
-    //     { id: 1, image: require('@/assets/images/galeria.png'), title: 'Galleria Bar', phoneNumber: '+5511987654321' },
-    //     { id: 2, image: require('@/assets/images/galeria.png'), title: 'Galleria Bar 2', phoneNumber: '+5511987654322' },
-    //     { id: 3, image: require('@/assets/images/galeria.png'), title: 'Galleria Bar 3', phoneNumber: '+5511987654323' },
-    //     { id: 4, image: require('@/assets/images/galeria.png'), title: 'Galleria Bar 4', phoneNumber: '+5511987654324' },
-    //     { id: 5, image: require('@/assets/images/galeria.png'), title: 'Galleria Bar 5', phoneNumber: '+5511987654325' },
-    //     { id: 6, image: require('@/assets/images/galeria.png'), title: 'Galleria Bar 6', phoneNumber: '+5511987654326' },
-    //     { id: 7, image: require('@/assets/images/galeria.png'), title: 'Galleria Bar 7', phoneNumber: '+5511987654327' }
-    // ];
-
     const handleDateChange = (input: string) => {
         // Remove tudo que não seja número
         let cleanInput = input.replace(/[^0-9]/g, '');
@@ -140,7 +130,7 @@ export default function Packages() {
                             ))}
                         </View>
                         <View className="w-full mt-10 ml-10">
-                            <Text className="text-2xl text-white">Estabelecimento</Text>
+                            <Text className="text-2xl text-white">Estabelecimentos</Text>
                         </View>
                         <ScrollView className="w-full flex flex-1 mt-5 ">
                             <View className="flex flex-wrap flex-row justify-start ml-10">
@@ -157,7 +147,7 @@ export default function Packages() {
                                                         style={{ borderRadius: 999, flexDirection: 'row', alignItems: 'center', height: '100%', width: 157 }}
                                                     >
                                                         <View className="mx-1">
-                                                            <Image source={{ uri: institute.photosUrl }} />
+                                                            <Image source={{ uri: institute.logoPhoto }} />
                                                         </View>
                                                         <Text className="text-white text-center text-lg mx-3">{institute.name}</Text>
                                                     </LinearGradient>
@@ -169,7 +159,7 @@ export default function Packages() {
                                                 className="flex-row w-[157px] bg-button_color m-2 h-[75%] justify-center items-center rounded-full"
                                             >
                                                 <View className="mx-1">
-                                                    <Image source={{ uri: institute.photosUrl }} />
+                                                    <Image source={{ uri: institute.logoPhoto}} />
                                                 </View>
                                                 <Text className="text-white text-center text-lg mx-3">{institute.name}</Text>
                                             </View>
