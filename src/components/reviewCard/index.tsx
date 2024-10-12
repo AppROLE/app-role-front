@@ -5,7 +5,7 @@ import Svg from "@/src/components/svg";
 interface ReviewCardProps {
     image: string;
     nickname: string;
-    at: string;
+    username: string;
     stars: number;
     full: boolean;
     review: string;
@@ -13,7 +13,7 @@ interface ReviewCardProps {
     onOpen?: () => void;
 }
 
-export default function ReviewCard({ image, nickname, at, stars, full, review, onOpen, opacity }: ReviewCardProps) {
+export default function ReviewCard({ image, nickname, username, stars, full, review, onOpen, opacity }: ReviewCardProps) {
     const starsList = Array.from({ length: stars }, (_, index) => index + 1)
     const emptyStars = Array.from({ length: 5 - stars }, (_, index) => index + 1)
 
@@ -31,7 +31,7 @@ export default function ReviewCard({ image, nickname, at, stars, full, review, o
                             {nickname}
                         </Text>
                         <Text numberOfLines={1} className="text-sm text-sub_title">
-                            @{at}
+                            @{username}
                         </Text>
                     </View>
                 </View>
@@ -55,7 +55,7 @@ export default function ReviewCard({ image, nickname, at, stars, full, review, o
                 </View>
             </View>
             <View className="flex items-center justify-center mt-2">
-                <Text className={`text-center text-sub_title ${full? '' : 'line-clamp-3'}`}>
+                <Text className={`text-center text-sub_title ${full ? '' : 'line-clamp-3'}`}>
                     {review}
                 </Text>
             </View>
