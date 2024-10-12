@@ -82,7 +82,7 @@ export default function ComfirmedListModal({ visible, onClose }: ModalReviewProp
                         <TouchableOpacity className="rounded-full bg-button_color mr-5 absolute left-[10px] top-[12px]" onPress={onClose}>
                             <Ionicons name="arrow-back" size={22} color='#fff' className="p-2" />
                         </TouchableOpacity>
-                        <Text className="text-2xl text-white">Lista de Confirmados</Text>
+                        <Text className="text-2xl text-white text-center">Lista de Confirmados</Text>
                     </View>
                     <ScrollView className="w-full mt-8">
                         {confirmeds.map((user) => (
