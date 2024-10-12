@@ -6,6 +6,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import UserContextProvider from '@/context/user_context';
 import { InstituteContextProvider } from '@/context/institute_context';
+import {useEffect, useState} from "react";
+import { UserRepositoryHttp } from "@/api/repositories/user_repository_http"; // ajuste o caminho conforme necessário
 
 export default function TabLayout() {
     const insets = useSafeAreaInsets(); // Obtem as margens seguras do dispositivo
@@ -16,6 +18,32 @@ export default function TabLayout() {
 
     // Use a altura adequada com base no insets.bottom
     const tabBarHeight = insets.bottom > 0 ? tabBarHeightWithoutSafeArea : tabBarHeightWithSafeArea;
+
+    // Instanciar a classe UserRepositoryHttp
+    const userRepository = new UserRepositoryHttp();
+
+    // Estados para armazenar os dados do perfil
+    const [profileData, setProfileData] = useState({
+        profilePhoto: '',
+    });
+
+    async function fetchProfile() {
+        try {
+            const profile = await userRepository.getProfile();
+            if (profile) {
+                setProfileData(profile);
+            }
+        } catch (error) {
+            console.error("Erro ao buscar perfil:", error);
+        }
+    }
+
+    console.log(profileData)
+
+    // useEffect para carregar os dados quando o componente for montado
+    useEffect(() => {
+        fetchProfile();
+    }, []);
 
     return (
         <UserContextProvider>
