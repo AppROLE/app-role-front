@@ -13,7 +13,7 @@ import { Animated, Image, KeyboardAvoidingView, Linking, Platform, Pressable, Sa
 
 export default function Packages() {
     const [selected, setSelected] = useState<number | null>(null);
-    const [selectedCard, setSelectedCard] = useState<number | null>(null);
+    const [selectedCard, setSelectedCard] = useState<string | number | null>(null);
     const [date, setDate] = useState('');
     const [isDateFocused, setIsDateFocused] = useState(false);
     const { getAllInstitutesByPartnerType } = useContext(InstituteContext);
@@ -26,23 +26,26 @@ export default function Packages() {
         // Adicione mais objetos conforme necessário
     ];
 
+    const partnerType = "GLOBAL_PARTNER"
+
+
     const handleSelect = (id: number) => {
         setSelected(prevSelected => (prevSelected === id ? null : id));
     };
 
-    const handleSelectCard = (id: number) => {
+    const handleSelectCard = (id: string) => {
         setSelectedCard(prevSelectedCard => (prevSelectedCard === id ? null : id));
     }
 
-    const cards = [
-        { id: 1, image: require('@/assets/images/galeria.png'), title: 'Galleria Bar', phoneNumber: '+5511987654321' },
-        { id: 2, image: require('@/assets/images/galeria.png'), title: 'Galleria Bar 2', phoneNumber: '+5511987654322' },
-        { id: 3, image: require('@/assets/images/galeria.png'), title: 'Galleria Bar 3', phoneNumber: '+5511987654323' },
-        { id: 4, image: require('@/assets/images/galeria.png'), title: 'Galleria Bar 4', phoneNumber: '+5511987654324' },
-        { id: 5, image: require('@/assets/images/galeria.png'), title: 'Galleria Bar 5', phoneNumber: '+5511987654325' },
-        { id: 6, image: require('@/assets/images/galeria.png'), title: 'Galleria Bar 6', phoneNumber: '+5511987654326' },
-        { id: 7, image: require('@/assets/images/galeria.png'), title: 'Galleria Bar 7', phoneNumber: '+5511987654327' }
-    ];
+    // const cards = [
+    //     { id: 1, image: require('@/assets/images/galeria.png'), title: 'Galleria Bar', phoneNumber: '+5511987654321' },
+    //     { id: 2, image: require('@/assets/images/galeria.png'), title: 'Galleria Bar 2', phoneNumber: '+5511987654322' },
+    //     { id: 3, image: require('@/assets/images/galeria.png'), title: 'Galleria Bar 3', phoneNumber: '+5511987654323' },
+    //     { id: 4, image: require('@/assets/images/galeria.png'), title: 'Galleria Bar 4', phoneNumber: '+5511987654324' },
+    //     { id: 5, image: require('@/assets/images/galeria.png'), title: 'Galleria Bar 5', phoneNumber: '+5511987654325' },
+    //     { id: 6, image: require('@/assets/images/galeria.png'), title: 'Galleria Bar 6', phoneNumber: '+5511987654326' },
+    //     { id: 7, image: require('@/assets/images/galeria.png'), title: 'Galleria Bar 7', phoneNumber: '+5511987654327' }
+    // ];
 
     const handleDateChange = (input: string) => {
         // Remove tudo que não seja número
@@ -61,30 +64,29 @@ export default function Packages() {
     };
 
   
-    const handleWhatsAppRedirect = () => {
-        if (selectedCard !== null) {
-            const selectedPhoneNumber = cards.find(card => card.id === selectedCard)?.phoneNumber;
-            if (selectedPhoneNumber) {
-                const url = `https://wa.me/${selectedPhoneNumber.replace(/[^0-9]/g, '')}`;
-                Linking.openURL(url);
-            }
+    // const handleWhatsAppRedirect = () => {
+    //     if (selectedCard !== null) {
+    //         const selectedPhoneNumber = institutes.find(institute=> institute.instituteId === selectedCard)?.name;
+    //         if (selectedPhoneNumber) {
+    //             const url = `https://wa.me/${selectedPhoneNumber.replace(/[^0-9]/g, '')}`;
+    //             Linking.openURL(url);
+    //         }
+    //     }
+    // };
+
+    async function getInstitutes() { 
+        const idToken = (await AsyncStorage.getItem('idToken')) || ''
+        if (idToken === '') return
+        const response = await getAllInstitutesByPartnerType(idToken, partnerType);
+        console.log("RESPOSTA DA GET ALL", response)
+        if (response) {
+            const data = response as getInstituteByPartnerTypeResponseDTO
+            setInstitutes(data.institutes)
         }
-    };
+    }
+
 
     useEffect(() => { 
-        async function getInstitutes() { 
-            const idToken = (await AsyncStorage.getItem('idToken')) || ''
-            if (idToken === '') return
-            if (getAllInstitutesByPartnerType) {
-                const response = getAllInstitutesByPartnerType(idToken);
-                response.then((res : getInstituteByPartnerTypeResponseDTO) => {
-                    setInstitutes(res.institutes)
-                    console.log(res.institutes)
-                }).catch((error) => {
-                    console.log("error "+ error)
-                })
-            }
-        }
         getInstitutes();
     }, []);
 
@@ -143,19 +145,19 @@ export default function Packages() {
                         <ScrollView className="w-full flex flex-1 mt-5 ">
                             <View className="flex flex-wrap flex-row justify-start ml-10">
                                 {institutes.map((institute : Institute) => (
-                                    <TouchableOpacity className="flex h-[76px]" onPress={() => handleSelectCard(institute.id)}>
-                                        {selectedCard === institute.id ? (
+                                    <TouchableOpacity className="flex h-[76px]" onPress={() => handleSelectCard(institute.instituteId)}>
+                                        {selectedCard?.toString() === institute.instituteId ? (
                                             <View
                                                 className="flex-row  bg-button_color m-2 h-[75%] justify-center items-center rounded-full"
                                             >
-                                                <Pressable onPress={() => handleSelectCard(institute.id)}>
+                                                <Pressable onPress={() => handleSelectCard(institute.instituteId)}>
                                                     <LinearGradient
-                                                        key={institute.id}
+                                                        key={institute.instituteId}
                                                         colors={["#5A189A", "#9C4EDC"]}
                                                         style={{ borderRadius: 999, flexDirection: 'row', alignItems: 'center', height: '100%', width: 157 }}
                                                     >
                                                         <View className="mx-1">
-                                                            <Image source={{ uri: institute.image }} />
+                                                            <Image source={{ uri: institute.photosUrl }} />
                                                         </View>
                                                         <Text className="text-white text-center text-lg mx-3">{institute.name}</Text>
                                                     </LinearGradient>
@@ -163,11 +165,11 @@ export default function Packages() {
                                             </View>
                                         ) : (
                                             <View
-                                                key={institute.id}
+                                                key={institute.instituteId}
                                                 className="flex-row w-[157px] bg-button_color m-2 h-[75%] justify-center items-center rounded-full"
                                             >
                                                 <View className="mx-1">
-                                                    <Image source={{ uri: institute.image }} />
+                                                    <Image source={{ uri: institute.photosUrl }} />
                                                 </View>
                                                 <Text className="text-white text-center text-lg mx-3">{institute.name}</Text>
                                             </View>
