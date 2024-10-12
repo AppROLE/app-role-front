@@ -7,7 +7,7 @@ export type Institute = {
     price: number;
     photosUrl: string[];
     logoPhoto: string;
-    phoneNumber: string;
+    phone: string;
 }
 
 export type getAllInstituteByIdResponseDTO = { 
