@@ -12,9 +12,15 @@ export class InstituteRepositoryHttp {
     }
   }
 
-  async getById(id: string) {
+  async getInstituteById(instituteId: string) {
     try {
-      const response = await http.get(`/institute/${id}`)
+      const idToken = await AsyncStorage.getItem('idToken') || ''
+      if (idToken === '') return
+      const response = await http.get(`/get-institute-by-id?instituteId=${instituteId}`, {
+        headers: {
+          Authorization: `Bearer ${idToken}`
+        }
+      })
       return response.data
     } catch (error: any) {
       return error.response.data
@@ -39,6 +45,22 @@ export class InstituteRepositoryHttp {
       const response = await httpEvent.get(`/get-all-favorites-institutes`, {
         headers: {
           Authorization: `Bearer ${idToken}`,
+        }
+      });
+      return response.data
+    } catch (error: any) {
+      return error.response.data
+    }
+  }
+
+
+  async updateFavoriteInstitute(instituteId: string) {
+    try {
+      const idToken = await AsyncStorage.getItem('idToken') || ''
+      if (idToken === '') return
+      const response = await httpEvent.post(`/update-favorite-institute?instituteId=${instituteId}`, {
+        headers: {
+          Authorization: `Bearer ${idToken}`
         }
       });
       return response.data
