@@ -1,15 +1,16 @@
+import { CATEGORY } from "@/api/enums/catetegory_enum";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { router } from "expo-router";
 import { View, Text, TouchableOpacity, Image, Dimensions } from "react-native";
 
 interface RoleCardProps {
-    data: string;
-    image: string;
+    data: Date;
+    image?: string;
     title: string;
-    type: string;
-    stars: number;
+    type?: CATEGORY;
+    stars?: number;
     local: string;
-    idRole: string;
+    idRole?: string;
 }
 
 export default function RoleCard({data, image, title, type, stars, local, idRole} : RoleCardProps) {
@@ -33,7 +34,7 @@ export default function RoleCard({data, image, title, type, stars, local, idRole
                     <Text className="text-xl font-bold text-white">{title}</Text>
                 </View>
                 <View className="flex flex-row gap-2 mb-4 items-center">
-                    {type === 'Bar' ? (
+                    {type?.includes(CATEGORY.BAR) ? (
                         <FontAwesome6 name="beer-mug-empty" size={16} color="white" />
                     )
                     : (
