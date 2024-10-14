@@ -4,7 +4,7 @@ import RoleMainButton from '@/src/components/roleMainButton'
 import * as ImagePicker from 'expo-image-picker'
 import { FontAwesome6 } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import {
   TouchableOpacity,
   View,
@@ -14,6 +14,8 @@ import {
   StyleSheet,
   TextInput
 } from 'react-native'
+import { AuthContext } from '@/context/auth_context'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function EditingPerfil() {
   const navigation = useRouter()
@@ -97,6 +99,29 @@ export default function EditingPerfil() {
   function handleVoltar() {
     navigation.back()
   }
+
+  
+  const { updateProfile } = useContext(AuthContext)
+
+  async function fetchUpdateProfile() { 
+    const data = {
+      username: (await AsyncStorage.getItem('username')) ?? '',
+      nickname: (await AsyncStorage.getItem('nickname')) ?? '',
+      biography: (await AsyncStorage.getItem('biography')) ?? '',
+      instagramLink: (await AsyncStorage.getItem('instagramLink')) ?? '',
+      tiktokLink: (await AsyncStorage.getItem('tiktokLink')) ?? '',
+    }
+
+    try {
+      const response = await updateProfile(data)
+      if (response) {
+        console.log('RESPOSTA DO UPDATE PROFILE', response)
+      }
+      return response
+    } catch (error: any) {
+      console.error("Erro ao atualizar perfil")
+  }
+}
 
   return (
     <Background>
@@ -249,7 +274,7 @@ export default function EditingPerfil() {
         </View>
         <View className="fixed bottom-0 z-40 flex h-[16%] w-full flex-row items-center justify-evenly border-t-2 border-t-[#2C2B2B] bg-background pb-6">
           <View className="flex w-[85%]">
-            <RoleMainButton type="gradient">
+            <RoleMainButton type="gradient" buttonFunction={fetchUpdateProfile}>
               <Text className="text-white">Salvar</Text>
             </RoleMainButton>
           </View>
