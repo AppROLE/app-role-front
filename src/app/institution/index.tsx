@@ -1,11 +1,19 @@
+import { Institute } from '@/api/types/institute_dto'
+import { InstituteContext } from '@/context/institute_context'
 import Background from '@/src/components/background'
 import RoleCard from '@/src/components/roleCard'
+import SocialCard from '@/src/components/socialCard'
 import { FontAwesome6 } from '@expo/vector-icons'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useRouter } from 'expo-router'
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 
-export default function institutionScreen() {
+interface intutionScreenProps {
+  instituteId: string
+}
+
+export default function institutionScreen({instituteId}: intutionScreenProps) {
   const navigate = useRouter()
   const [roles, setRoles] = useState([
     {
@@ -209,17 +217,32 @@ export default function institutionScreen() {
   function handleVoltar() {
     navigate.back()
   }
+
+  const [instituteA, setInstituteA] = useState<Institute>()
+  const { updateFavoriteInstitute, getInstituteById } = useContext(InstituteContext)
+
+  async function updateInstitute() { 
+    const response = await updateFavoriteInstitute(instituteId)
+    console.log('RESPOSTA DA UPDATE', response)
+  }
+
+  async function getInstitute() { 
+    const response = await getInstituteById(instituteId)
+    if (response) {
+      setInstituteA(response.institute)
+    }
+    console.log('RESPOSTA DA GET', response)
+  }
+
+
+  useEffect(() => { 
+    getInstitute()
+  }, [])
   return (
     <Background scrollable lockScroll={scrollDisabled} function1={loadMoreRoles}>
       <View className="flex w-full flex-col items-center justify-center">
+        <SocialCard title={instituteA?.name} image={instituteA?.logoPhoto} bookMarkerFunction={updateInstitute}/>
         <View className="flex w-full flex-col items-center justify-center border-b-2 border-[#1c1c1c] pb-6">
-          <View className="flex h-14 w-[90%] flex-row items-center justify-between rounded-full bg-[#1c1c1c]">
-            <View className="flex flex-row items-center">
-              <View className="ml-4 h-10 w-10 rounded-full bg-white" />
-              <Text className="ml-4 text-3xl text-white">{institute.title}</Text>
-            </View>
-            <View className="mr-4 h-10 w-10 rounded-full bg-white" />
-          </View>
           <View className="mt-6 flex w-[90%] flex-row items-center">
             <TouchableOpacity
               onPress={() => handleVoltar()}
