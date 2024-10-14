@@ -3,11 +3,12 @@ import React from "react";
 import {SvgUri} from "react-native-svg";
 
 interface SocialCardProps {
-    image: string;
-    title: string;
+    image?: string;
+    title?: string;
+    bookMarkerFunction?: () => void;
 }
 
-export default function SocialCard({image, title} : SocialCardProps) {
+export default function SocialCard({image, title, bookMarkerFunction} : SocialCardProps) {
 
     return (
         <TouchableOpacity className="flex flex-row items-center bg-[#1C1C1C] rounded-full p-2 justify-between mb-4">
@@ -21,13 +22,13 @@ export default function SocialCard({image, title} : SocialCardProps) {
                 />
                 <Text className="text-2xl font-bold text-white flex-1 line-clamp-3">{title}</Text>
             </View>
-            <View className="pr-3">
+            <TouchableOpacity onPress={bookMarkerFunction} className="pr-3">
                 <SvgUri
                     uri={process.env.EXPO_PUBLIC_URL_S3 + "/bookmark.svg"}
                     width="14"
                     height="18"
                 />
-            </View>
+            </TouchableOpacity>
         </TouchableOpacity>
     )
 }
