@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import { http } from '../http'
-import { deleteAccountResponseDTO, signInRequestDTO, signInResponseDTO } from '../types/auth_dto'
+import { deleteAccountResponseDTO, signInRequestDTO, signInResponseDTO, updateProfileRequestDTO, updateProfileResponseDTO } from '../types/auth_dto'
 import { finishSignUpRequestDTO } from '../types/auth_dto'
 import { confirmForgotPasswordRequestDTO, confirmForgotPasswordResponseDTO } from '../types/auth_dto'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -100,6 +100,15 @@ export class AuthRepositoryHttp {
     } catch (error: any) {
       return error.response.data
     }
+  }
+
+  async updateProfile(data: updateProfileRequestDTO) {
+    try {
+      const response = await http.put('/update-profile', data, { headers: {Authorization: `Bearer ${await AsyncStorage.getItem('idToken')}`}})
+      return response.data as updateProfileResponseDTO
+    } catch (error: any) {
+      return error.response.data
+    } 
   }
 }
 
