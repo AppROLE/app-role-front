@@ -18,3 +18,8 @@ export type getInstituteByPartnerTypeResponseDTO = {
     institutes: Institute[],    
     message: string
 }
+
+export type getAllFavoritesInstitutesResponseDTO = { 
+    institutes: Institute[],    
+    message: string
+}
