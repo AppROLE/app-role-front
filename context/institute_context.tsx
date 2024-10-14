@@ -1,12 +1,13 @@
 import { InstituteRepositoryHttp } from "@/api/repositories/institute_repository_http"
-import { getAllFavoritesInstitutesResponseDTO, getAllInstituteByIdResponseDTO, getInstituteByPartnerTypeResponseDTO } from "@/api/types/institute_dto"
+import { getAllFavoritesInstitutesResponseDTO, getAllInstituteByIdResponseDTO, getInstituteByIdResponseDTO, getInstituteByPartnerTypeResponseDTO, updateFavoriteInstituteResponseDTO } from "@/api/types/institute_dto"
 import { createContext, PropsWithChildren } from "react"
 
 type InstituteContextType = { 
     getAll: () => Promise<getAllInstituteByIdResponseDTO>
-    getById: (id: string) => Promise<object>
+    getInstituteById: (instituteId: string) => Promise<getInstituteByIdResponseDTO>
     getAllInstitutesByPartnerType: (idToken: string, partnerType: string) => Promise<getInstituteByPartnerTypeResponseDTO>
     getAllFavoritesInstitutes: (idToken: string) => Promise<getAllFavoritesInstitutesResponseDTO>
+    updateFavoriteInstitute: (instituteId: string) => Promise<updateFavoriteInstituteResponseDTO>
 }
 
 const defaultInstituteContext = { 
@@ -16,8 +17,23 @@ const defaultInstituteContext = {
             message: ''
         }
     },
-    getById: async (_id: string) => {
-        return {}
+    getInstituteById: async (_instituteId: string) => {
+        return {
+            institute: {
+                instituteId: '',
+                logoPhoto: '',
+                name: '',
+                description: '',
+                intituteType: '',
+                price: 0,
+                photosUrl: [],
+                phone: '',
+                partnerType: '',
+                address: '',
+                contact: ''
+            },
+            message: ''
+        }
     },
     getAllInstitutesByPartnerType: async (_idToken: string, _partnerType: string) => {
         return {
@@ -30,7 +46,12 @@ const defaultInstituteContext = {
             institutes: [],
             message: ''
         }
-    }
+    },
+    updateFavoriteInstitute: async ( _instituteId: string) => {
+        return {
+            message: ''
+        }
+    },
 }
 
 export const InstituteContext = createContext<InstituteContextType>(defaultInstituteContext)
@@ -47,9 +68,9 @@ export function InstituteContextProvider({ children }: PropsWithChildren) {
     }
   }
 
-  async function getById(id: string) { 
+  async function getInstituteById(instituteId: string) { 
     try {
-      const response = await instituteRepository.getById(id)
+      const response = await instituteRepository.getInstituteById(instituteId)
       return response
     } catch (error: any) {
       return error
@@ -74,8 +95,17 @@ export function InstituteContextProvider({ children }: PropsWithChildren) {
     }
   }
 
+  async function updateFavoriteInstitute(instituteId: string) { 
+    try {
+      const response = await instituteRepository.updateFavoriteInstitute(instituteId)
+      return response
+    } catch (error: any) {
+      return error
+    }
+  }
+
   return (
-    <InstituteContext.Provider value={{ getAll, getById, getAllInstitutesByPartnerType, getAllFavoritesInstitutes }}>
+    <InstituteContext.Provider value={{ getAll, getInstituteById, getAllInstitutesByPartnerType, getAllFavoritesInstitutes, updateFavoriteInstitute }}>
       {children}
     </InstituteContext.Provider>
   )
