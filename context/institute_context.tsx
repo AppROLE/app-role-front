@@ -1,11 +1,12 @@
 import { InstituteRepositoryHttp } from "@/api/repositories/institute_repository_http"
-import { getAllInstituteByIdResponseDTO, getInstituteByPartnerTypeResponseDTO } from "@/api/types/institute_dto"
+import { getAllFavoritesInstitutesResponseDTO, getAllInstituteByIdResponseDTO, getInstituteByPartnerTypeResponseDTO } from "@/api/types/institute_dto"
 import { createContext, PropsWithChildren } from "react"
 
 type InstituteContextType = { 
     getAll: () => Promise<getAllInstituteByIdResponseDTO>
     getById: (id: string) => Promise<object>
     getAllInstitutesByPartnerType: (idToken: string, partnerType: string) => Promise<getInstituteByPartnerTypeResponseDTO>
+    getAllFavoritesInstitutes: (idToken: string) => Promise<getAllFavoritesInstitutesResponseDTO>
 }
 
 const defaultInstituteContext = { 
@@ -19,6 +20,12 @@ const defaultInstituteContext = {
         return {}
     },
     getAllInstitutesByPartnerType: async (_idToken: string, _partnerType: string) => {
+        return {
+            institutes: [],
+            message: ''
+        }
+    },
+    getAllFavoritesInstitutes: async (_idToken: string) => {
         return {
             institutes: [],
             message: ''
@@ -58,8 +65,17 @@ export function InstituteContextProvider({ children }: PropsWithChildren) {
     }
   }
 
+  async function getAllFavoritesInstitutes(idToken: string) { 
+    try { 
+      const response = await instituteRepository.getAllFavoritesInstitutes(idToken)
+      return response
+    } catch (error: any) { 
+      return error
+    }
+  }
+
   return (
-    <InstituteContext.Provider value={{ getAll, getById, getAllInstitutesByPartnerType }}>
+    <InstituteContext.Provider value={{ getAll, getById, getAllInstitutesByPartnerType, getAllFavoritesInstitutes }}>
       {children}
     </InstituteContext.Provider>
   )
