@@ -23,3 +23,12 @@ export type getAllFavoritesInstitutesResponseDTO = {
     institutes: Institute[],    
     message: string
 }
+
+export type updateFavoriteInstituteResponseDTO = { 
+    message: string
+}
+
+export type getInstituteByIdResponseDTO = {
+    institute: Institute,
+    message: string
+}
