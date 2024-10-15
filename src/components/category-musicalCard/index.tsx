@@ -22,7 +22,7 @@ export default function CategoryMusicalCard({type, name} : CategoryMusicalCardPr
                 : (
                     <FontAwesome6 name="question" size={48} color="white" />
                 )}
-                <Text className="text-xl text-white font-sans">{name}</Text>
+                <Text className="text-xl text-white font-nunito">{name}</Text>
             </View>
         </TouchableOpacity>
     )

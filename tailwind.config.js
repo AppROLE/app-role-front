@@ -19,8 +19,8 @@ module.exports = {
         sub_text: '#8E8E8E',
       },
       fontFamily: {
-        sans: ['Nunito', 'sans-serif'],
-        sansBold: ['NunitoBold', 'sans-serif']
+        nunito: ['Nunito', 'nunito-serif'],
+        nunitoBold: ['NunitoBold', 'nunito-serif']
       },
       screens: {
         'big-cellphone': '1px'

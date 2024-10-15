@@ -23,14 +23,14 @@ export default function RoleCard({data, image, title, type, stars, local, idRole
     return (
         <TouchableOpacity className="flex flex-row bg-[#1C1C1C] rounded-2xl" style={{height: height*0.14}}>
             <View className="absolute top-2 left-2 z-10 bg-[#121212]/70 px-2 py-1 rounded-lg">
-                <Text className="text-white text-base font-sans">16 DEZ</Text>
+                <Text className="text-white text-base font-nunito">16 DEZ</Text>
             </View>
             <View className="w-1/2">
                 <Image source={{ uri: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png' }} className="w-full h-full object-cover rounded-l-2xl"/>
             </View>
             <View className="w-1/2 p-5">
                 <View className="mb-2">
-                    <Text className="text-xl font-sansBold text-white">{title}</Text>
+                    <Text className="text-xl font-nunitoBold text-white">{title}</Text>
                 </View>
                 <View className="flex flex-row gap-2 mb-4 items-center">
                     {type === 'Bar' ? (
@@ -39,16 +39,16 @@ export default function RoleCard({data, image, title, type, stars, local, idRole
                     : (
                         <FontAwesome6 name="question" size={16} color="white" />
                     )}
-                    <Text className="text-base text-white font-sans">{type}</Text>
+                    <Text className="text-base text-white font-nunito">{type}</Text>
                 </View>
                 <View className="flex flex-row gap-4">
                     <View className="flex flex-row gap-2 items-center">
                         <FontAwesome6 name="star" size={8} color="#BDBDBD" solid/>
-                        <Text className="text-sm font-sans text-[#BDBDBD]">{stars}</Text>
+                        <Text className="text-sm font-nunito text-[#BDBDBD]">{stars}</Text>
                     </View>
                     <View className="flex flex-row gap-2 items-center">
                         <FontAwesome6 name="location-dot" size={8} color="#BDBDBD" />
-                        <Text className="text-sm font-sans text-[#BDBDBD]">{local}</Text>
+                        <Text className="text-sm font-nunito text-[#BDBDBD]">{local}</Text>
                     </View>
                 </View>
             </View>

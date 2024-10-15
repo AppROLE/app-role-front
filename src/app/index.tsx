@@ -48,9 +48,9 @@ export default function Index() {
     }
 
   return (
-    <SafeAreaView className='font-sans flex-1 text-black'>
+    <SafeAreaView className='font-nunito flex-1 text-black'>
       <View className="flex h-full w-full items-center justify-center bg-blue-100">
-        <Text className="text-2xl font-sans text-red-500">
+        <Text className="text-2xl font-nunito text-red-500">
           EH FRONTAS DO APP ROLE
         </Text>
         <Link href={'/first-page'}>First Page</Link>

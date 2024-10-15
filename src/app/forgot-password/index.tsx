@@ -71,9 +71,9 @@ export default function ForgotPassword() {
             <Background>
                 <Toast/>
                 <View className="flex justify-center items-center w-[80%]">
-                    <Text className="text-white text-2xl font-sans">Recuperação de Senha</Text>
+                    <Text className="text-white text-2xl font-nunito">Recuperação de Senha</Text>
                     <View className="w-[85%] pt-8">
-                        <Text className="text-[#BDBDBD] text-center text-base font-sans">Escreva seu e-mail ou nome de usuário e enviaremos detalhes de como prosseguir 
+                        <Text className="text-[#BDBDBD] text-center text-base font-nunito">Escreva seu e-mail ou nome de usuário e enviaremos detalhes de como prosseguir 
                         para a criação de sua nova senha.</Text>
                     </View>
                     <View className="flex w-80 flex-row gap-2 mt-16">
@@ -86,11 +86,11 @@ export default function ForgotPassword() {
                     </View>
                     <View className="pt-16">
                         <RoleMainButton type='gradient' buttonFunction={() => handlePress(router)}>
-                            <Text className="text-white font-sans">Enviar</Text>
+                            <Text className="text-white font-nunito">Enviar</Text>
                         </RoleMainButton>
                         <Link href={'/sign-in'} className="mt-8" asChild>
                             <TouchableOpacity className=" bg-[#1C1C1C] w-96 rounded-2xl h-10 justify-center items-center">
-                                <Text className="text-[#BDBDBD] text-center text-base font-sans">Voltar</Text>
+                                <Text className="text-[#BDBDBD] text-center text-base font-nunito">Voltar</Text>
                             </TouchableOpacity>
                         </Link>
                     </View>

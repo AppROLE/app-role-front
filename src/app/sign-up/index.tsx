@@ -118,12 +118,12 @@ export default function SignUp() {
       <View className="flex h-[89%] w-full flex-col items-center gap-11 rounded-t-[54px] bg-background">
         <View className="flex items-center">
           <View className="flex flex-row gap-[5px]">
-            <Text className="text-2xl font-sansBold text-white max-[320px]:text-xl">
+            <Text className="text-2xl font-nunitoBold text-white max-[320px]:text-xl">
               Crie sua conta
             </Text>
           </View>
-          <Text className="text-2xl text-white max-[320px]:text-xl font-sans">
-            O <Text className="font-sansBold">ROLE</Text> vai te surpreender!
+          <Text className="text-2xl text-white max-[320px]:text-xl font-nunito">
+            O <Text className="font-nunitoBold">ROLE</Text> vai te surpreender!
           </Text>
         </View>
         <View className="flex w-full items-center">
@@ -172,9 +172,9 @@ export default function SignUp() {
                   <Ionicons name="square-outline" size={24} color="white" />
                 )}
               </Pressable>
-              <Text className="flex items-center font-sans justify-center text-xs text-white">
+              <Text className="flex items-center font-nunito justify-center text-xs text-white">
                 Eu li e concordo com os{' '}
-                <Text onPress={handleIsVisible()} className="text-[#D8A9FF] font-sansBold">
+                <Text onPress={handleIsVisible()} className="text-[#D8A9FF] font-nunitoBold">
                   termos de uso
                 </Text>{' '}
                 e política de privacidade
@@ -187,16 +187,16 @@ export default function SignUp() {
             type="gradient"
             buttonFunction={() => changePassword()}
           >
-            <Text className="text-white font-sans">Cadastrar</Text>
+            <Text className="text-white font-nunito">Cadastrar</Text>
           </RoleMainButton>
           <RoleMainButton type="simple">
             <FontAwesome6 name="google" size={24} color="white" />
-            <Text className="text-white font-sans">Cadastrar via Google</Text>
+            <Text className="text-white font-nunito">Cadastrar via Google</Text>
           </RoleMainButton>
         </View>
         <View className="mt-7 flex flex-row gap-2">
-          <Text className="text-sm text-white font-sans">Ja possui uma conta?</Text>
-          <Link href={'/'} className="text-sm text-[#D8A9FF] font-sansBold">
+          <Text className="text-sm text-white font-nunito">Ja possui uma conta?</Text>
+          <Link href={'/'} className="text-sm text-[#D8A9FF] font-nunitoBold">
             Entrar
           </Link>
         </View>
