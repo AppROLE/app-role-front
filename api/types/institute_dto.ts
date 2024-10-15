@@ -1,9 +1,13 @@
 export type Institute = {
-    id: number;
+    instituteId: string;
     name: string;
     description: string;
-    image: string;
-    // Outras propriedades que façam sentido
+    intituteType: string;
+    partnerType: string;
+    price: number;
+    photosUrl: string[];
+    logoPhoto: string;
+    phone: string;
 }
 
 export type getAllInstituteByIdResponseDTO = { 

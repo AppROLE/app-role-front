@@ -5,9 +5,11 @@ import {SvgXml, SvgProps} from "react-native-svg";
 type SvgAddedProps = SvgProps & {
     uri: string;
     color?: ColorValue;
+    width?: number;
+    height?: number;
 }
 
-export default function Svg({uri, color, ...rest} : SvgAddedProps) {
+export default function Svg({uri, color, width, height, ...rest} : SvgAddedProps) {
     const [imgXml, setImgXml] = useState('<svg></svg>');
 
     const getImgXml = async () => {
@@ -20,6 +22,8 @@ export default function Svg({uri, color, ...rest} : SvgAddedProps) {
 
     return (
         <SvgXml
+            width={width? width : 24}
+            height={height? height : 24}
             xml={imgXml}
             {...rest}
         />

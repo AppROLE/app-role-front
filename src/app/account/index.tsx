@@ -10,6 +10,8 @@ import Svg from "@/src/components/svg";
 import RoleInput from "@/src/components/input";
 import BigButton from "@/src/components/bigButton";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
+import AnimatedOption from "@/src/components/selectedCard";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 export default function Account() {
   const [phone, setPhone] = React.useState('');
@@ -17,6 +19,12 @@ export default function Account() {
 
   const insets = useSafeAreaInsets(); // Obtem as margens seguras do dispositivo
   const [viewHeight, setViewHeight] = useState(0);
+  const [genderSelected, setGenderSelected] = useState([false, false, false])
+
+  const [date, setDate] = useState(new Date())
+  const [showPicker, setShowPicker] = useState(false)
+  const [dateSelected, setDateSelected] = useState(false)
+  const [formattedDate, setFormattedDate] = useState('DD/MM/YYYY')
 
   const handleLayout = (event:any) => {
     const { height } = event.nativeEvent.layout;
@@ -27,6 +35,25 @@ export default function Account() {
   const tabBarHeightWithoutSafeArea = 0;
 
   const tabBarHeight = insets.bottom > 0 ? tabBarHeightWithoutSafeArea : tabBarHeightWithSafeArea;
+
+  console.log(tabBarHeight);
+
+  const handleDateChange = (event: any, selectedDate: Date | undefined) => {
+    const currentDate = selectedDate || date
+    setShowPicker(false)
+    setDate(currentDate)
+
+    const day = String(currentDate.getDate()).padStart(2, '0')
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0')
+    const year = currentDate.getFullYear()
+
+    setFormattedDate(`${day}/${month}/${year}`)
+    setDateSelected(true)
+  }
+
+  function handleClosePicker() {
+    setShowPicker(false)
+  }
 
   function handlePhoneChange(text: string) {
     setPhone(text);
@@ -62,16 +89,19 @@ export default function Account() {
           </View>
         </View>
 
-        <ScrollView>
+        <ScrollView style={{marginBottom: tabBarHeight + 96}}>
           <View className="pl-6 gap-6 pt-6 items-start border-b-2 border-b-line_gray">
             <Text className="text-white text-lg font-bold">
               Data de nascimento
             </Text>
-            <TouchableOpacity className="bg-button_color p-2 justify-center rounded-lg mb-8">
-              <Text className="text-sub_text text-lg">
-                DD / MM / AAAA
-              </Text>
-            </TouchableOpacity>
+            <View className="flex flex-row flex-wrap mb-8">
+              <AnimatedOption
+                  label={formattedDate}
+                  selected={dateSelected}
+                  onPress={() => setShowPicker(true)}
+              />
+            </View>
+
           </View>
           <View className="px-6 gap-6 pt-6 items-start border-b-2 border-b-line_gray">
             <Text className="text-white text-lg font-bold">
@@ -89,22 +119,22 @@ export default function Account() {
             <Text className="text-white text-lg font-bold">
               Gênero
             </Text>
-            <View className="flex flex-row gap-2">
-              <TouchableOpacity className="bg-button_color justify-center p-2 rounded-lg mb-8">
-                <Text className="text-sub_text text-lg">
-                  Masculino
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity className="bg-button_color justify-center p-2 rounded-lg mb-8">
-                <Text className="text-sub_text text-lg">
-                  Feminino
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity className="bg-button_color justify-center p-2 rounded-lg mb-8">
-                <Text className="text-sub_text text-lg">
-                  Outro
-                </Text>
-              </TouchableOpacity>
+            <View className="flex flex-row gap-2 mb-8">
+              <AnimatedOption
+                  label={"Masculino"}
+                  selected={genderSelected[0]}
+                  onPress={() => setGenderSelected([true, false, false])}
+              />
+              <AnimatedOption
+                  label={"Feminino"}
+                  selected={genderSelected[1]}
+                  onPress={() => setGenderSelected([false, true, false])}
+              />
+              <AnimatedOption
+                  label={"Outro"}
+                  selected={genderSelected[2]}
+                  onPress={() => setGenderSelected([false, false, true])}
+              />
             </View>
           </View>
           <View className="gap-6 pt-6 items-start border-b-2 border-b-line_gray">
@@ -121,7 +151,7 @@ export default function Account() {
             <Text className="ml-6 text-white text-lg font-bold">
               Senha
             </Text>
-            <TouchableOpacity onPress={openChange} className="bg-button_color p-2 justify-center self-center rounded-3xl mb-8 w-10/12">
+            <TouchableOpacity onPress={openChange} className="bg-button_color p-2 justify-center self-center rounded-3xl w-10/12">
               <Text className="text-white text-lg text-center">
                 Alterar Senha
               </Text>
@@ -135,6 +165,29 @@ export default function Account() {
             </Text>
           </BigButton>
         </View>
+        {showPicker && (
+            <View className="absolute inset-0 flex z-50 bg-transparent mt-20 w-[100vw] p-5">
+              <View className="relative flex justify-center items-center bg-black rounded-3xl">
+                <View className="w-[90%] flex p-4 rounded-lg mx-auto">
+                  <DateTimePicker
+                      value={date}
+                      mode="date"
+                      display="inline"
+                      accentColor="#9C4EDC"
+                      themeVariant='dark'
+                      minimumDate={new Date()}
+                      onChange={handleDateChange}
+                  />
+                  <TouchableOpacity
+                      onPress={handleClosePicker}
+                      className="mt-4 p-2 bg-[#1C1C1C] rounded-full items-center justify-center"
+                  >
+                    <Text className="text-white">Fechar</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+        )}
       </View>
     </Background>
   );

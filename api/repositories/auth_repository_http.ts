@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import { http } from '../http'
-import { signInRequestDTO, signInResponseDTO } from '../types/auth_dto'
+import { deleteAccountResponseDTO, signInRequestDTO, signInResponseDTO } from '../types/auth_dto'
 import { finishSignUpRequestDTO } from '../types/auth_dto'
 import { confirmForgotPasswordRequestDTO, confirmForgotPasswordResponseDTO } from '../types/auth_dto'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -92,4 +92,17 @@ export class AuthRepositoryHttp {
       return error.response.data
     }
   }
+  
+  async deleteAccount() {
+    try {
+      const response = await http.delete('/delete-account', {headers: {Authorization: `Bearer ${await AsyncStorage.getItem('idToken')}`}})
+      return response.data as deleteAccountResponseDTO
+    } catch (error: any) {
+      return error.response.data
+    }
+  }
 }
+
+
+
+

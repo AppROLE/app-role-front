@@ -1,25 +1,62 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { SvgUri } from "react-native-svg";
 import Background from "@/src/components/background";
 import { useRouter } from "expo-router";
 import RoleMainButton from "@/src/components/roleMainButton";
 import Toast from "react-native-toast-message";
+import { AuthContext } from "@/context/auth_context";  // Importe o AuthContext
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Delete() {
     const [themeModeS, setThemeModeS] = useState('dark');
     const [isChecked, setIsChecked] = useState(false); // Estado para o checkbox
     const navigation = useRouter();
-    const [buttonDisabled, setButtonDisabled] = useState(true);
+    const { deleteAccount } = useContext(AuthContext); // Use o AuthContext
 
     function handleVoltar() {
         navigation.back();
     }
 
-    function handleButton() {
-        navigation.push('/sign-in'); 
+    async function handleButton() {
+        try {
+            const response = await deleteAccount(); // Passa o idToken no request
+            if (response.message === 'Conta deletada com sucesso!') {
+                Toast.show({
+                    type: 'success',
+                    text1: 'Conta deletada com sucesso',
+                    visibilityTime: 3000,
+                    position: 'top', 
+                    topOffset: 10,   
+                    onHide: () => {
+                        AsyncStorage.removeItem('idToken'); // Remove o idToken do AsyncStorage
+                        AsyncStorage.removeItem('accessToken'); // Remove o accessToken do AsyncStorage
+                        AsyncStorage.removeItem('refreshToken'); // Remove o refreshToken do AsyncStorage
+                        navigation.replace('/first-page'); // Redireciona após sucesso
+                    } // Redireciona após sucesso
+                });
+                
+            } else {
+                Toast.show({
+                    type: 'error',
+                    text1: 'Erro ao deletar conta',
+                    text2: 'Tente novamente mais tarde.',
+                    visibilityTime: 3000,
+                    position: 'top', 
+                    topOffset: 10,
+                });
+            }
+        } catch (error) {
+            Toast.show({
+                type: 'error',
+                text1: 'Erro',
+                text2: 'Falha ao deletar conta',
+                visibilityTime: 3000,
+                position: 'top', 
+                topOffset: 10,
+            });
+        }
     }
-
     return (
         <>
             <Background>
@@ -49,27 +86,28 @@ export default function Delete() {
                             </Text>
 
                             {/* Custom Checkbox View */}
+                            {/* Custom Checkbox View */}
                             <View className="flex flex-row items-center justify-center gap-4 py-10">
                                 <TouchableOpacity
                                     style={{
-                                        height: 25,
-                                        width: 25,
-                                        borderWidth: 2,
-                                        borderColor: themeModeS === 'dark' ? '#BDBDBD' : '#000000',
-                                        backgroundColor: isChecked ? (themeModeS === 'dark' ? '#FFFFFF' : '#000000') : 'transparent',
                                         justifyContent: 'center',
                                         alignItems: 'center',
                                         borderRadius: 4,
                                     }}
                                     onPress={() => setIsChecked(!isChecked)}
                                 >
-                                    {/* Optionally render checkmark */}
-                                    {isChecked && (
+                                    {/* Alternar entre dois SVGs com base no estado */}
+                                    {isChecked ? (
                                         <SvgUri
-                                            uri={process.env.EXPO_PUBLIC_URL_S3 + '/checkmark.svg'}
-                                            width={16}
-                                            height={16}
-                                            fill={themeModeS === 'dark' ? '#000000' : '#FFFFFF'}
+                                            uri={process.env.EXPO_PUBLIC_URL_S3 + '/checkbox_check.svg'} // SVG para quando está marcado
+                                            width={25}
+                                            height={25}
+                                        />
+                                    ) : (
+                                        <SvgUri
+                                            uri={process.env.EXPO_PUBLIC_URL_S3 + '/checkbox_empty.svg'} // SVG para quando não está marcado
+                                            width={25}
+                                            height={25}
                                         />
                                     )}
                                 </TouchableOpacity>
@@ -88,8 +126,8 @@ export default function Delete() {
                         <View className="w-80">
                             <RoleMainButton
                                 type="gradient"
-                                buttonFunction={handleButton}
-                                disabled={!isChecked}
+                                buttonFunction={handleButton} // Função para deletar a conta
+                                disabled={!isChecked} // Botão desativado até marcar o checkbox
                             >
                                 <Text className="text-white">Excluir Conta</Text>
                             </RoleMainButton>
