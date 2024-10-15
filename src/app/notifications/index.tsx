@@ -3,6 +3,7 @@ import {Text, View, FlatList, TouchableOpacity} from "react-native";
 import React from "react";
 import NotificationCard from "@/src/components/notificationCard";
 import Svg from "@/src/components/svg";
+import {router} from "expo-router";
 
 export default function Notifications() {
 
@@ -37,11 +38,16 @@ export default function Notifications() {
         }
     ]
 
+    function navigateToFavorites() {
+        router.navigate('/(tabs)/favorites')
+    }
+
     return (
         <Background>
             <View className="items-start h-full w-full">
                 <View className="relative flex flex-row h-12 w-full items-center gap-3 border-b-2 border-b-line_gray">
                     <TouchableOpacity
+                        onPress={() => navigateToFavorites()}
                         className="absolute flex h-12 w-12 items-center justify-center rounded-full bg-button_color
                         bottom-4 left-6"
                     >
