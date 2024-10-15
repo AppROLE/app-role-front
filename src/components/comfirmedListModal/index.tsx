@@ -11,16 +11,16 @@ import { Friends } from "@/api/types/user_dto";
 interface ModalReviewProps {
     visible: boolean;
     onClose: () => void;
-    eventId: string;
+    // eventId: string;
 }
 
-export default function ComfirmedListModal({ visible, onClose, eventId }: ModalReviewProps) {
+export default function ComfirmedListModal({ visible, onClose }: ModalReviewProps) {
     const [presence, setPresence] = useState<(Presence & { profilePhoto?: ImageSourcePropType })[]>([]);
     const [friends, setFriends] = useState<(Friends)[]>([]);
     const [loading, setLoading] = useState(true);
     const { getAllPresence } = useContext(PresenceContext);  
     const { getFriends } = useContext(UserContext);
-
+    const eventId = "d942a349-f74a-4d94-b591-ffb1fd143ad8";
     // Função para buscar amigos
     async function fetchFriends() {
         try {
@@ -82,7 +82,7 @@ export default function ComfirmedListModal({ visible, onClose, eventId }: ModalR
                         <TouchableOpacity className="rounded-full bg-button_color mr-5 absolute left-[10px] top-[12px]" onPress={onClose}>
                             <Ionicons name="arrow-back" size={22} color='#fff' className="p-2" />
                         </TouchableOpacity>
-                        <Text className="text-2xl text-white">Lista de Confirmados</Text>
+                        <Text className="text-2xl text-white text-center">Lista de Confirmados</Text>
                     </View>
                     <ScrollView className="w-full mt-8">
                         {confirmeds.map((user) => (

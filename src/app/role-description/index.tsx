@@ -1,5 +1,5 @@
 import Background from "@/src/components/background";
-import ModalReview from "@/src/components/modalReview";import ReviewCard from "@/src/components/reviewCard";
+import ModalReview from "@/src/components/modalReview"; import ReviewCard from "@/src/components/reviewCard";
 import Svg from "@/src/components/svg";
 import ModalReviewList from "@/src/components/modalReviewList";
 import React, { useContext, useEffect, useState } from "react";
@@ -11,11 +11,11 @@ import { getProfileResponseDTO } from "@/api/types/user_dto";
 import { PresenceContext } from "@/context/presence_context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-interface RoleDescriptionProps {
-    eventId: string;
-}
+// interface RoleDescriptionProps {
+//     eventId: string;
+// }
 
-export default function RoleDescription({ eventId }: RoleDescriptionProps) {
+export default function RoleDescription() {
     const [modalListVisible, setModalListVisible] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [comfirmedListModalVisible, setConfirmedListModalVisible] = useState(false);
@@ -23,6 +23,7 @@ export default function RoleDescription({ eventId }: RoleDescriptionProps) {
     const { getProfile } = useContext(UserContext);
     const { confirmEvent } = useContext(PresenceContext);
     const stars = [1, 2, 3, 4, 5];
+    const eventId = "50a7a9cb-ac7b-4c97-b987-47113ecbaf2b";
 
     const avatars = [
         { id: 1, uri: require('../../../assets/images/profile1 (1).png') },
@@ -58,9 +59,11 @@ export default function RoleDescription({ eventId }: RoleDescriptionProps) {
     async function fetchConfirmEvent() {
         try {
             const promoterCode = await AsyncStorage.getItem('promoterCode') || '';
-            if (promoterCode === '') return;
+            if(profilePhoto === "") {
+                setProfilePhoto(process.env.EXPO_PUBLIC_URL_S3 + "/images/profile_default.png");
+            }
             const response = await confirmEvent(eventId, profilePhoto, promoterCode);
-            console.log("RESPOSTA DA CONFIRMEVENT ", response);
+            console.log("RESPOSTA DA CONFIRM EVENT ", response);
             if (response) {
                 return response;
             }
@@ -103,7 +106,7 @@ export default function RoleDescription({ eventId }: RoleDescriptionProps) {
                     <ComfirmedListModal
                         visible={comfirmedListModalVisible}
                         onClose={() => setConfirmedListModalVisible(false)}
-                        eventId={"1"}
+                        // eventId={"d942a349-f74a-4d94-b591-ffb1fd143ad8"}
                     />
 
                     <ModalReview
@@ -113,15 +116,15 @@ export default function RoleDescription({ eventId }: RoleDescriptionProps) {
                     <ModalReviewList
                         visible={modalListVisible}
                         onClose={() => setModalListVisible(false)}
-                        eventId={eventId}
+                        // eventId={eventId}
                     />
                     <View className="w-11/12">
                         <Text className="text-2xl font-bold text-white mb-3 ">Reviews</Text>
 
                         {/* IMAGE TEM QUE TIPAR NO CARD (preciso saber o tipo da imagem na request) */}
                         <ReviewCard image={process.env.EXPO_PUBLIC_URL_S3 + "/images/profile_default.png"}
-                                    opacity={0} nickname={data.nickname} at={data.username} stars={4} full={false} onOpen={() => setModalListVisible(!modalListVisible)}
-                                    review={data.review}></ReviewCard>
+                            opacity={0} nickname={data.nickname} username={data.username} stars={4} full={false} onOpen={() => setModalListVisible(!modalListVisible)}
+                            review={data.review}></ReviewCard>
 
                         <View className="items-center mb-4">
                             <Text className="text-LILAC font-light" onPress={() => setModalListVisible(true)}>

@@ -1,5 +1,5 @@
 import { UserRepositoryHttp } from "@/api/repositories/user_repository_http"
-import { getFriendsResponseDTO, getPhraseResponseDTO, getProfileResponseDTO } from "@/api/types/user_dto"
+import { findPersonResponseDTO, getFriendsResponseDTO, getPhraseResponseDTO, getProfileResponseDTO } from "@/api/types/user_dto"
 import { createContext, PropsWithChildren } from "react"
 
 
@@ -7,6 +7,7 @@ type UserContextType = {
     getPhrase: () => Promise<getPhraseResponseDTO>
     getFriends: () => Promise<getFriendsResponseDTO>
     getProfile: () => Promise<getProfileResponseDTO>
+    findPerson: (searchTerm: string) => Promise<findPersonResponseDTO>
 }
 
 const defaultUserContext = {
@@ -27,6 +28,12 @@ const defaultUserContext = {
             profilePhoto: '',
             followers: 0,
             folowing: 0
+        }
+    },
+    findPerson: async () => {
+        return {
+            users: [],
+            message: ''
         }
     }
 }
@@ -63,8 +70,19 @@ export default function UserContextProvider({ children }: PropsWithChildren) {
         }
     }
 
+
+    async function findPerson(searchTerm: string) {
+        try {
+            const response = await userRepository.findPerson(searchTerm)
+            return response as findPersonResponseDTO
+        } catch (error: any) {
+            return error
+        }
+
+    }
+
     return (
-        <UserContext.Provider value={{ getPhrase, getFriends, getProfile }}>
+        <UserContext.Provider value={{ getPhrase, getFriends, getProfile, findPerson }}>
             {children}
         </UserContext.Provider>
     )
