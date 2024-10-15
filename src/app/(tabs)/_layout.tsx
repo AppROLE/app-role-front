@@ -37,8 +37,6 @@ export default function TabLayout() {
         }
     }
 
-    console.log(profileData)
-
     // useEffect para carregar os dados quando o componente for montado
     useEffect(() => {
         fetchProfile();
