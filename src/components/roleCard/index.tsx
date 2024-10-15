@@ -16,7 +16,7 @@ export default function RoleCard({data, image, title, type, stars, local, idRole
     const {width, height} = Dimensions.get('window');
     
     function handleRole() {
-        router.replace(`/event-description`)
+        router.push(`/event-description`)
         // router.replace('/')
     }
 
