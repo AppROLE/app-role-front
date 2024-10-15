@@ -17,22 +17,20 @@ const defaultInstituteContext = {
             message: ''
         }
     },
-    getInstituteById: async (_instituteId: string) => {
+    getInstituteById: async (_id: string) => {
         return {
-            institute: {
-                instituteId: '',
-                logoPhoto: '',
-                name: '',
-                description: '',
-                intituteType: '',
-                price: 0,
-                photosUrl: [],
-                phone: '',
-                partnerType: '',
-                address: '',
-                contact: ''
-            },
-            message: ''
+            addres: '',
+            description: '',
+            district_id: '',
+            events_id: [],
+            institute_id: '',
+            institute_type: '',
+            logo_photo: '',
+            name: '',
+            partner_type: '',
+            phone: '',
+            photos_url: [],
+            price: 0, 
         }
     },
     getAllInstitutesByPartnerType: async (_idToken: string, _partnerType: string) => {
@@ -71,7 +69,7 @@ export function InstituteContextProvider({ children }: PropsWithChildren) {
   async function getInstituteById(instituteId: string) { 
     try {
       const response = await instituteRepository.getInstituteById(instituteId)
-      return response
+      return response as getInstituteByIdResponseDTO
     } catch (error: any) {
       return error
     }

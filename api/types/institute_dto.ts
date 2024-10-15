@@ -11,7 +11,8 @@ export type Institute = {
 }
 
 export type getAllInstituteByIdResponseDTO = { 
-    institutes: Institute[],    
+    institutes: Institute[],
+    message: string
 }
 
 export type getInstituteByPartnerTypeResponseDTO = { 
@@ -28,7 +29,18 @@ export type updateFavoriteInstituteResponseDTO = {
     message: string
 }
 
+
 export type getInstituteByIdResponseDTO = {
-    institute: Institute,
-    message: string
+    addres: string;
+    description: string;
+    district_id: string;
+    events_id: Array<string>;
+    institute_id: string;
+    institute_type: string;
+    logo_photo: string;
+    name: string;
+    partner_type: string;
+    phone: string;
+    photos_url: Array<string>;
+    price: number;
 }

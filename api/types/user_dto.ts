@@ -9,6 +9,18 @@ export type getFriendsResponseDTO = {
     friends: Friends[];
 }
 
+type personResponseDTO = {
+    username: string;
+    profilePhoto: string;
+    nickname: string;
+}
+
+export type findPersonResponseDTO = {
+    users: personResponseDTO[];
+    message: string;
+}
+
+
 export type getPhraseResponseDTO = {
     phrase: string
 }
