@@ -18,68 +18,68 @@ export default function RootLayout() {
               <InstituteContextProvider>
                 <GestureHandlerRootView style={{ flex: 1 }}>
                   <Stack>
-                    <Stack.Screen 
-                      name="sign-in/index" 
+                    <Stack.Screen
+                      name="sign-in/index"
                       options={{ headerShown: false }} />
-                    <Stack.Screen 
-                      name="sign-up/index" 
+                    <Stack.Screen
+                      name="sign-up/index"
                       options={{ headerShown: false }} />
-                    <Stack.Screen 
-                      name="opening/index" 
+                    <Stack.Screen
+                      name="opening/index"
                       options={{ headerShown: false }} />
-                    <Stack.Screen 
-                      name="almost-there/index" 
+                    <Stack.Screen
+                      name="almost-there/index"
                       options={{ headerShown: false }} />
-                    <Stack.Screen 
-                      name="create-new-password/index" 
+                    <Stack.Screen
+                      name="create-new-password/index"
                       options={{ headerShown: false }} />
-                    <Stack.Screen 
-                      name="forgot-password/index" 
+                    <Stack.Screen
+                      name="forgot-password/index"
                       options={{ headerShown: false }} />
-                    <Stack.Screen 
-                      name="recovery-code/index" 
+                    <Stack.Screen
+                      name="recovery-code/index"
                       options={{ headerShown: false }} />
-                    <Stack.Screen 
-                      name="confirm-forgot-password/index" 
+                    <Stack.Screen
+                      name="confirm-forgot-password/index"
                       options={{ headerShown: false }} />
-                    <Stack.Screen 
-                      name="friends/index" 
+                    <Stack.Screen
+                      name="friends/index"
                       options={{ headerShown: false }} />
-                    <Stack.Screen 
-                      name="notifications/index" 
+                    <Stack.Screen
+                      name="notifications/index"
                       options={{ headerShown: false }} />
-                    <Stack.Screen 
-                      name="searching-filters/index" 
+                    <Stack.Screen
+                      name="searching-filters/index"
                       options={{ headerShown: false }} />
-                    <Stack.Screen 
-                      name="(tabs)" 
+                    <Stack.Screen
+                      name="(tabs)"
                       options={{ headerShown: false }} />
-                    <Stack.Screen 
-                      name="first-page/index" 
+                    <Stack.Screen
+                      name="first-page/index"
                       options={{ headerShown: false }} />
-                    <Stack.Screen 
-                      name="editing-perfil/index" 
+                    <Stack.Screen
+                      name="editing-perfil/index"
                       options={{ headerShown: false }} />
-                    <Stack.Screen 
-                      name="configs/index" 
+                    <Stack.Screen
+                      name="configs/index"
                       options={{ headerShown: false }} />
-                    <Stack.Screen 
-                      name="configs/delete/index" 
+                    <Stack.Screen
+                      name="configs/delete/index"
                       options={{ headerShown: false }} />
-                    <Stack.Screen 
-                      name="institution/index" 
+                    <Stack.Screen
+                      name="institution/index"
                       options={{ headerShown: false }} />
-                    <Stack.Screen 
-                      name="role-description/index" 
+                    <Stack.Screen
+                      name="role-description/index"
                       options={{ headerShown: false }} />
-                    <Stack.Screen 
-                      name="privacy/index" 
+                    <Stack.Screen
+                      name="privacy/index"
                       options={{ headerShown: false }} />
-                    <Stack.Screen 
-                      name="account/index" 
+                    <Stack.Screen
+                      name="account/index"
                       options={{ headerShown: false }} />
-                    <Stack.Screen 
-                      name="event-description/index" 
+                    <Stack.Screen
+                      name="event-description/index"
                       options={{ headerShown: false }} />
                   </Stack>
                 </GestureHandlerRootView>

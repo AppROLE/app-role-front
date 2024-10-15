@@ -2,6 +2,8 @@ import {
   confirmCodeResponseDTO, signUpRequestDTO, finishSignUpRequestDTO, finishSignUpResponseDTO,
   signInRequestDTO, signInResponseDTO, confirmForgotPasswordResponseDTO, forgotPasswordResponseDTO,
   confirmForgotPasswordRequestDTO, deleteAccountResponseDTO,
+  updateProfileRequestDTO,
+  updateProfileResponseDTO,
 } from '@/api/types/auth_dto'
 import { createContext, PropsWithChildren } from 'react'
 import { AuthRepositoryHttp } from '@/api/repositories/auth_repository_http'
@@ -18,6 +20,7 @@ type AuthContextType = {
   uploadImageProfile: (formData: FormData) => Promise<object>
   confirmCode: (email: string, code: string) => Promise<confirmCodeResponseDTO>
   deleteAccount: () => Promise<deleteAccountResponseDTO>
+  updateProfile: (data: updateProfileRequestDTO) => Promise<updateProfileResponseDTO>
 
 }
 
@@ -61,6 +64,11 @@ const defaultAuthContext = {
     }
   },
   deleteAccount: async () => {
+    return {
+      message: ''
+    }
+  },
+  updateProfile: async (_data: updateProfileRequestDTO) => {
     return {
       message: ''
     }
@@ -116,7 +124,6 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
       const response = await authRepository.finishSignUp(data)
       console.log("RESPOSTA DA REQ FINISH SIGN UP CONTEXT ", response);
       await AsyncStorage.removeItem('email');
-      await AsyncStorage.removeItem('password');
       return response
     } catch (error: any) {
       return error
@@ -175,9 +182,18 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
     }
   }
 
+  async function updateProfile(data: updateProfileRequestDTO) { 
+    try {
+      const response = await authRepository.updateProfile(data)
+      return response
+    } catch (error: any) {
+      return error
+    }
+  }
+
   return (
 
-    <AuthContext.Provider value={{ signIn, signUp, forgotPassword, confirmCode, finishSignUp, uploadImageProfile, confirmForgotPassword, resendCode, deleteAccount }}>
+    <AuthContext.Provider value={{ signIn, signUp, forgotPassword, confirmCode, finishSignUp, uploadImageProfile, confirmForgotPassword, resendCode, deleteAccount, updateProfile }}>
 
       {children}
     </AuthContext.Provider>
