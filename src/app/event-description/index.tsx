@@ -1,66 +1,43 @@
+import { EventContext } from "@/context/event_context";
+import { InstituteContext } from "@/context/institute_context";
 import ModalListaConfirmados from "@/src/components/modalListaConfirmados";
 import ModalReview from "@/src/components/modalReview";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { useEffect, useState, useRef } from "react";
+import { openURL } from "expo-linking";
+import { router } from "expo-router";
+import { useEffect, useState, useRef, useContext } from "react";
 import { View, Text, Image, ScrollView, TouchableOpacity, Animated, Easing } from "react-native";
 
 export default function EventDescription() {
+    // Interfaces
+    interface Review {
+        id: number;
+        nickname: string;
+        profilePhoto: string;
+        star: number;
+        comment: string;
+    }
+
+    // States
     const [darkLight, setDarkLight] = useState(false);
     const [price, setPrice] = useState('');
     const [blanckPrice, setBlanckPrice] = useState('');
     const [description, setDescription] = useState('');
     const [descriptionHeight, setDescriptionHeight] = useState(false);
-    const [features, setFeatures] = useState([
-        { id: 1, name: 'Estacionamento' },
-        { id: 2, name: 'Fumódromo' },
-        { id: 3, name: 'Valet' },
-        { id: 4, name: 'Wi-fi' },
-        { id: 5, name: 'DJ' },
-    ]);
-    const [gallery, setGallery] = useState([
-        { id: 1, image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png' },
-        { id: 2, image: 'https://placehold.co/600x400' },
-        { id: 3, image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png' },
-        { id: 4, image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png' },
-        { id: 5, image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png' },
-        { id: 6, image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png' },
-    ]);
+    const [features, setFeatures] = useState<string[]>([]);
+    const [gallery, setGallery] = useState<string[]>([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [modalList, setModalList] = useState(false);
     const stars = [1, 2, 3, 4, 5];
-    const [reviews, setReviews] = useState([
-        { 
-            id: 1, 
-            imageProfile: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png', 
-            userName: 'Isabella', 
-            at: '@isa.saab', 
-            opnion: 'Foi incrível! Música e bebida muito boas. O único problema que eu tive foi com a fila de entrada kkk mas eu estava com as minhas amigas que marcamos pelo app ROLE!',
-            stars: 4,
-        },
-        {
-            id: 2,
-            imageProfile: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png', 
-            userName: 'Gabriel Marola', 
-            at: '@merolinhaG',
-            opnion: 'lorem epsilum!',
-            stars: 5,
-        },
-        {
-            id: 3,
-            imageProfile: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png', 
-            userName: 'Yurão',
-            at: '@yurinho.aabb',
-            opnion: 'lorem epsilum',
-            stars: 1
-        },
-    ]);
+    const [reviews, setReviews] = useState<Review[]>([]);
     const [showAllReviews, setShowAllReviews] = useState(false)
     const [selectedImagePosition, setSelectedImagePosition] = useState(0)
     const [openGalletyModal, setOpenGalleryModal] = useState(false)
     const [imageSize, setImageSize] = useState(true)
     const animatedHeight = useRef(new Animated.Value(40)).current;
     const [typePartner, setTypePartner] = useState('global');
+    const [bannerUrl, setBannerUrl] = useState('https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png');
     const [confirmedPeople, setConfirmedPeople] = useState([
         {
             id: 1,
@@ -96,10 +73,24 @@ export default function EventDescription() {
         { id: 2, image: 'https://placehold.co/600x400' },
         { id: 3, image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png' },
     ]);
-    const [buttonCondition, setButtonCondition] = useState(false);
+    const [buttonCondition, setButtonCondition] = useState(true);
+    const [roleStars, setRoleStars] = useState(0);
+    const [musicsTypes, setMusicsTypes] = useState<string[]>([]);
+    const [category, setCategory] = useState('');
+    const [ageRange, setAgeRange] = useState('');
+    const [date, setDate] = useState('');
+    const [weekDay, setWeekDay] = useState('');
+    const [hour, setHour] = useState('');
+    const [address, setAddress] = useState('');
+    const [menuLink, setMenuLink] = useState('');
+    const [logo_photo, setLogoPhoto] = useState('');
     const gradientColors = buttonCondition
         ? ['rgba(90, 24, 154, 0.25)', 'rgba(156, 78, 220, 0.25)'] // Cores do gradiente com brilho reduzido
         : ['#5A189A', '#9C4EDC']; // Cores normais do gradiente
+
+    const { getEventById } = useContext(EventContext);
+    const { getReviewsEventById } = useContext(EventContext);
+    const { getById } = useContext(InstituteContext);
 
     function priceDesign(value: number) {
         const tempPrice = '$'.repeat(value);
@@ -126,6 +117,97 @@ export default function EventDescription() {
         }
     }
 
+    async function getInfosEvent() {
+        const response = await getEventById('55d2b5a6-3995-4415-b072-8f87a2b66c13');
+        console.log(response);
+        if (response) {
+            priceDesign(response.price);
+            setMusicsTypes(response.musicType ?? []);
+            setCategory(response.category ?? '');
+            setAgeRange(response.ageRange ?? '');
+
+            let dateR = new Date(response.eventDate).toISOString().split('T')[0];
+            let dateD = dateR.split('-')[2];
+            let mouth = dateR.split('-')[1];
+            switch (mouth) {
+                case '01': mouth = 'JAN'; break;
+                case '02': mouth = 'FEV'; break;
+                case '03': mouth = 'MAR'; break;
+                case '04': mouth = 'ABR'; break;
+                case '05': mouth = 'MAI'; break;
+                case '06': mouth = 'JUN'; break;
+                case '07': mouth = 'JUL'; break;
+                case '08': mouth = 'AGO'; break;
+                case '09': mouth = 'SET'; break;
+                case '10': mouth = 'OUT'; break;
+                case '11': mouth = 'NOV'; break;
+                case '12': mouth = 'DEZ'; break;
+            }
+            setDate(`${dateD} ${mouth}`);
+            let hourR = new Date(response.eventDate).toISOString().split('T')[1].split('.')[0];
+            setHour(hourR.split(':')[0] + ':' + hourR.split(':')[1]);
+            const weekDayR = new Date(response.eventDate).getDay();
+            let days = ['Domingo', 'Segunda-Feira', 'Terça-Feira', 'Quarta-Feira', 'Quinta-Feira', 'Sexta-Feira', 'Sábado'];
+            setWeekDay(days[weekDayR-1]);
+
+            setDescription(response.description);
+            setGallery(response.galeryLink ?? []);
+            setBannerUrl(response.bannerUrl ?? 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png');
+            setAddress(response.address);
+            setMenuLink(response.menuLink ?? '');
+            setFeatures(response.features);
+            setPackagesImages(response.packageType ? response.packageType.map((image: string, index: number) => ({ id: index, image })) : []);
+        }
+    }
+
+    async function getReviewsEvent() {
+        const response = await getReviewsEventById('9017cfe4-c287-42a0-997c-39f67e9e37f5');
+        // console.log(response);
+        if (response.reviews.length > 0) {
+            const formattedReviews: Review[] = response.reviews.map((review: any) => ({
+                id: review.id,
+                nickname: review.nickname,
+                profilePhoto: review.profilePhoto,
+                star: review.star,
+                comment: review.comment,
+            }));
+            setReviews(formattedReviews);
+            let totalStars = 0;
+            formattedReviews.map((review) => totalStars += review.star);
+            const averageStars = totalStars / formattedReviews.length;
+            // console.log('Average stars:', averageStars);
+            setRoleStars(averageStars);
+        }
+    }
+
+    async function getInstituteEvent() {
+        const response = await getById('2f3073ac-3633-4fc7-9cfe-c2084399bbc3');
+        // console.log(response);
+        if (response) {
+            setTypePartner(response.partner_type);
+            if (response.partner_type === 'PROMOTER_PARTNER' || response.partner_type === 'GLOBAL_PARTNER') {
+                setButtonCondition(false);
+            }
+            if (response.logo_photo === '') {
+                setLogoPhoto('https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png');
+            } else {
+                setLogoPhoto(response.logo_photo ?? 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png');
+            }
+        }
+    }
+
+    useEffect(() => {
+        getInfosEvent();
+    }, []);
+
+    useEffect(() => {
+        getReviewsEvent();
+    }, []);
+
+    useEffect(() => {
+        getInstituteEvent();
+    }, []);
+
     useEffect(() => {
         Animated.timing(animatedHeight, {
             toValue: imageSize ? 40 : 16, // Muda entre 40% e 16% de altura
@@ -136,26 +218,6 @@ export default function EventDescription() {
                 : Easing.in(Easing.ease), // Ease-in quando diminui
         }).start();
     }, [imageSize]);
-
-    useEffect(() => {
-        priceDesign(3);
-    }, []);
-
-    useEffect(() => {
-        setDescription(`
-🚀 React Native Expo: Uma Introdução Completa 🚀\n
-1️⃣ O que é React Native Expo?\n
-Expo é uma plataforma baseada em React Native que facilita o desenvolvimento de aplicativos móveis. Com ele, você pode criar apps nativos de forma rápida, sem a necessidade de configurar manualmente cada componente nativo.\n
-✨ Principais Características:\n
-- Rápida configuração: Sem necessidade de lidar com Xcode ou Android Studio para começar.\n
-- Acesso a APIs nativas: Como câmera, localização e notificações com simplicidade.\n
-- Atualizações OTA: Distribua atualizações diretamente aos usuários sem necessidade de passar por lojas de aplicativos.\n
-- Compatível com plataformas: Funciona tanto para iOS quanto para Android.\n
-2️⃣ Como começar?\n
-Para começar a desenvolver com React Native Expo, você precisa instalar o Expo CLI. Para isso, basta rodar o comando:\n
-npm install -g expo-cli
-`);
-    }, []);
 
     return (
         <View className="bg-background w-full h-full flex-1">
@@ -171,7 +233,7 @@ npm install -g expo-cli
             >
                 <Image
                     source={{
-                        uri: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png',
+                        uri: bannerUrl,
                     }}
                     style={{
                         width: '100%',
@@ -180,14 +242,17 @@ npm install -g expo-cli
                         borderBottomRightRadius: 45,
                     }}
                 />
-                <View className="w-12 h-12 bg-black flex justify-center items-center rounded-full absolute top-20 left-8">
+                <TouchableOpacity className="w-12 h-12 bg-black flex justify-center items-center rounded-full absolute top-20 left-8"
+                    onPress={() =>
+                        router.push('/home')
+                    }>
                     <FontAwesome name="arrow-left" size={32} color="white" />
-                </View>
+                </TouchableOpacity>
                 <View className="w-11/12 h-16 mx-auto bg-black mt-auto rounded-full flex flex-row items-center p-2 gap-4 mb-4">
                     <View className="w-12 h-12 rounded-full">
                         <Image
                             source={{
-                                uri: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png',
+                                uri: logo_photo,
                             }}
                             style={{ width: '100%', height: '100%', borderRadius: 9999 }}
                         />
@@ -210,7 +275,7 @@ npm install -g expo-cli
                         </View>
                         <View className="flex flex-row gap-2 items-center bg-[#1C1C1C] rounded-full px-2 py-1 self-start">
                             <FontAwesome name="question" size={20} color="white" />
-                            <Text className="text-[#BDBDBD] text-base">Universitário</Text>
+                            <Text className="text-[#BDBDBD] text-base">{category}</Text>
                         </View>
                         <View className="flex flex-row gap-2 items-center bg-[#1C1C1C] rounded-full px-2 py-1 self-start">
                             <FontAwesome name="question" size={20} color="white" />
@@ -219,21 +284,30 @@ npm install -g expo-cli
                                 {blanckPrice}
                             </Text>
                         </View>
-                        <View className="flex flex-row gap-2 items-center bg-[#1C1C1C] rounded-full px-2 py-1 self-start">
-                            <FontAwesome name="question" size={20} color="white" />
-                            <Text className="text-[#BDBDBD] text-base">Funk</Text>
+                        <View className="flex flex-row gap-2 items-center w-full flex-wrap rounded-full self-start">
+                            {musicsTypes ? musicsTypes.map((type, index) => (
+                                <View key={`viewtype-${type}-${index}`} className="flex flex-row gap-2 items-center bg-[#1C1C1C] rounded-full px-2 py-1 self-start">
+                                    <FontAwesome name="question" size={20} color="white" />
+                                    <Text className="text-[#BDBDBD] text-base">{type}</Text>
+                                </View>
+                            )) : (
+                                <View key={`viewtype-`} className="flex flex-row gap-2 items-center bg-[#1C1C1C] rounded-full px-2 py-1 self-start">
+                                    <FontAwesome name="question" size={20} color="white" />
+                                    <Text className="text-[#BDBDBD] text-base">Não Definido</Text>
+                                </View>
+                            )}
                         </View>
                         <View className="flex flex-row gap-2 items-center bg-[#1C1C1C] rounded-full px-2 py-1 self-start">
                             <FontAwesome name="star" size={20} color="white" />
-                            <Text className="text-[#BDBDBD] text-base">4,5</Text>
+                            <Text className="text-[#BDBDBD] text-base">{roleStars}</Text>
                         </View>
                         <View className="flex flex-row gap-2 items-center bg-[#1C1C1C] rounded-full px-2 py-1 self-start">
                             <FontAwesome name="question" size={20} color="white" />
-                            <Text className="text-[#BDBDBD] text-base">18-20 anos</Text>
+                            <Text className="text-[#BDBDBD] text-base">{ageRange}</Text>
                         </View>
                     </View>
                     <View className="flex flex-col gap-4 w-1/2 items-end">
-                        {/* {typePartner === 'promoter' || typePartner === 'global' && ( */}
+                        {typePartner === 'PROMOTER_PARTNER' || typePartner === 'GLOBAL_PARTNER' && (
                             <View className="w-36 rounded-xl items-center justify-center flex flex-row">
                                 {confirmedPeople.length <= 3 ? (
                                     confirmedPeople.slice(0, 3).map((person, index) => (
@@ -268,19 +342,19 @@ npm install -g expo-cli
                                     </View>
                                 )}
                             </View>
-                        {/* )} */}
+                        )}
                         <View className="w-36 py-3 bg-[#1C1C1C] rounded-xl items-center">
                             <View className="flex flex-row gap-2">
                                 <FontAwesome name="calendar" size={24} color="white" />
-                                <Text className="text-white text-lg">16 DEZ</Text>
+                                <Text className="text-white text-lg">{date}</Text>
                             </View>
                             <View>
-                                <Text className="text-white text-lg">Sexta-feira</Text>
+                                <Text className="text-white text-lg">{weekDay}</Text>
                             </View>
                         </View>
                         <View className="flex flex-row gap-2 bg-[#1C1C1C] justify-center w-36 py-3 rounded-xl">
                             <FontAwesome name="clock-o" size={24} color="white" />
-                            <Text className="text-white text-lg">22:00</Text>
+                            <Text className="text-white text-lg">{hour}</Text>
                         </View>
                     </View>
                     <ModalListaConfirmados
@@ -305,28 +379,28 @@ npm install -g expo-cli
                     <View className="flex flex-row gap-2 mt-2">
                         <></>
                     </View>
-                    <Text className="text-white text-base">Rua dos Bobos, 0 - São Paulo</Text>
+                    <Text className="text-white text-base">{address}</Text>
                 </View>
                 {/* Features */}
                 <View className="mt-8">
                     <Text className="text-white text-2xl font-bold">Features</Text>
                     <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{marginBottom: 16, marginTop: 8}}>
                         {features.map((type, index) => (
-                            <View key={`viewtype-${type.name}-${index}`} className="mx-2">
+                            <View key={`viewtype-${type}-${index}`} className="mx-2">
                                 <View className="bg-[#1C1C1C] rounded-xl px-2 py-1 flex flex-col gap-2 items-center min-w-32">
-                                    <FontAwesome name={type.name == 'Estacionamento' ? 'question' :
-                                                        type.name == 'Fumódromo' ? 'question' :
-                                                        type.name == 'Valet' ? 'question' :
-                                                        type.name == 'Área Aberta' ? 'question' :
-                                                        type.name == 'Welcome Shot' ? 'question' :
-                                                        type.name == 'Mesas' ? 'question' :
-                                                        type.name == 'Open Bar' ? 'question' :
-                                                        type.name == 'Ao Vivo' ? 'question' :
-                                                        type.name == 'Esquenta' ? 'question' :
-                                                        type.name == 'After' ? 'question' : 'question'
+                                    <FontAwesome name={type == 'ESTACIONAMENTO' ? 'question' :
+                                                        type == 'FUMODROMO' ? 'question' :
+                                                        type == 'VALET' ? 'question' :
+                                                        type == 'AREA_ABERTA' ? 'question' :
+                                                        type == 'WELCOME SHOT' ? 'question' :
+                                                        type == 'MESAS' ? 'question' :
+                                                        type == 'OPEN_BAR' ? 'question' :
+                                                        type == 'A0_VIVO' ? 'question' :
+                                                        type == 'ESQUENTA' ? 'question' :
+                                                        type == 'AFTER' ? 'question' : 'question'
                                     } 
                                     size={20} color="purple" />
-                                    <Text className="text-purple-500 text-base">{type.name}</Text>
+                                    <Text className="text-purple-500 text-base">{type}</Text>
                                 </View>
                             </View>
                         ))}
@@ -335,13 +409,15 @@ npm install -g expo-cli
                 {/* Menu */}
                 <View className="mt-8">
                     <Text className="text-white text-2xl font-bold mb-2">Cardápio</Text>
-                    <TouchableOpacity className="flex flex-row bg-[#1C1C1C] items-center justify-center gap-2 py-2 rounded-lg">
+                    <TouchableOpacity className="flex flex-row bg-[#1C1C1C] items-center justify-center gap-2 py-2 rounded-lg" onPress={() => {
+                        openURL(menuLink)
+                    }}>
                         <Text className="text-[#BDBDBD] text-lg mt-2" style={{lineHeight: 16}}>Acesse o cadápio digital</Text>
                         <FontAwesome name="question" size={24} color="white" />
                     </TouchableOpacity>
                 </View>
                 {/* Packages */}
-                {typePartner === 'global' && (
+                {typePartner === 'GLOBAL_PARTNER' && (
                     <View className="mt-8">
                         <Text className="text-white text-2xl font-bold mb-2">Pacotes</Text>
                         <View className="flex flex-row gap-2">
@@ -405,19 +481,19 @@ npm install -g expo-cli
                     <View>
                         {showAllReviews ? (
                             reviews.map((review, index) => (
-                                <View key={`viewreview-${review.id}-${index}`} className="flex flex-col gap-2 mt-4 bg-[#1C1C1C] p-4 rounded-xl">
+                                <View key={`viewreview-${review['nickname']}-${index}`} className="flex flex-col gap-2 mt-4 bg-[#1C1C1C] p-4 rounded-xl">
                                     <View className="flex flex-row">
                                         <View className="flex flex-row w-3/5 gap-2">
                                             <View className="w-12 h-12 rounded-full flex flex-row">
-                                                <Image source={{ uri: review.imageProfile }} style={{ width: '100%', height: '100%', borderRadius: 9999 }} />
+                                                <Image source={{ uri: review['profilePhoto'] }} style={{ width: '100%', height: '100%', borderRadius: 9999 }} />
                                             </View>
                                             <View className="h-full flex flex-col">
-                                                <Text className="text-white text-lg font-bold" style={{lineHeight: 18}}>{review.userName}</Text>
-                                                <Text className="text-[#BDBDBD] text-sm" style={{lineHeight: 14}}>{review.at}</Text>
+                                                <Text className="text-white text-lg font-bold" style={{lineHeight: 18}}>{review['username']}</Text>
+                                                <Text className="text-[#BDBDBD] text-sm" style={{lineHeight: 14}}>{review['nickname']}</Text>
                                             </View>
                                         </View>
                                         <View className="flex flex-row gap-1 items-start w-2/5 justify-end">
-                                            {Array.from({ length: review.stars ?? 0 }).map((_, i) => (
+                                            {Array.from({ length: review['star'] ?? 0 }).map((_, i) => (
                                                 <Ionicons
                                                     name='star'
                                                     size={16}
@@ -425,7 +501,7 @@ npm install -g expo-cli
                                                     key={i}
                                                 />
                                             ))}
-                                            {Array.from({ length: 5 - (review.stars ?? 0) }).map((_, i) => (
+                                            {Array.from({ length: 5 - (review['star'] ?? 0) }).map((_, i) => (
                                                 <Ionicons
                                                     name='star-outline'
                                                     size={16}
@@ -436,25 +512,25 @@ npm install -g expo-cli
                                         </View>
                                     </View>
                                     <View className="flex flex-col">
-                                        <Text className="text-[#BDBDBD] text-xs text-center">{review.opnion}</Text>
+                                        <Text className="text-[#BDBDBD] text-xs text-center">{review['comment']}</Text>
                                     </View>
                                 </View>
                             ))) 
                         : (
                             reviews.slice(0, 1).map((review, index) => (
-                                <View key={`viewreview-${review.id}-${index}`} className="flex flex-col gap-2 mt-4 bg-[#1C1C1C] p-4 rounded-xl">
+                                <View key={`viewreview-${review['username']}-${index}`} className="flex flex-col gap-2 mt-4 bg-[#1C1C1C] p-4 rounded-xl">
                                     <View className="flex flex-row">
                                         <View className="flex flex-row w-3/5 gap-2">
                                             <View className="w-12 h-12 rounded-full flex flex-row">
-                                                <Image source={{ uri: review.imageProfile }} style={{ width: '100%', height: '100%', borderRadius: 9999 }} />
+                                                <Image source={{ uri: review['profilePhoto'] }} style={{ width: '100%', height: '100%', borderRadius: 9999 }} />
                                             </View>
                                             <View className="h-full flex flex-col">
-                                                <Text className="text-white text-lg font-bold" style={{lineHeight: 18}}>{review.userName}</Text>
-                                                <Text className="text-[#BDBDBD] text-sm" style={{lineHeight: 14}}>{review.at}</Text>
+                                                <Text className="text-white text-lg font-bold" style={{lineHeight: 18}}>{review['username']}</Text>
+                                                <Text className="text-[#BDBDBD] text-sm" style={{lineHeight: 14}}>{review['nickname']}</Text>
                                             </View>
                                         </View>
                                         <View className="flex flex-row gap-1 items-start w-2/5 justify-end">
-                                            {Array.from({ length: review.stars ?? 0 }).map((_, i) => (
+                                            {Array.from({ length: review['star'] ?? 0 }).map((_, i) => (
                                                 <Ionicons
                                                     name='star'
                                                     size={16}
@@ -462,7 +538,7 @@ npm install -g expo-cli
                                                     key={i}
                                                 />
                                             ))}
-                                            {Array.from({ length: 5 - (review.stars ?? 0) }).map((_, i) => (
+                                            {Array.from({ length: 5 - (review['star'] ?? 0) }).map((_, i) => (
                                                 <Ionicons
                                                     name='star-outline'
                                                     size={16}
@@ -473,7 +549,7 @@ npm install -g expo-cli
                                         </View>
                                     </View>
                                     <View className="flex flex-col">
-                                        <Text className="text-[#BDBDBD] text-xs text-center">{review.opnion}</Text>
+                                        <Text className="text-[#BDBDBD] text-xs text-center">{review['comment']}</Text>
                                     </View>
                                 </View>
                             ))
@@ -530,7 +606,7 @@ npm install -g expo-cli
                             elevation: 10,
                         }}
                     >
-                        <Text className="text-center text-white">{typePartner === 'global' ? 'CONFIRMAR ROLE' : typePartner === 'promoter' ? 'POR NOME NA LISTA' : 'EU VOU'}</Text>
+                        <Text className="text-center text-white">{typePartner === 'GLOBAL_PARTNER' ? 'CONFIRMAR ROLE' : typePartner === 'PROMOTER_PARTNER' ? 'POR NOME NA LISTA' : 'EU VOU'}</Text>
                     </LinearGradient>
                 </TouchableOpacity>
             </View>
@@ -547,7 +623,7 @@ npm install -g expo-cli
                         </TouchableOpacity>
                         <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="w-full h-full" onScroll={()=>console.log('ola')}>
                             <View className="w-full h-full bg-white border-2 border-purple-600">
-                                <Image source={{ uri: gallery[selectedImagePosition].image }} className="w-full h-full object-cover" />
+                                <Image source={{ uri: gallery[selectedImagePosition] }} className="w-full h-full object-cover" />
                             </View>
                         </ScrollView>
                         <View className="flex flex-row justify-center mt-2 gap-2">
