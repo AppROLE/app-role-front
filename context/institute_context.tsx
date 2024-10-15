@@ -1,10 +1,10 @@
 import { InstituteRepositoryHttp } from "@/api/repositories/institute_repository_http"
-import { getAllInstituteByIdResponseDTO, getInstituteByPartnerTypeResponseDTO } from "@/api/types/institute_dto"
+import { getAllInstituteByIdResponseDTO, getInstituteByIdResponseDTO, getInstituteByPartnerTypeResponseDTO } from "@/api/types/institute_dto"
 import { createContext, PropsWithChildren } from "react"
 
 type InstituteContextType = { 
     getAll: () => Promise<getAllInstituteByIdResponseDTO>
-    getById: (id: string) => Promise<object>
+    getById: (id: string) => Promise<getInstituteByIdResponseDTO>
     getAllInstitutesByPartnerType: (idToken: string, partnerType: string) => Promise<getInstituteByPartnerTypeResponseDTO>
 }
 
@@ -16,7 +16,20 @@ const defaultInstituteContext = {
         }
     },
     getById: async (_id: string) => {
-        return {}
+        return {
+            addres: '',
+            description: '',
+            district_id: '',
+            events_id: [],
+            institute_id: '',
+            institute_type: '',
+            logo_photo: '',
+            name: '',
+            partner_type: '',
+            phone: '',
+            photos_url: [],
+            price: 0, // Add the missing price property
+        }
     },
     getAllInstitutesByPartnerType: async (_idToken: string, _partnerType: string) => {
         return {
@@ -43,7 +56,7 @@ export function InstituteContextProvider({ children }: PropsWithChildren) {
   async function getById(id: string) { 
     try {
       const response = await instituteRepository.getById(id)
-      return response
+      return response as getInstituteByIdResponseDTO
     } catch (error: any) {
       return error
     }
