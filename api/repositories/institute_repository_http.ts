@@ -1,4 +1,4 @@
-import { http } from "../http"
+import { http, httpEvent } from "../http"
 
 
 export class InstituteRepositoryHttp {
@@ -13,7 +13,7 @@ export class InstituteRepositoryHttp {
 
   async getById(id: string) { 
     try {
-      const response = await http.get(`/institute/${id}`)
+      const response = await httpEvent.get(`/get-institute-by-id?instituteId=${id}`)
       return response.data
     } catch (error: any) {
       return error.response.data
