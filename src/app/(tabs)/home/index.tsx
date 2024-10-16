@@ -12,7 +12,6 @@ import {
   TouchableOpacity,
   Dimensions,
   ScrollView,
-  FlatList
 } from 'react-native'
 import Carousel from 'react-native-reanimated-carousel'
 
