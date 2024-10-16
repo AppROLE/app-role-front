@@ -18,8 +18,6 @@ import Carousel from 'react-native-reanimated-carousel'
 import { UserContext } from '@/context/user_context'
 import { EventContext } from '@/context/event_context'
 import { router } from 'expo-router'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { SearchBar } from 'react-native-screens'
 
 export default function Home() {
   const [scrollDisabled, setScrollDisabled] = useState(false)
@@ -31,6 +29,7 @@ export default function Home() {
   const [rolesLoaded, setRolesLoaded] = useState(20)
   const [search, setSearch] = useState('')
   const [typingTimeout, setTypingTimeout] = useState<any>(null)
+  const [searchResults, setSearchResults] = useState([])
 
   const { getPhrase } = useContext(UserContext)
   const { getAll } = useContext(EventContext)
@@ -183,7 +182,7 @@ export default function Home() {
 
   async function getSearchFilter(filter: string) {
     const response = await getEventsByFilter(filter)
-    console.log(response)
+    setSearchResults(response.events)
   }
 
   const handleChangeText = (text: string) => {
@@ -195,7 +194,7 @@ export default function Home() {
 
     const timeout = setTimeout(() => {
       if (text === '') {
-        getEvents();
+        setSearchResults([]);
         return;
       } else {
         getSearchFilter(text.replace(/ /g, '+'));
@@ -216,6 +215,10 @@ export default function Home() {
   useEffect(() => {
     getBombando()
   }, [])
+
+  useEffect(() => {
+
+  }, [roles])
 
   return (
     <Background text={phrase} scrollable lockScroll={scrollDisabled} function1={loadMoreRoles}>
@@ -273,75 +276,88 @@ export default function Home() {
           </TouchableOpacity>
         </View>
       </View>
-      <View className="flex flex-col gap-4 px-8">
-        <Text className="text-3xl font-bold text-white">Explore</Text>
-        {roles.slice(0, 5).map((role, index) => (
-          <RoleCard key={`id${role.eventId}ind${index}`} {...role} />
-        ))}
-        <View>
-          <Text className="mb-2 mt-3 text-2xl font-bold text-white">Categorias</Text>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={{ marginBottom: 16 }}
-          >
-            {typesRole.map((type, index) => (
-              <View key={`viewtype-${type.name}-${index}`}>
-                <CategoryMusicalCard key={`cardtype-${type.name}-${index}`} {...type} />
-              </View>
-            ))}
-          </ScrollView>
-        </View>
-        {roles.slice(5, 10).map((role, index) => (
-          <RoleCard key={`id${role.idRole}ind${index}`} {...role} />
-        ))}
-        <View>
-          <Text className="mb-2 mt-3 text-2xl font-bold text-white">Gênero Musical</Text>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={{ marginBottom: 16 }}
-          >
-            {musicRole.map((music, index) => (
-              <CategoryMusicalCard key={`music-${music.name}-${index}`} {...music} />
-            ))}
-          </ScrollView>
-        </View>
-        {roles.slice(10, rolesLoaded).map((role, index) => (
-          <RoleCard key={`id${role.idRole}ind${index}`} {...role} />
-        ))}
-        <View className="mt-8 pb-8">
-          <Text className="text-center text-lg text-[#BDBDBD]">Não encontrou o que procurava?</Text>
-          <Text className="text-center text-lg text-[#BDBDBD]">
-            Utilieze os nossos <Text className="font-bold text-white">Filtros!</Text>
-          </Text>
-          <TouchableOpacity className="flex w-full justify-center rounded-2xl py-4">
-            <LinearGradient
-              colors={gradientColors}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }} // Gradiente diagonal suave
-              style={{
-                width: '25%',
-                marginHorizontal: 'auto',
-
-                paddingVertical: 6,
-                paddingHorizontal: 8,
-                borderRadius: 20, // Bordas arredondadas
-                alignItems: 'center',
-
-                shadowColor: 'rgba(156, 78, 220, 1)', // Cor da sombra
-                shadowOffset: { width: 0, height: 7 }, // Deslocamento da sombra
-                shadowOpacity: 1, // Opacidade da sombra
-                shadowRadius: 11, // Raio de desfoque
-                elevation: 10
-              }}
-            >
-              <Text className="text-lg text-white">Filtrar</Text>
-            </LinearGradient>
-          </TouchableOpacity>
-          {loadLock && <View className="flex h-1 w-full justify-center bg-transparent"></View>}
-        </View>
+      { searchResults == undefined ?
+      <View>
+        <Text className="text-lg text-center font-bold text-purple-500">Nehum <Text className='font-bold'>ROLE</Text> encontrado</Text>
       </View>
+      :
+      searchResults.length > 0 ? 
+        <View className="flex flex-col gap-4 px-8">
+          {searchResults.map((role, index) => (
+            <RoleCard key={`id${role.idRole}ind${index}`} {...role} />
+          ))}
+        </View>
+        :
+        <View className="flex flex-col gap-4 px-8">
+          <Text className="text-3xl font-bold text-white">Explore</Text>
+          {roles.slice(0, 5).map((role, index) => (
+            <RoleCard key={`id${role.eventId}ind${index}`} {...role} />
+          ))}
+          <View>
+            <Text className="mb-2 mt-3 text-2xl font-bold text-white">Categorias</Text>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={{ marginBottom: 16 }}
+            >
+              {typesRole.map((type, index) => (
+                <View key={`viewtype-${type.name}-${index}`}>
+                  <CategoryMusicalCard key={`cardtype-${type.name}-${index}`} {...type} />
+                </View>
+              ))}
+            </ScrollView>
+          </View>
+          {roles.slice(5, 10).map((role, index) => (
+            <RoleCard key={`id${role.idRole}ind${index}`} {...role} />
+          ))}
+          <View>
+            <Text className="mb-2 mt-3 text-2xl font-bold text-white">Gênero Musical</Text>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={{ marginBottom: 16 }}
+            >
+              {musicRole.map((music, index) => (
+                <CategoryMusicalCard key={`music-${music.name}-${index}`} {...music} />
+              ))}
+            </ScrollView>
+          </View>
+          {roles.slice(10, rolesLoaded).map((role, index) => (
+            <RoleCard key={`id${role.idRole}ind${index}`} {...role} />
+          ))}
+          <View className="mt-8 pb-8">
+            <Text className="text-center text-lg text-[#BDBDBD]">Não encontrou o que procurava?</Text>
+            <Text className="text-center text-lg text-[#BDBDBD]">
+              Utilieze os nossos <Text className="font-bold text-white">Filtros!</Text>
+            </Text>
+            <TouchableOpacity className="flex w-full justify-center rounded-2xl py-4">
+              <LinearGradient
+                colors={gradientColors}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }} // Gradiente diagonal suave
+                style={{
+                  width: '25%',
+                  marginHorizontal: 'auto',
+
+                  paddingVertical: 6,
+                  paddingHorizontal: 8,
+                  borderRadius: 20, // Bordas arredondadas
+                  alignItems: 'center',
+
+                  shadowColor: 'rgba(156, 78, 220, 1)', // Cor da sombra
+                  shadowOffset: { width: 0, height: 7 }, // Deslocamento da sombra
+                  shadowOpacity: 1, // Opacidade da sombra
+                  shadowRadius: 11, // Raio de desfoque
+                  elevation: 10
+                }}
+              >
+                <Text className="text-lg text-white">Filtrar</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+            {loadLock && <View className="flex h-1 w-full justify-center bg-transparent"></View>}
+          </View>
+        </View>
+      }
     </Background>
   )
 }
