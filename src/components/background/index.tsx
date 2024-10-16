@@ -4,7 +4,7 @@ import Constants from 'expo-constants';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFocusEffect } from 'expo-router';
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Animated, Image, Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import { Animated, Image, Text, View, ScrollView, TouchableOpacity, Platform } from 'react-native';
 
 const statusBarHeight = Constants.statusBarHeight;
 
@@ -116,12 +116,22 @@ export default function Background({ children, text, scrollable, themeMode, lock
     const scrollPosition = event.nativeEvent.contentOffset.y;
     const containerHeight = event.nativeEvent.layoutMeasurement.height;
 
-    if (scrollPosition + containerHeight >= contentHeight - 4) {
-      console.log('Chegou ao final');
-      function1 && function1();
-      // return true;
-    } else {
-      // console.log('Não chegou ao final');
+    if (Platform.OS === 'android') {
+      if (scrollPosition + containerHeight >= contentHeight - 4) {
+        console.log('Chegou ao final Android');
+        function1 && function1();
+        // return true;
+      } else {
+        // console.log('Não chegou ao final');
+      }
+    } else if (Platform.OS === 'ios') {
+      if (scrollPosition + containerHeight == contentHeight) {
+        console.log('Chegou ao final IOS');
+        function1 && function1();
+        // return true;
+      } else {
+        // console.log('Não chegou ao final');
+      }
     }
   }
 
