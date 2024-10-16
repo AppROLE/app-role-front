@@ -163,7 +163,7 @@ export default function Home() {
 
   async function getEvents() {
     const response = await getAll()
-    console.log(response)
+    // console.log(response)
     setRoles(response.events)
   }
 
