@@ -28,11 +28,6 @@ interface Event {
     ticketUrl: string
 }
 
-interface Bombando {
-    date: string,
-    event: Array<>,
-}
-
 export type getEventByIdResponseDTO = {
     eventId: string;
     name: string;
@@ -61,10 +56,5 @@ export type getReviewsEventByIdResponseDTO = {
 
 export type	getAllEventsResponseDTO = {
     events: Array<Event>
-    message: string
-}
-
-export type getRoleBombandoResponseDTO = {
-    data: Array<Bombando>
     message: string
 }
