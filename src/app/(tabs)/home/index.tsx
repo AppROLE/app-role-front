@@ -17,196 +17,19 @@ import {
 import Carousel from 'react-native-reanimated-carousel'
 
 import { UserContext } from '@/context/user_context'
+import { EventContext } from '@/context/event_context'
 
 export default function Home() {
   const [scrollDisabled, setScrollDisabled] = useState(false)
   const [disabledB, setDisabled] = useState(false)
-  const [roles, setRoles] = useState([
-    {
-      idRole: '1',
-      data: '16 DEZ',
-      image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png',
-      title: 'São Conrado',
-      type: 'Bar',
-      stars: 4.5,
-      local: 'Itaim'
-    },
-    {
-      idRole: '2',
-      data: '17 DEZ',
-      image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png',
-      title: 'São Conrado',
-      type: 'Bar',
-      stars: 4.5,
-      local: 'Itaim'
-    },
-    {
-      idRole: '3',
-      data: '18 DEZ',
-      image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png',
-      title: 'São Conrado',
-      type: 'Bar',
-      stars: 4.5,
-      local: 'Itaim'
-    },
-    {
-      idRole: '4',
-      data: '19 DEZ',
-      image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png',
-      title: 'São Conrado',
-      type: 'Bar',
-      stars: 4.5,
-      local: 'Itaim'
-    },
-    {
-      idRole: '5',
-      data: '20 DEZ',
-      image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png',
-      title: 'São Conrado',
-      type: 'Bar',
-      stars: 4.5,
-      local: 'Itaim'
-    },
-    {
-      idRole: '6',
-      data: '16 DEZ',
-      image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png',
-      title: 'São Conrado',
-      type: 'Bar',
-      stars: 4.5,
-      local: 'Itaim'
-    },
-    {
-      idRole: '7',
-      data: '17 DEZ',
-      image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png',
-      title: 'São Conrado',
-      type: 'Bar',
-      stars: 4.5,
-      local: 'Itaim'
-    },
-    {
-      idRole: '8',
-      data: '18 DEZ',
-      image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png',
-      title: 'São Conrado',
-      type: 'Bar',
-      stars: 4.5,
-      local: 'Itaim'
-    },
-    {
-      idRole: '9',
-      data: '19 DEZ',
-      image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png',
-      title: 'São Conrado',
-      type: 'Bar',
-      stars: 4.5,
-      local: 'Itaim'
-    },
-    {
-      idRole: '10',
-      data: '20 DEZ',
-      image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png',
-      title: 'São Conrado',
-      type: 'Bar',
-      stars: 4.5,
-      local: 'Itaim'
-    },
-    {
-      idRole: '11',
-      data: '16 DEZ',
-      image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png',
-      title: 'São Conrado',
-      type: 'Bar',
-      stars: 4.5,
-      local: 'Itaim'
-    },
-    {
-      idRole: '12',
-      data: '17 DEZ',
-      image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png',
-      title: 'São Conrado',
-      type: 'Bar',
-      stars: 4.5,
-      local: 'Itaim'
-    },
-    {
-      idRole: '13',
-      data: '18 DEZ',
-      image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png',
-      title: 'São Conrado',
-      type: 'Bar',
-      stars: 4.5,
-      local: 'Itaim'
-    },
-    {
-      idRole: '14',
-      data: '19 DEZ',
-      image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png',
-      title: 'São Conrado',
-      type: 'Bar',
-      stars: 4.5,
-      local: 'Itaim'
-    },
-    {
-      idRole: '15',
-      data: '20 DEZ',
-      image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png',
-      title: 'São Conrado',
-      type: 'Bar',
-      stars: 4.5,
-      local: 'Itaim'
-    },
-    {
-      idRole: '16',
-      data: '16 DEZ',
-      image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png',
-      title: 'São Conrado',
-      type: 'Bar',
-      stars: 4.5,
-      local: 'Itaim'
-    },
-    {
-      idRole: '17',
-      data: '17 DEZ',
-      image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png',
-      title: 'São Conrado',
-      type: 'Bar',
-      stars: 4.5,
-      local: 'Itaim'
-    },
-    {
-      idRole: '18',
-      data: '18 DEZ',
-      image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png',
-      title: 'São Conrado',
-      type: 'Bar',
-      stars: 4.5,
-      local: 'Itaim'
-    },
-    {
-      idRole: '19',
-      data: '19 DEZ',
-      image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png',
-      title: 'São Conrado',
-      type: 'Bar',
-      stars: 4.5,
-      local: 'Itaim'
-    },
-    {
-      idRole: '20',
-      data: '20 DEZ',
-      image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_card_teste.png',
-      title: 'São Conrado',
-      type: 'Bar',
-      stars: 4.5,
-      local: 'Itaim'
-    }
-  ])
+  const [roles, setRoles] = useState([])
   const [activeSlide, setActiveSlide] = useState(0)
   const [loadLock, setLoadLock] = useState(false)
-  const { getPhrase } = useContext(UserContext)
   const [phrase, setPhrase] = useState('')
+  const [rolesLoaded, setRolesLoaded] = useState(20)
+
+  const { getPhrase } = useContext(UserContext)
+  const { getAll } = useContext(EventContext)
 
   const [typesRole, setTypesRole] = useState([
     {
@@ -323,8 +146,10 @@ export default function Home() {
   function loadMoreRoles() {
     setLoadLock(!loadLock)
     if (loadLock) {
-      setRoles([...roles, ...roles])
-      console.log(roles.length)
+      if (rolesLoaded >= roles.length) {
+        return
+      }
+      setRolesLoaded(rolesLoaded + 10)
       setLoadLock(false)
     } else {
       setLoadLock(true)
@@ -336,8 +161,18 @@ export default function Home() {
     setPhrase(response.phrase)
   }
 
+  async function getEvents() {
+    const response = await getAll()
+    console.log(response)
+    setRoles(response.events)
+  }
+
   useEffect(() => {
     getThePhrase()
+  }, [])
+
+  useEffect(() => {
+    getEvents()
   }, [])
 
   return (
@@ -394,7 +229,7 @@ export default function Home() {
       <View className="flex flex-col gap-4 px-12">
         <Text className="text-3xl font-bold text-white">Explore</Text>
         {roles.slice(0, 5).map((role, index) => (
-          <RoleCard key={`id${role.idRole}ind${index}`} {...role} />
+          <RoleCard key={`id${role.eventId}ind${index}`} {...role} />
         ))}
         <View>
           <Text className="mb-2 mt-3 text-2xl font-bold text-white">Categorias</Text>
@@ -425,7 +260,7 @@ export default function Home() {
             ))}
           </ScrollView>
         </View>
-        {roles.slice(10).map((role, index) => (
+        {roles.slice(10, rolesLoaded).map((role, index) => (
           <RoleCard key={`id${role.idRole}ind${index}`} {...role} />
         ))}
         <View className="mt-8 pb-8">
