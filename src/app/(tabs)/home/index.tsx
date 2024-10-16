@@ -17,6 +17,7 @@ import Carousel from 'react-native-reanimated-carousel'
 
 import { UserContext } from '@/context/user_context'
 import { EventContext } from '@/context/event_context'
+import { router } from 'expo-router'
 
 export default function Home() {
   const [scrollDisabled, setScrollDisabled] = useState(false)
@@ -235,7 +236,9 @@ export default function Home() {
               placeholderTextColor={'#BEBEBE'}
             />
           </View>
-          <TouchableOpacity className="w-[10%] flex items-end">
+          <TouchableOpacity className="w-[10%] flex items-end"
+            onPress={() => router.push('/searching-filters')}
+          >
             <FontAwesome6 name="bars" size={24} color="#BEBEBE" solid />
           </TouchableOpacity>
         </View>
