@@ -6,7 +6,7 @@ export default function RoleEmphasis() {
 
     return (
         <>
-            <View className={`w-full bg-blue-500`} style={{height: height*0.18, borderRadius: 24}} >
+            <View className={`w-full bg-blue-500`} style={{height: height*0.21, borderRadius: 24}} >
                 <View className="absolute top-2 left-2 z-10 bg-[#121212]/70 px-2 py-1 rounded-lg">
                     <Text className="text-white text-base">16 DEZ</Text>
                 </View>
