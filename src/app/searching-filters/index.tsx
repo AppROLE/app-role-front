@@ -2,7 +2,6 @@ import Background from '@/src/components/background'
 import RoleMainButton from '@/src/components/roleMainButton'
 import SearchingBarInput from '@/src/components/searchingBarInput'
 import AnimatedOption from '@/src/components/selectedCard'
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import { useRouter } from 'expo-router'
 import React, { useState } from 'react'
 import {
@@ -10,10 +9,9 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  Platform
 } from 'react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
-import SvgUri from 'react-native-svg'
+import Svg from '@/src/components/svg'
 
 interface Filter {
   icon: string
@@ -24,7 +22,7 @@ interface Filter {
 
 const initialFilters = [
   {
-    icon: 'location-dot',
+    icon: 'gps',
     title: 'Região',
     options: [
       { label: 'Zona Sul', value: 'south' },
@@ -52,7 +50,7 @@ const initialFilters = [
     selected: []
   },
   {
-    icon: 'music',
+    icon: 'musical_note',
     title: 'Gênero Musical',
     options: [
       { label: 'Funk', value: 'funk' },
@@ -70,7 +68,7 @@ const initialFilters = [
     selected: []
   },
   {
-    icon: 'sack-dollar',
+    icon: 'money',
     title: 'Preço',
     options: [
       { label: '$', value: 'free' },
@@ -82,7 +80,7 @@ const initialFilters = [
     selected: '[]'
   },
   {
-    icon: 'user-shield',
+    icon: 'eighteen',
     title: 'Idade',
     options: [
       { label: '18-20', value: '18-20' },
@@ -94,7 +92,7 @@ const initialFilters = [
     selected: []
   },
   {
-    icon: 'star',
+    icon: 'star_empty',
     title: 'Avaliação',
     options: [
       { label: 'Mais Altas', value: 'greatest' },
@@ -104,7 +102,7 @@ const initialFilters = [
     selected: null
   },
   {
-    icon: 'diamond',
+    icon: 'rhombus',
     title: 'Features',
     options: [
       { label: 'Open Bar', value: 'open-bar' },
@@ -121,7 +119,7 @@ const initialFilters = [
     selected: []
   },
   {
-    icon: 'user',
+    icon: 'user_icon',
     title: 'Amigos',
     options: [{ label: 'Apenas Amigos', value: 'only-friends' }],
     selected: []
@@ -208,7 +206,9 @@ export default function SearchingFilters() {
             onPress={() => handleVoltar()}
             className="ml-5 flex h-12 w-12 items-center justify-center rounded-full bg-[#1C1C1C]"
           >
-            <FontAwesome6 name="arrow-left" size={18} color="white" />
+            <Svg
+                uri={process.env.EXPO_PUBLIC_URL_S3 + '/left_arrow.svg'}
+            />
           </TouchableOpacity>
           <SearchingBarInput search={search} setSearch={setSearch} />
         </View>
@@ -219,9 +219,12 @@ export default function SearchingFilters() {
             >
               <View className="flex flex-row">
                 <View className="ml-4 mt-4">
-                  <FontAwesome6 name="calendar" size={20} color="white" />
+                  <Svg
+                      uri={process.env.EXPO_PUBLIC_URL_S3 + '/calendar.svg'}
+
+                  />
                 </View>
-                <Text className="ml-2 mt-4 text-lg text-white font-sans">Data</Text>
+                <Text className="ml-2 mt-4 text-lg text-white font-nunito">Data</Text>
               </View>
               <View className="mx-2 mt-2 flex flex-row flex-wrap">
                 <AnimatedOption
@@ -238,9 +241,9 @@ export default function SearchingFilters() {
               >
                 <View className="flex flex-row">
                   <View className="ml-4 mt-4">
-                    <FontAwesome6 name={filter.icon} size={20} color="white" />
+                    <Svg uri={process.env.EXPO_PUBLIC_URL_S3 + "/" + filter.icon + ".svg"} color="white"/>
                   </View>
-                  <Text className="ml-2 mt-4 text-lg text-white font-sans">
+                  <Text className="ml-2 mt-4 text-lg text-white font-nunito">
                     {filter.title}
                   </Text>
                 </View>
@@ -253,7 +256,7 @@ export default function SearchingFilters() {
                           filter.title === 'Avaliação'
                             ? filter.selected === optionIndex
                             : Array.isArray(filter.selected) &&
-                              filter.selected.includes(optionIndex)
+                            filter.selected.includes(optionIndex)
                         }
                         onPress={() => handleOptionSelect(index, optionIndex)}
                       />
@@ -264,16 +267,18 @@ export default function SearchingFilters() {
             ))}
           </ScrollView>
         </View>
-        <View className="fixed bottom-0 z-40 flex h-[16%] w-full flex-row items-center justify-evenly border-t-2 border-t-[#2C2B2B] bg-background pb-6">
-          <View className="flex w-[40%]">
-            <RoleMainButton type="simple" buttonFunction={handleClearFilters}>
-              <Text className="text-white font-sans">Limpar Filtros</Text>
-            </RoleMainButton>
-          </View>
-          <View className="flex w-[40%]">
-            <RoleMainButton type="gradient">
-              <Text className="text-white font-sans">Pesquisar</Text>
-            </RoleMainButton>
+        <View className="flex w-full h-[20%] py-4 border-t-2 border-t-[#2C2B2B] bg-background">
+          <View className="flex flex-row justify-evenly items-center">
+            <View className="w-[40%]">
+              <RoleMainButton type="simple" buttonFunction={handleClearFilters}>
+                <Text className="text-white text-center font-nunito">Limpar Filtros</Text>
+              </RoleMainButton>
+            </View>
+            <View className="w-[40%]">
+              <RoleMainButton type="gradient">
+                <Text className="text-white text-center font-nunito">Pesquisar</Text>
+              </RoleMainButton>
+            </View>
           </View>
         </View>
 

@@ -35,21 +35,22 @@ export default function FirstPage() {
     }, []);
 
     const renderItem = ({ item }: { item: any }) => (
-        <View style={{ width: width, height: 600, justifyContent: 'center', alignItems: 'center', padding: 10}}>
+        <View style={{ width: width, height: 500, justifyContent: 'center', alignItems: 'center', padding: 10}}>
             <Image
                 source={item}
                 style={{ width: width, height: 600 }}
                 resizeMode="cover"
             />
             <LinearGradient 
-                colors={['rgba(179, 115, 235, 0)', 'rgba(29, 25, 33, 0)', 'rgba(18, 18, 18, 1)']}
-                style={{
-                    position: 'absolute',
-                    width: width,
-                    height: 600,
-                    bottom: 0,
-                }}
-            />
+    colors={['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.7)', 'rgba(18, 18, 18, 1)']}
+    style={{
+        position: 'absolute',
+        width: width,
+        height:500,
+        bottom: 0,
+    }}
+/>
+
         </View>
     );
 
@@ -78,7 +79,7 @@ export default function FirstPage() {
             <Image
                  style={{
                     position: 'absolute',
-                    top: 68,
+                    top: 50,
                     left: 32,
                     width: 140, 
                     height: 70 
@@ -99,17 +100,17 @@ export default function FirstPage() {
                     />
                 ))}
             </View>
-            <View className="items-center pb-20 ">
-                <Text className="text-white font-sans text-xl">Suas melhores histórias começam aqui.</Text>
-                <Text className="text-white text-xl font-sans mt-2">Bora dar um <Text className="font-sansBold text-white text-xl ">ROLE</Text>?</Text>
+            <View className="items-center pb-20">
+                <Text adjustsFontSizeToFit numberOfLines={1} className="text-white font-nunito text-xl">Suas melhores histórias começam aqui.</Text>
+                <Text adjustsFontSizeToFit numberOfLines={1} className="text-white text-xl font-nunito mt-2">Bora dar um <Text className="font-nunitoBold text-white text-xl ">ROLE</Text>?</Text>
                 
                 <View className="w-[80%] mt-8">
                     <RoleMainButton type="gradient" buttonFunction={() => handlePress(router)}>
-                        <Text className="text-white font-sans text-base">Cadastre-se</Text>
+                        <Text className="text-white font-nunito text-base">Cadastre-se</Text>
                     </RoleMainButton> 
                 </View> 
                 <View className="mt-16">
-                    <Text className="text-[#BDBDBD] font-sans">Já possui uma conta?  <Link href={'/sign-in'} className="text-[#D8A9FF] font-sans">Entrar</Link></Text>
+                    <Text className="text-[#BDBDBD] font-nunito">Já possui uma conta?  <Link href={'/sign-in'} className="text-[#D8A9FF] font-nunito">Entrar</Link></Text>
                 </View>
             </View>
         </View>

@@ -4,7 +4,7 @@ import RoleMainButton from '@/src/components/roleMainButton'
 import * as ImagePicker from 'expo-image-picker'
 import { FontAwesome6 } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import {
   TouchableOpacity,
   View,
@@ -14,6 +14,8 @@ import {
   StyleSheet,
   TextInput
 } from 'react-native'
+import { AuthContext } from '@/context/auth_context'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function EditingPerfil() {
   const navigation = useRouter()
@@ -98,6 +100,29 @@ export default function EditingPerfil() {
     navigation.back()
   }
 
+
+  const { updateProfile } = useContext(AuthContext)
+
+  async function fetchUpdateProfile() {
+    const data = {
+      username: (await AsyncStorage.getItem('username')) ?? '',
+      nickname: (await AsyncStorage.getItem('nickname')) ?? '',
+      biography: (await AsyncStorage.getItem('biography')) ?? '',
+      instagramLink: (await AsyncStorage.getItem('instagramLink')) ?? '',
+      tiktokLink: (await AsyncStorage.getItem('tiktokLink')) ?? '',
+    }
+
+    try {
+      const response = await updateProfile(data)
+      if (response) {
+        console.log('RESPOSTA DO UPDATE PROFILE', response)
+      }
+      return response
+    } catch (error: any) {
+      console.error("Erro ao atualizar perfil")
+  }
+}
+
   return (
     <Background>
       <View className="relative w-full flex-1">
@@ -111,7 +136,7 @@ export default function EditingPerfil() {
             </TouchableOpacity>
           </View>
           <View className="flex h-[300%] w-[100%] items-center">
-            <Text className="flex h-[300%] items-center text-3xl text-white font-sansBold">
+            <Text className="flex h-[300%] items-center text-3xl text-white font-nunitoBold">
               Editar Perfil
             </Text>
           </View>
@@ -119,7 +144,7 @@ export default function EditingPerfil() {
         <View className="flex-1">
           <ScrollView className="flex-1">
             <View className="gap-5 border-b-2 border-b-[#1C1C1C] p-8 pl-10">
-              <Text className="text-2xl text-white font-sansBold">Foto de perfil</Text>
+              <Text className="text-2xl text-white font-nunitoBold">Foto de perfil</Text>
               <View className="flex flex-row items-center gap-8">
                 <View className="flex h-24 w-24 items-center justify-center rounded-full bg-[#1C1C1C]">
                   {profileImage ? (
@@ -146,7 +171,7 @@ export default function EditingPerfil() {
               </View>
             </View>
             <View className="gap-5 border-b-2 border-b-[#1C1C1C] p-8 pl-10">
-              <Text className="text-2xl text-white font-sansBold">Banner</Text>
+              <Text className="text-2xl text-white font-nunitoBold">Banner</Text>
               <View className="flex flex-row items-center gap-8">
                 <View className="flex h-24 w-48 items-center justify-center bg-[#1c1c1c]">
                   {banner ? (
@@ -172,7 +197,7 @@ export default function EditingPerfil() {
               </View>
             </View>
             <View className="gap-5 border-b-2 border-b-[#1C1C1C] p-8 pl-10">
-              <Text className="text-2xl text-white font-sansBold">Usuário</Text>
+              <Text className="text-2xl text-white font-nunitoBold">Usuário</Text>
               <View className="flex flex-row items-center gap-8">
                 <View className="flex w-full flex-row items-baseline gap-2 border-b-[1px] border-[#BDBDBD] pb-1">
                   <TextInput
@@ -186,7 +211,7 @@ export default function EditingPerfil() {
               </View>
             </View>
             <View className="gap-5 border-b-2 border-b-[#1C1C1C] p-8 pl-10">
-              <Text className="text-2xl text-white font-sansBold">Apelido</Text>
+              <Text className="text-2xl text-white font-nunitoBold">Apelido</Text>
               <View className="flex flex-row items-center gap-8">
                 <View className="flex w-full flex-row items-baseline gap-2 border-b-[1px] border-[#BDBDBD] pb-1">
                   <TextInput
@@ -200,7 +225,7 @@ export default function EditingPerfil() {
               </View>
             </View>
             <View className="gap-5 border-b-2 border-b-[#1C1C1C] p-8 pl-10">
-              <Text className="text-2xl text-white font-sansBold">Biografia</Text>
+              <Text className="text-2xl text-white font-nunitoBold">Biografia</Text>
               <View className="flex flex-row items-center gap-8">
                 <View className="flex flex-col">
                   <View className="flex h-20 w-full flex-row items-baseline gap-2 rounded-lg border-[2px] p-2 border-[#1c1c1c] pb-1">
@@ -219,7 +244,7 @@ export default function EditingPerfil() {
               </View>
             </View>
             <View className="gap-5 p-8 pl-10">
-              <Text className="text-2xl text-white font-sansBold">Contas vinculadas</Text>
+              <Text className="text-2xl text-white font-nunitoBold">Contas vinculadas</Text>
               <View className="flex flex-row items-center gap-4">
                 <View className="flex h-12 w-12 items-center justify-center rounded-md bg-[#1C1C1C]">
                   <FontAwesome6 name="instagram" size={18} color="white" />
@@ -249,8 +274,8 @@ export default function EditingPerfil() {
         </View>
         <View className="fixed bottom-0 z-40 flex h-[16%] w-full flex-row items-center justify-evenly border-t-2 border-t-[#2C2B2B] bg-background pb-6">
           <View className="flex w-[85%]">
-            <RoleMainButton type="gradient">
-              <Text className="text-white font-sans">Salvar</Text>
+            <RoleMainButton type="gradient" buttonFunction={fetchUpdateProfile}>
+              <Text className="text-white font-nunito">Salvar</Text>
             </RoleMainButton>
           </View>
         </View>

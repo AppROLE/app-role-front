@@ -1,8 +1,9 @@
-import { http } from "../http"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import { http, httpEvent } from "../http"
 
 
 export class InstituteRepositoryHttp {
-  async getAll() { 
+  async getAll() {
     try {
       const response = await http.get('/get-all-institutes')
       return response.data
@@ -11,24 +12,59 @@ export class InstituteRepositoryHttp {
     }
   }
 
-  async getById(id: string) { 
+  async getInstituteById(instituteId: string) {
     try {
-      const response = await http.get(`/institute/${id}`)
+      const idToken = await AsyncStorage.getItem('idToken') || ''
+      if (idToken === '') return
+      const response = await http.get(`/get-institute-by-id?instituteId=${instituteId}`, {
+        headers: {
+          Authorization: `Bearer ${idToken}`
+        }
+      })
       return response.data
     } catch (error: any) {
       return error.response.data
     }
   }
 
-  async getAllInstitutesByPartnerType(idToken: string) { 
-    try { 
-      const response = await http.get('/get-institute-by-partnertype', {
+  async getAllInstitutesByPartnerType(idToken: string, partnerType: string) {
+    try {
+      const response = await httpEvent.get(`/get-all-institutes-by-partner-type?partnerType=${partnerType}`, {
         headers: {
-          Authorization: `Bearer ${idToken}` 
+          Authorization: `Bearer ${idToken}`,
         }
       });
       return response.data
-    } catch (error: any) { 
+    } catch (error: any) {
+      return error.response.data
+    }
+  }
+
+  async getAllFavoritesInstitutes(idToken: string) {
+    try {
+      const response = await httpEvent.get(`/get-all-favorites-institutes`, {
+        headers: {
+          Authorization: `Bearer ${idToken}`,
+        }
+      });
+      return response.data
+    } catch (error: any) {
+      return error.response.data
+    }
+  }
+
+
+  async updateFavoriteInstitute(instituteId: string) {
+    try {
+      const idToken = await AsyncStorage.getItem('idToken') || ''
+      if (idToken === '') return
+      const response = await httpEvent.post(`/update-favorite-institute?instituteId=${instituteId}`, {
+        headers: {
+          Authorization: `Bearer ${idToken}`
+        }
+      });
+      return response.data
+    } catch (error: any) {
       return error.response.data
     }
   }

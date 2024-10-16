@@ -1,0 +1,5 @@
+export enum PACKAGE_TYPE {
+    COMBO = "COMBO",
+    ANIVERSARIO = "ANIVERSARIO",
+    CAMAROTE = "CAMAROTE",
+  }

@@ -1,7 +1,9 @@
 import {
   confirmCodeResponseDTO, signUpRequestDTO, finishSignUpRequestDTO, finishSignUpResponseDTO,
   signInRequestDTO, signInResponseDTO, confirmForgotPasswordResponseDTO, forgotPasswordResponseDTO,
-  confirmForgotPasswordRequestDTO, getFriendsResponseDTO, deleteAccountResponseDTO,
+  confirmForgotPasswordRequestDTO, deleteAccountResponseDTO,
+  updateProfileRequestDTO,
+  updateProfileResponseDTO,
 } from '@/api/types/auth_dto'
 import { createContext, PropsWithChildren } from 'react'
 import { AuthRepositoryHttp } from '@/api/repositories/auth_repository_http'
@@ -17,8 +19,8 @@ type AuthContextType = {
   finishSignUp: (data: finishSignUpRequestDTO) => Promise<finishSignUpResponseDTO>
   uploadImageProfile: (formData: FormData) => Promise<object>
   confirmCode: (email: string, code: string) => Promise<confirmCodeResponseDTO>
-  getFriends: () => Promise<getFriendsResponseDTO>
   deleteAccount: () => Promise<deleteAccountResponseDTO>
+  updateProfile: (data: updateProfileRequestDTO) => Promise<updateProfileResponseDTO>
 
 }
 
@@ -61,12 +63,12 @@ const defaultAuthContext = {
       message: ''
     }
   },
-  getFriends: async () => {
+  deleteAccount: async () => {
     return {
-      friends: [],
+      message: ''
     }
   },
-  deleteAccount: async () => {
+  updateProfile: async (_data: updateProfileRequestDTO) => {
     return {
       message: ''
     }
@@ -122,7 +124,6 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
       const response = await authRepository.finishSignUp(data)
       console.log("RESPOSTA DA REQ FINISH SIGN UP CONTEXT ", response);
       await AsyncStorage.removeItem('email');
-      await AsyncStorage.removeItem('password');
       return response
     } catch (error: any) {
       return error
@@ -171,15 +172,6 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
     }
   }
 
-  async function getFriends() {
-    try {
-      const response = await authRepository.getFriends();
-      return response;
-    } catch (error: any) {
-      return error
-    }
-  }
-
   async function deleteAccount() {
     try {
       const response = await authRepository.deleteAccount();
@@ -190,9 +182,18 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
     }
   }
 
+  async function updateProfile(data: updateProfileRequestDTO) { 
+    try {
+      const response = await authRepository.updateProfile(data)
+      return response
+    } catch (error: any) {
+      return error
+    }
+  }
+
   return (
 
-    <AuthContext.Provider value={{ signIn, signUp, forgotPassword, confirmCode, finishSignUp, uploadImageProfile, confirmForgotPassword, resendCode, getFriends, deleteAccount }}>
+    <AuthContext.Provider value={{ signIn, signUp, forgotPassword, confirmCode, finishSignUp, uploadImageProfile, confirmForgotPassword, resendCode, deleteAccount, updateProfile }}>
 
       {children}
     </AuthContext.Provider>

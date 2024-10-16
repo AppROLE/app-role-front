@@ -17,10 +17,11 @@ module.exports = {
         button_color: '#1C1C1C',
         line_gray: '#2C2B2B',
         sub_text: '#8E8E8E',
+        sub_title: '#BDBDBD',
       },
       fontFamily: {
-        sans: ['Nunito', 'sans-serif'],
-        sansBold: ['NunitoBold', 'sans-serif']
+        nunito: ['Nunito', 'nunito-serif'],
+        nunitoBold: ['NunitoBold', 'nunito-serif']
       },
       screens: {
         'big-cellphone': '1px'

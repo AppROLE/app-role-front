@@ -70,19 +70,19 @@ export type confirmCodeResponseDTO = {
   message: string
 }
 
-
-export type Friends = {
-  user_id: string;
-  username: string;
-  profilePhoto: string;
-  nickname: string;
-}
-
-export type getFriendsResponseDTO = { 
-  friends: Friends[]; 
-}
-
 export type deleteAccountResponseDTO = {
   message: string
 }
 
+export type updateProfileRequestDTO = { 
+  username?: string,
+  nickname?: string,
+  biography?: string
+  instagramLink?: string
+  tiktokLink?: string
+}
+
+
+export type updateProfileResponseDTO = {
+  message: string
+}

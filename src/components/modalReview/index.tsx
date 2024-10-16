@@ -2,13 +2,15 @@ import { Ionicons } from "@expo/vector-icons";
 import { useContext, useState } from "react";
 import { Keyboard, KeyboardAvoidingView, Modal, Platform, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import RoleMainButton from "../roleMainButton";
-import Toast from "react-native-toast-message";
 import { createReviewRequestDTO, createReviewResponseDTO } from "@/api/types/review_dto";
 import { ReviewContext } from "@/context/review_context";
+
 
 interface ModalReviewProps {
     visible: boolean;
     onClose: () => void;
+    // eventId: string;
+    // instituteId: string;
 }
 
 export default function ModalReview({ visible, onClose }: ModalReviewProps) {
@@ -18,10 +20,15 @@ export default function ModalReview({ visible, onClose }: ModalReviewProps) {
     const maxChars = 250;
     const { createReview } = useContext(ReviewContext);
 
+    const clearFields = () => {
+        setSelectedStars(0);
+        setReviewText("");
+    };
 
     async function create() {
         const data: createReviewRequestDTO = {
-            instituteId: '0368ec3a-d1da-4fc1-80cf-92d6416be8ad',
+            eventId: "d942a349-f74a-4d94-b591-ffb1fd143ad8",
+            instituteId: '15da4d9c-8b98-459c-8d02-14f644ad34f8',
             reviewedAt: new Date().getTime(),
             star: selectedStars,
             review: reviewText
@@ -38,21 +45,11 @@ export default function ModalReview({ visible, onClose }: ModalReviewProps) {
 
         try {
             const response: createReviewResponseDTO = await createReview(data);
-            Toast.show({
-                type: 'success',
-                text1: 'Sucesso',
-                text2: response.message || 'Feedback criado com sucesso!',
-                visibilityTime: 3000,
-                topOffset: 0,
-            });
+            console.log("RESPOSTA DO CREATE REVIEW", response)
+            clearFields();
+            onClose();
         } catch (error: any) {
-            Toast.show({
-                type: 'error',
-                text1: 'Erro',
-                text2: error.message || 'Ocorreu um erro ao criar o feedback.',
-                visibilityTime: 3000,
-                topOffset: 0
-            })
+            throw new Error(error)
         }
     }
 
@@ -72,12 +69,12 @@ export default function ModalReview({ visible, onClose }: ModalReviewProps) {
                                 <TouchableOpacity className="rounded-full bg-button_color mr-5 absolute left-[12px] top-[12px]" onPress={onClose}>
                                     <Ionicons name="arrow-back" size={24} color='#fff' className="p-2" />
                                 </TouchableOpacity>
-                                <Text className="text-3xl text-white font-sansBold">
+                                <Text className="text-3xl text-white font-nunitoBold">
                                     Escreva sua Review
                                 </Text>
                             </View>
                             <View className="w-full mt-5">
-                                <Text className="text-white text-center text-lg font-sans">
+                                <Text className="text-white text-center text-lg font-nunito">
                                     Como foi a sua experiência nesse ROLE?
                                 </Text>
                                 <Text className="text-white text-center text-lg">Conta pra gente!</Text>
@@ -112,7 +109,7 @@ export default function ModalReview({ visible, onClose }: ModalReviewProps) {
                             </View>
                             <View className="w-[80%] mx-auto mt-10">
                                 <RoleMainButton type="gradient" buttonFunction={() => create()}>
-                                    <Text className="text-white text-md font-sans">Publicar</Text>
+                                    <Text className="text-white text-md font-nunito">Publicar</Text>
                                 </RoleMainButton>
                             </View>
                         </View>
