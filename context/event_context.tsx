@@ -1,12 +1,12 @@
 import { createContext, PropsWithChildren } from "react"
 import { EventRepositoryHttp } from "@/api/repositories/event_repository_http"
-import { getAllEventsResponseDTO, getEventByIdResponseDTO, getReviewsEventByIdResponseDTO, getRoleBombandoResponseDTO } from "@/api/types/event_dto"
+import { getAllEventsResponseDTO, getEventByIdResponseDTO, getReviewsEventByIdResponseDTO } from "@/api/types/event_dto"
 
 type EventContextType = {
     getAll: () => Promise<getAllEventsResponseDTO>
     getEventById: (id: string) => Promise<getEventByIdResponseDTO>
     getReviewsEventById(id: string): Promise<getReviewsEventByIdResponseDTO>
-    getRoleBombando: () => Promise<getRoleBombandoResponseDTO>
+    getRoleBombando: () => Promise<any>
 }
 
 const defaultEventContext = {
@@ -37,10 +37,7 @@ const defaultEventContext = {
         }
     },
     getRoleBombando: async () => {
-        return {
-            data: [],
-            message: ''
-        }
+        return {}
     }
 }
 
@@ -79,7 +76,7 @@ export function EventContextProvider({ children }: PropsWithChildren) {
     async function getRoleBombando() {
         try {
             const response = await eventRepository.getRoleBombando()
-            return response as getRoleBombandoResponseDTO
+            return response
         } catch (error: any) {
             return error
         }
