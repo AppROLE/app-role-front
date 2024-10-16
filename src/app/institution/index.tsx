@@ -1,4 +1,4 @@
-import { Institute } from '@/api/types/institute_dto'
+import { getInstituteByIdResponseDTO, Institute } from '@/api/types/institute_dto'
 import { InstituteContext } from '@/context/institute_context'
 import Background from '@/src/components/background'
 import RoleCard from '@/src/components/roleCard'
@@ -218,7 +218,7 @@ export default function institutionScreen({instituteId}: intutionScreenProps) {
     navigate.back()
   }
 
-  const [instituteA, setInstituteA] = useState<Institute>()
+  const [instituteA, setInstituteA] = useState<getInstituteByIdResponseDTO>()
   const { updateFavoriteInstitute, getInstituteById } = useContext(InstituteContext)
 
   async function updateInstitute() { 
@@ -227,9 +227,10 @@ export default function institutionScreen({instituteId}: intutionScreenProps) {
   }
 
   async function getInstitute() { 
-    const response = await getInstituteById(instituteId)
+    const instituteIde = '2f3073ac-3633-4fc7-9cfe-c2084399bbc3'
+    const response = await getInstituteById(instituteIde)
     if (response) {
-      setInstituteA(response.institute)
+      setInstituteA(response)
     }
     console.log('RESPOSTA DA GET', response)
   }
@@ -241,7 +242,7 @@ export default function institutionScreen({instituteId}: intutionScreenProps) {
   return (
     <Background scrollable lockScroll={scrollDisabled} function1={loadMoreRoles}>
       <View className="flex w-full flex-col items-center justify-center">
-        <SocialCard title={instituteA?.name} image={instituteA?.logoPhoto} bookMarkerFunction={updateInstitute}/>
+        <SocialCard title={instituteA?.name} image={instituteA?.logo_photo} bookMarkerFunction={updateInstitute}/>
         <View className="flex w-full flex-col items-center justify-center border-b-2 border-[#1c1c1c] pb-6">
           <View className="mt-6 flex w-[90%] flex-row items-center">
             <TouchableOpacity
