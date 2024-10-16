@@ -18,11 +18,12 @@ import { AuthContext } from '@/context/auth_context'
 import { finishSignUpRequestDTO } from '@/api/types/auth_dto'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { router } from 'expo-router'
+import Svg from '@/src/components/svg'
 
 export default function AlmostThere() {
     const [files, setFiles] = useState<any>(null)
     const [imageType, setImageType] = useState<string>('')
-    const [imageUri, setImageUri] = useState<string | null>(null)
+    const [imageUri, setImageUri] = useState<string>(process.env.EXPO_PUBLIC_URL_S3 + '/images/profile_default.png')
     const [username, setUsername] = useState<string>('')
     const [nickname, setNickname] = useState<string>('')
     const [usernameError, setUsernameError] = useState<string>('')
@@ -74,6 +75,8 @@ export default function AlmostThere() {
         }
         loginVerify()
     }, [])
+    
+    console.log(imageUri)
 
     async function handleFinishSignUp() {
         if (username === '') {
@@ -125,10 +128,10 @@ export default function AlmostThere() {
                     <ScrollView contentContainerStyle={{ paddingBottom: 90 }}>
                         <View className="w-full items-center">
                             <View>
-                                <Text className="text-3xl text-white font-nunito">Estamos quase lá...</Text>
+                                <Text className="text-3xl text-white font-nunitoBold">Estamos quase lá...</Text>
                             </View>
                             <View className="mb-5 mt-10 rounded-full bg-button_color">
-                                <Text className="p-2 text-xl text-white font-nunito">
+                                <Text className="py-1 px-2 text-xl text-white font-nunito">
                                     Adicione uma foto de perfil!
                                 </Text>
                             </View>
@@ -140,20 +143,11 @@ export default function AlmostThere() {
                                     <TouchableOpacity onPress={pickImage}>
                                         <View className="rounded-full bg-white">
                                             <View className="rounded-full bg-gray-400">
-                                                {imageUri ? (
                                                     <Image
                                                         source={{ uri: imageUri }}
                                                         style={styles.image}
                                                         className="rounded-full"
                                                     />
-                                                ) : (
-                                                    <Ionicons
-                                                        name="person"
-                                                        size={64}
-                                                        color="white"
-                                                        className="items-center justify-center p-3"
-                                                    />
-                                                )}
                                             </View>
                                         </View>
                                     </TouchableOpacity>
@@ -169,19 +163,18 @@ export default function AlmostThere() {
                                         padding: 10 // Espaçamento ao redor do ícone
                                     }}
                                 >
-                                    <View className="rounded-full bg-button_color">
-                                        <Ionicons
-                                            name="pencil"
-                                            size={22}
-                                            color="white"
-                                            className="p-2"
+                                    <View className="rounded-full bg-button_color p-3">
+                                        <Svg
+                                            uri={process.env.EXPO_PUBLIC_URL_S3 + "/pencil.svg"}
+                                            width={16}
+                                            height={16}
                                         />
                                     </View>
                                 </TouchableOpacity>
                             </View>
                             <View className="w-[80%] gap-5">
-                                <View className="mx-auto mt-14 w-[250px] items-center rounded-full bg-button_color">
-                                    <Text className="p-2 text-xl text-white font-nunito">
+                                <View className="mx-auto mt-14 items-center rounded-full bg-button_color">
+                                    <Text className="py-1 px-2 text-xl text-white font-nunito">
                                         Escolha seu @ de usuário!
                                     </Text>
                                 </View>
@@ -191,8 +184,8 @@ export default function AlmostThere() {
                                     error={usernameError}
                                     onChangeText={handleUsernameChange}
                                 />
-                                <View className="mx-auto w-[250px] items-center rounded-full bg-button_color">
-                                    <Text className="p-2 text-xl text-white font-nunito">
+                                <View className="mx-auto items-center rounded-full bg-button_color">
+                                    <Text numberOfLines={1} className="px-2 py-1 text-xl text-white font-nunito">
                                         Como seus amigos te chamam?
                                     </Text>
                                 </View>
@@ -207,8 +200,8 @@ export default function AlmostThere() {
                                     />
                                 </View>
                             </View>
-                            <View className="my-6 flex w-[80%]">
-                                <Text className="mb-5 text-center text-2xl text-white font-nunito">
+                            <View className="my-6 flex w-[85%]">
+                                <Text className="mb-5 text-center text-2xl text-white font-nunitoBold">
                                     Preparado(a)?
                                 </Text>
                                 <RoleMainButton
