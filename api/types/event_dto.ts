@@ -30,7 +30,7 @@ interface Event {
 
 interface Bombando {
     date: string,
-    event: Array<Event>,
+    event: Array<>,
 }
 
 export type getEventByIdResponseDTO = {
