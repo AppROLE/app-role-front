@@ -1,21 +1,20 @@
 import { createContext, PropsWithChildren } from "react"
 import { EventRepositoryHttp } from "@/api/repositories/event_repository_http"
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry"
-import { getEventByIdResponseDTO, getReviewsEventByIdResponseDTO } from "@/api/types/event_dto"
+import { getAllEventsResponseDTO, getEventByIdResponseDTO, getReviewsEventByIdResponseDTO } from "@/api/types/event_dto"
 
 type EventContextType = {
-    // getAll: () => Promise<getAllEventByIdResponseDTO>
+    getAll: () => Promise<getAllEventsResponseDTO>
     getEventById: (id: string) => Promise<getEventByIdResponseDTO>
     getReviewsEventById(id: string): Promise<getReviewsEventByIdResponseDTO>
 }
 
 const defaultEventContext = {
-    // getAll: async () => {
-    //     return {
-    //         events: [],
-    //         message: ''
-    //     }
-    // },
+    getAll: async () => {
+        return {
+            events: [],
+            message: ''
+        }
+    },
     getEventById: async (_id: string) => {
         return {
             eventId: '',
@@ -43,14 +42,14 @@ export const EventContext = createContext<EventContextType>(defaultEventContext)
 export function EventContextProvider({ children }: PropsWithChildren) {
     const eventRepository = new EventRepositoryHttp()
 
-    // async function getAll() {
-    //     try {
-    //         const response = await eventRepository.getAll()
-    //         return response
-    //     } catch (error: any) {
-    //         return error
-    //     }
-    // }
+    async function getAll() {
+        try {
+            const response = await eventRepository.getAll()
+            return response as getAllEventsResponseDTO
+        } catch (error: any) {
+            return error
+        }
+    }
 
     async function getEventById(id: string) {
         try {
@@ -71,7 +70,7 @@ export function EventContextProvider({ children }: PropsWithChildren) {
     }
 
     return (
-        <EventContext.Provider value={{ getEventById, getReviewsEventById }}>
+        <EventContext.Provider value={{ getAll, getEventById, getReviewsEventById }}>
             {children}
         </EventContext.Provider>
     )
