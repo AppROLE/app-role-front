@@ -341,7 +341,7 @@ export default function Home() {
   }, [])
 
   return (
-    <Background text={phrase} scrollable lockScroll={scrollDisabled} function1={loadMoreRoles}>
+    <Background text={phrase} scrollable lockScroll={scrollDisabled} function1={loadMoreRoles} centralize>
       <Text className="mb-4 text-center text-3xl font-bold text-white">Role Bombando</Text>
       <View className="mb-10 px-12">
         <Carousel
