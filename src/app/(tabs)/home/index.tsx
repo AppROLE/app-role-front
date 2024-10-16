@@ -18,6 +18,7 @@ import Carousel from 'react-native-reanimated-carousel'
 import { UserContext } from '@/context/user_context'
 import { EventContext } from '@/context/event_context'
 import { router } from 'expo-router'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function Home() {
   const [scrollDisabled, setScrollDisabled] = useState(false)
