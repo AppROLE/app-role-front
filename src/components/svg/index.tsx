@@ -14,9 +14,12 @@ export default function Svg({uri, color, width, height, ...rest} : SvgAddedProps
 
     const getImgXml = async () => {
         const xml = await (await fetch(uri)).text();
-        const xmlFormat = color ? xml.replace(/stroke="white"/g, `stroke="${color.toString()}"`) : xml;
+        const xmlFormat = color 
+        ? xml.replace(/stroke=".*?"/g, `stroke="${color.toString()}"`).replace(/fill=".*?"/g, `fill="${color.toString()}"`) 
+        : xml;
         setImgXml(xmlFormat);
     };
+
 
     getImgXml();
 
