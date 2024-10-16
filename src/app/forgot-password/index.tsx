@@ -82,6 +82,7 @@ export default function ForgotPassword() {
                             value={email}
                             onChangeText={handleEmailChange}
                             error={emailError}
+                            placeholder="E-mail ou usuário"
                         />
                     </View>
                     <View className="pt-16">
