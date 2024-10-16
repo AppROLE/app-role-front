@@ -177,7 +177,7 @@ export default function Home() {
 
   return (
     <Background text={phrase} scrollable lockScroll={scrollDisabled} function1={loadMoreRoles}>
-      <Text className="mb-4 text-center text-3xl font-bold text-white">Role Bombando</Text>
+      <Text className="mb-4 text-center text-3xl font-bold text-white">ROLE BOMBANDO</Text>
       <View className="mx-auto">
         <Carousel
           loop
