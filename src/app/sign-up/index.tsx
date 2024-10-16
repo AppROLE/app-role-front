@@ -182,7 +182,7 @@ export default function SignUp() {
             </View>
           </View>
         </View>
-        <View className="w-full gap-12 px-[8%]">
+        <View className="w-full gap-8 px-[8%]">
           <RoleMainButton
             type="gradient"
             buttonFunction={() => changePassword()}
@@ -194,8 +194,8 @@ export default function SignUp() {
             <Text className="text-white font-nunito">Cadastrar via Google</Text>
           </RoleMainButton>
         </View>
-        <View className="mt-7 flex flex-row gap-2">
-          <Text className="text-sm text-white font-nunito">Ja possui uma conta?</Text>
+        <View className="flex flex-row gap-2">
+          <Text className="text-sm text-white font-nunito">Já possui uma conta?</Text>
           <Link href={'/'} className="text-sm text-[#D8A9FF] font-nunitoBold">
             Entrar
           </Link>
