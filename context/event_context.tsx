@@ -7,6 +7,7 @@ type EventContextType = {
     getEventById: (id: string) => Promise<getEventByIdResponseDTO>
     getReviewsEventById(id: string): Promise<getReviewsEventByIdResponseDTO>
     getRoleBombando: () => Promise<any>
+    getEventsByFilter: (filters: any) => Promise<any>
 }
 
 const defaultEventContext = {
@@ -37,6 +38,9 @@ const defaultEventContext = {
         }
     },
     getRoleBombando: async () => {
+        return {}
+    },
+    getEventsByFilter: async () => {
         return {}
     }
 }
@@ -82,8 +86,17 @@ export function EventContextProvider({ children }: PropsWithChildren) {
         }
     }
 
+    async function getEventsByFilter(filters: any) {
+        try {
+            const response = await eventRepository.getEventsByFilter(filters)
+            return response
+        } catch (error: any) {
+            return error
+        }
+    }
+
     return (
-        <EventContext.Provider value={{ getAll, getEventById, getReviewsEventById, getRoleBombando }}>
+        <EventContext.Provider value={{ getAll, getEventById, getReviewsEventById, getRoleBombando, getEventsByFilter }}>
             {children}
         </EventContext.Provider>
     )
