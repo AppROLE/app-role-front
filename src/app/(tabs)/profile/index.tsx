@@ -42,11 +42,6 @@ export default function Profile() {
     }
   }
 
-  // useEffect para carregar os dados quando o componente for montado
-  useEffect(() => {
-    fetchProfile();
-  }, []);
-
   // Funções de navegação
   function handleEditProfile() {
     navigation.push('/editing-perfil');
@@ -72,10 +67,8 @@ export default function Profile() {
   const { getAllConfirmedEvents } = useContext(PresenceContext);
 
   async function fetchRoles() {
-    const idToken = await AsyncStorage.getItem('idToken') || '';
-    if (idToken === '') return;
-    const response = await getAllConfirmedEvents(idToken);
-    console.log('RESPOSTA DA GET ALL', response);
+    const response = await getAllConfirmedEvents();
+    console.log('RESPOSTA DA GET ALL ROLES', response);
     if (response) {
       setRoles(response.events);
     }
@@ -83,6 +76,7 @@ export default function Profile() {
 
   useEffect(() => {
     fetchRoles();
+    fetchProfile();
   }, []);
 
   return (
