@@ -7,31 +7,13 @@ import Svg from "@/src/components/svg";
 import { router } from 'expo-router'
 import { InstituteContext } from "@/context/institute_context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Institute } from "@/api/types/institute_dto";
+import { getAllFavoritesInstitutesResponseDTO, Institute } from "@/api/types/institute_dto";
 
 
 export default function Favorites() {
     const { width } = Dimensions.get('window')
     const { getAllFavoritesInstitutes } = useContext(InstituteContext)
-    const [institutes, setInstitutes] = useState<Institute[]>([])
-
-    const json = [
-        {
-            "id": 1,
-            "title": "INSTITUIÇÃO 1",
-            "image": "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541"
-        },
-        {
-            "id": 2,
-            "title": "INSTITUIÇÃO 2",
-            "image": "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541"
-        },
-        {
-            "id": 3,
-            "title": "INSTITUIÇÃO 3",
-            "image": "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541"
-        },
-    ]
+    const [institutes, setInstitutes] = useState<getAllFavoritesInstitutesResponseDTO>()
 
     function navigateToFriends() {
         router.navigate('/friends')
@@ -43,12 +25,13 @@ export default function Favorites() {
 
     async function getAll() {
         try {
-            const idToken = await AsyncStorage.getItem('idToken') || ''
-            if (idToken === '') return;
-            const response = await getAllFavoritesInstitutes(idToken);
+            const response = await getAllFavoritesInstitutes();
             if (response) {
                 console.log('RESPOSTA DA GET ALL', response) 
-                setInstitutes(response.institutes)
+                setInstitutes(response)
+            }
+            if (response.institutes.length === 0) { 
+                setInstitutes({message: 'Nenhuma instituição favorita encontrada', institutes: []})
             }
             return response
         } catch (error: any) {
@@ -94,7 +77,7 @@ export default function Favorites() {
                 <View className="border-t-line_gray border-t-2 mt-8 p-10 w-full">
                     <Text className="text-2xl text-white mb-3">Instituições Favoritas</Text>
                     <FlatList
-                        data={institutes}
+                        data={institutes?.institutes}
                         keyExtractor={(institute) => institute.instituteId}
                         renderItem={
                             ({ item: institute }) => <SocialCard title={institute.name} image={institute.logoPhoto}/>
