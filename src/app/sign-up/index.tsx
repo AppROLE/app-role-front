@@ -23,13 +23,30 @@ export default function SignUp() {
   const [passwordError, setPasswordError] = React.useState('')
   const [confirmPassword, setConfirmPassword] = React.useState('')
   const [confirmPasswordError, setConfirmPasswordError] = React.useState('')
+  const [buttonDebounce, setButtonDebounce] = React.useState(false)
   const { signUp } = React.useContext(AuthContext)
 
-  function verifyPassword() {
+  function verifyCredentials() {
+    var isValid = true
     const specialCharacterRegex = /[!@#$%^&*(),.?":{}|<>]/
     const uppercaseLetterRegex = /[A-Z]/
     const lowercaseLetterRegex = /[a-z]/
     const numberRegex = /[0-9]/
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if(user.length == 0){
+      setUserError("Digite seu nome")
+      isValid = false
+    }
+    if (!email || !emailRegex.test(email)) {
+      setEmailError("E-mail inválido")
+      isValid = false
+    }
+    
+    if (password !== confirmPassword) {
+      setConfirmPasswordError('Senhas não conferem!')
+      isValid = false
+    }
 
     if (password.length < 6) {
       setPasswordError('Senha muito curta!')
@@ -43,19 +60,25 @@ export default function SignUp() {
       setPasswordError('A senha deve conter pelo menos um número!')
     } else if (password.trim() === '') {
       setPasswordError('Senha inválida!')
-    } else if (password !== confirmPassword) {
-      setConfirmPasswordError('Senhas não conferem!')
     } else {
       console.log('Senha válida!')
+      return isValid
     }
+    return false
   }
 
   interface SignUpResponse {
     message?: string
   }
 
-  async function changePassword() {
-    verifyPassword()
+  async function createAccount() {
+    if(buttonDebounce) return
+    setButtonDebounce(true)
+    
+    if (!verifyCredentials()){
+      setButtonDebounce(false)
+      return
+    }
 
     const data = {
       name: user,
@@ -67,6 +90,9 @@ export default function SignUp() {
     try {
       const response: SignUpResponse = await signUp(data)
       console.log(response)
+      if (!(response.message == 'User created successfully')){
+        return
+      }
       Toast.show({
         type: 'success',
         text1: 'Sucesso',
@@ -77,7 +103,7 @@ export default function SignUp() {
       await AsyncStorage.setItem('ScreenRequestToCode', 'sign-up')
       await AsyncStorage.setItem('user_email', email)
       await AsyncStorage.setItem('user_password', password)
-      router.push('/recovery-code');
+      router.push('/recovery-code');    
     } catch (error: any) {
       Toast.show({
         type: 'error',
@@ -86,6 +112,9 @@ export default function SignUp() {
         visibilityTime: 3000,
         topOffset: 0
       })
+    }
+    finally{
+      setButtonDebounce(false)
     }
   }
 
@@ -185,7 +214,7 @@ export default function SignUp() {
         <View className="w-full gap-8 px-[8%]">
           <RoleMainButton
             type="gradient"
-            buttonFunction={() => changePassword()}
+            buttonFunction={() => createAccount()}
           >
             <Text className="text-white font-nunito">Cadastrar</Text>
           </RoleMainButton>
@@ -196,7 +225,7 @@ export default function SignUp() {
         </View>
         <View className="flex flex-row gap-2">
           <Text className="text-sm text-white font-nunito">Já possui uma conta?</Text>
-          <Link href={'/'} className="text-sm text-[#D8A9FF] font-nunitoBold">
+          <Link href={'/sign-in'} className="text-sm text-[#D8A9FF] font-nunitoBold">
             Entrar
           </Link>
         </View>
