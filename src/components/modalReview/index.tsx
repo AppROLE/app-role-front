@@ -27,8 +27,7 @@ export default function ModalReview({ visible, onClose }: ModalReviewProps) {
 
     async function create() {
         const data: createReviewRequestDTO = {
-            eventId: "d942a349-f74a-4d94-b591-ffb1fd143ad8",
-            instituteId: '15da4d9c-8b98-459c-8d02-14f644ad34f8',
+            eventId: "da1c716a-b4d2-4c85-b139-27740a9b5f89",
             reviewedAt: new Date().getTime(),
             star: selectedStars,
             review: reviewText
