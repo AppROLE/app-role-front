@@ -178,13 +178,13 @@ export default function Home() {
   return (
     <Background text={phrase} scrollable lockScroll={scrollDisabled} function1={loadMoreRoles}>
       <Text className="mb-4 text-center text-3xl font-bold text-white">Role Bombando</Text>
-      <View className="mb-10 px-12">
+      <View className="mx-auto">
         <Carousel
           loop
           snapEnabled // Ativa o snap (encaixar) dos itens
           snapToInterval={width * 0.8 + 20}
-          width={width * 0.8}
-          height={height * 0.18}
+          width={width * 0.85}
+          height={height * 0.21}
           autoPlay={true}
           autoPlayInterval={5000}
           data={carrosselData}
@@ -192,7 +192,7 @@ export default function Home() {
           onScrollEnd={index => endScroll(index)} // Atualiza o slide ativo
           scrollAnimationDuration={1000}
           renderItem={({ item }) => (
-            <View style={{ marginHorizontal: 10 }}>
+            <View style={{ }}>
               <RoleEmphasis />
             </View>
           )}
@@ -209,8 +209,8 @@ export default function Home() {
           ))}
         </View>
       </View>
-      <View className="mb-12 px-12">
-        <View className="flex flex-row items-center rounded-full bg-[#1C1C1C] px-2 py-1">
+      <View className="my-8 px-8">
+        <View className="flex flex-row items-center rounded-full bg-[#1C1C1C] px-2 py-2">
           <View className="w-[12%]">
             <FontAwesome6 name="magnifying-glass" size={24} color="#BEBEBE" solid />
           </View>
@@ -226,7 +226,7 @@ export default function Home() {
           </View>
         </View>
       </View>
-      <View className="flex flex-col gap-4 px-12">
+      <View className="flex flex-col gap-4 px-8">
         <Text className="text-3xl font-bold text-white">Explore</Text>
         {roles.slice(0, 5).map((role, index) => (
           <RoleCard key={`id${role.eventId}ind${index}`} {...role} />
