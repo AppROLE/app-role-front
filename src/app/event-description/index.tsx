@@ -5,11 +5,12 @@ import ModalReview from "@/src/components/modalReview";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { openURL } from "expo-linking";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState, useRef, useContext } from "react";
 import { View, Text, Image, ScrollView, TouchableOpacity, Animated, Easing } from "react-native";
 
-export default function EventDescription() {
+export default function EventDescription(eventId: string) {
+    const { id } = useLocalSearchParams<{ id: string }>();
     // Interfaces
     interface Review {
         id: number;
