@@ -19,6 +19,7 @@ import { UserContext } from '@/context/user_context'
 import { EventContext } from '@/context/event_context'
 import { router } from 'expo-router'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { SearchBar } from 'react-native-screens'
 
 export default function Home() {
   const [scrollDisabled, setScrollDisabled] = useState(false)
@@ -28,11 +29,13 @@ export default function Home() {
   const [loadLock, setLoadLock] = useState(false)
   const [phrase, setPhrase] = useState('')
   const [rolesLoaded, setRolesLoaded] = useState(20)
-  const [bombando, setBombando] = useState([])
+  const [search, setSearch] = useState('')
+  const [typingTimeout, setTypingTimeout] = useState<any>(null)
 
   const { getPhrase } = useContext(UserContext)
   const { getAll } = useContext(EventContext)
   const { getRoleBombando } = useContext(EventContext)
+  const { getEventsByFilter } = useContext(EventContext)
 
   const [typesRole, setTypesRole] = useState([
     {
@@ -178,6 +181,30 @@ export default function Home() {
     }
   }
 
+  async function getSearchFilter(filter: string) {
+    const response = await getEventsByFilter(filter)
+    console.log(response)
+  }
+
+  const handleChangeText = (text: string) => {
+    setSearch(text);
+
+    if (typingTimeout) {
+      clearTimeout(typingTimeout);
+    }
+
+    const timeout = setTimeout(() => {
+      if (text === '') {
+        getEvents();
+        return;
+      } else {
+        getSearchFilter(text.replace(/ /g, '+'));
+      }
+    }, 1000);
+
+    setTypingTimeout(timeout);
+  };
+
   useEffect(() => {
     getThePhrase()
   }, [])
@@ -227,14 +254,16 @@ export default function Home() {
       </View>
       <View className="my-8 px-8">
         <View className="flex flex-row items-center justify-center rounded-full bg-[#1C1C1C] px-4 py-2">
-          <View className="w-[12%] flex items-start">
+          <TouchableOpacity className="w-[12%] flex items-start">
             <FontAwesome6 name="magnifying-glass" size={24} color="#BEBEBE" solid />
-          </View>
+          </TouchableOpacity>
           <View className="w-[78%]">
             <TextInput
               placeholder="Encontre o seu role"
               className="text-white"
               placeholderTextColor={'#BEBEBE'}
+              value={search}
+              onChangeText={(text) => handleChangeText(text)}
             />
           </View>
           <TouchableOpacity className="w-[10%] flex items-end"
