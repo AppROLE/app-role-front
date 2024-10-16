@@ -27,9 +27,11 @@ export default function Home() {
   const [loadLock, setLoadLock] = useState(false)
   const [phrase, setPhrase] = useState('')
   const [rolesLoaded, setRolesLoaded] = useState(20)
+  const [bombando, setBombando] = useState([])
 
   const { getPhrase } = useContext(UserContext)
   const { getAll } = useContext(EventContext)
+  const { getRoleBombando } = useContext(EventContext)
 
   const [typesRole, setTypesRole] = useState([
     {
@@ -167,12 +169,21 @@ export default function Home() {
     setRoles(response.events)
   }
 
+  async function getBombando() {
+    const response = await getRoleBombando()
+    console.log(response.data)
+  }
+
   useEffect(() => {
     getThePhrase()
   }, [])
 
   useEffect(() => {
     getEvents()
+  }, [])
+
+  useEffect(() => {
+    getBombando()
   }, [])
 
   return (
