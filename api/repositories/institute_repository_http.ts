@@ -16,7 +16,7 @@ export class InstituteRepositoryHttp {
     try {
       const idToken = await AsyncStorage.getItem('idToken') || ''
       if (idToken === '') return
-      const response = await http.get(`/get-institute-by-id?instituteId=${instituteId}`, {
+      const response = await httpEvent.get(`/get-institute-by-id?instituteId=${instituteId}`, {
         headers: {
           Authorization: `Bearer ${idToken}`
         }
