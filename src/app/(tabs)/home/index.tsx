@@ -171,6 +171,9 @@ export default function Home() {
   async function getBombando() {
     const response = await getRoleBombando()
     console.log(response.data)
+    for (let i = 0; i < response.data.length; i++) {
+      console.log(response.data[i].events)
+    }
   }
 
   useEffect(() => {
@@ -221,8 +224,8 @@ export default function Home() {
         </View>
       </View>
       <View className="my-8 px-8">
-        <View className="flex flex-row items-center rounded-full bg-[#1C1C1C] px-2 py-2">
-          <View className="w-[12%]">
+        <View className="flex flex-row items-center justify-center rounded-full bg-[#1C1C1C] px-4 py-2">
+          <View className="w-[12%] flex items-start">
             <FontAwesome6 name="magnifying-glass" size={24} color="#BEBEBE" solid />
           </View>
           <View className="w-[78%]">
@@ -232,9 +235,9 @@ export default function Home() {
               placeholderTextColor={'#BEBEBE'}
             />
           </View>
-          <View className="w-[10%]">
+          <TouchableOpacity className="w-[10%] flex items-end">
             <FontAwesome6 name="bars" size={24} color="#BEBEBE" solid />
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
       <View className="flex flex-col gap-4 px-8">
