@@ -63,7 +63,7 @@ export default function Profile() {
     }
   }
 
-  const [roles, setRoles] = useState<Events[]>([]);
+  const [roles, setRoles] = useState<Events[] | undefined>([]);
   const { getAllConfirmedEvents } = useContext(PresenceContext);
 
   async function fetchRoles() {
@@ -136,7 +136,7 @@ export default function Profile() {
         <View className="mt-8 border-b-2 border-[#DFA9FD]">
           <Text className="text-[#DFA9FD]">ROLEs Confirmados</Text>
         </View>
-        {roles.slice(0, 5).map((role, index) => (
+        {roles? roles.slice(0, 5).map((role, index) => (
           <RoleCard
             data={role.eventDate}
             image={role.eventPhotoLink}
@@ -146,9 +146,9 @@ export default function Profile() {
             key={`id${role.eventId}ind${index}`}
             {...role}
           />
-        ))}
+        )) : <></>}
 
-        {roles.length === 0 && (
+        {(!roles || roles.length === 0) && (
           <>
             <View className="mt-8">
               <Text className="text-white">Você ainda não possui um ROLE confirmado :(</Text>

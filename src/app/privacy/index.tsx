@@ -41,17 +41,17 @@ export default function Privacy() {
                         />
                     </TouchableOpacity>
                     <View className="flex-1 h-full mb-8">
-                        <Text className="absolute left-1/2 transform -translate-x-1/2 text-white text-3xl font-bold">
+                        <Text className="absolute left-1/2 transform -translate-x-1/2 text-white text-3xl font-nunitoBold">
                             Privacidade
                         </Text>
                     </View>
                 </View>
                 <View className="px-6 gap-3 pt-6 items-start border-b-2 border-b-line_gray">
-                    <Text className="text-white text-lg font-bold">
+                    <Text className="text-white text-lg font-nunitoBold">
                         Público
                     </Text>
                     <View className="flex-row w-full">
-                        <Text className="text-white text-xs pr-6 justify-center self-center mb-8 items-center w-11/12">
+                        <Text className="text-white text-xs pr-6 justify-center self-center mb-8 items-center w-11/12 font-nunito">
                             Todos os usuários podem ver seus próximos ROLEs e seu nome nas listas de confirmados!
                         </Text>
                         <TouchableOpacity className='rounded-full h-8 w-8 border-2 border-button_color justify-center items-center' onPress={() => setIsPrivate(false)}>
@@ -66,11 +66,11 @@ export default function Privacy() {
                 </View>
 
                 <View className="px-6 gap-3 pt-6 items-start border-b-2 border-b-line_gray">
-                    <Text className="text-white text-lg font-bold">
+                    <Text className="text-white text-lg font-nunitoBold">
                         Privado
                     </Text>
                     <View className="flex-row w-full">
-                        <Text className="text-white text-xs pr-6 justify-center self-center mb-8 items-center w-11/12">
+                        <Text className="text-white text-xs pr-6 justify-center self-center mb-8 items-center w-11/12 font-nunito">
                             Apenas seus amigos podem ver seus próximos ROLEs e seu nome nas listas de confirmados! Da mesma forma em que apenas seus amigos estarão visívieis para você.
                         </Text>
                         <TouchableOpacity className='rounded-full h-8 w-8 border-2 border-button_color justify-center items-center' onPress={() => setIsPrivate(true)}>

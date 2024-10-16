@@ -18,7 +18,7 @@ export default function ComfirmedListModal({ visible, onClose }: ModalReviewProp
     const [presence, setPresence] = useState<(Presence & { profilePhoto?: ImageSourcePropType })[]>([]);
     const [friends, setFriends] = useState<(Friends)[]>([]);
     const [loading, setLoading] = useState(true);
-    const { getAllPresence } = useContext(PresenceContext);  
+    const { getAllPresence } = useContext(PresenceContext);
     const { getFriends } = useContext(UserContext);
     const eventId = "d942a349-f74a-4d94-b591-ffb1fd143ad8";
     // Função para buscar amigos
@@ -82,7 +82,7 @@ export default function ComfirmedListModal({ visible, onClose }: ModalReviewProp
                         <TouchableOpacity className="rounded-full bg-button_color mr-5 absolute left-[10px] top-[12px]" onPress={onClose}>
                             <Ionicons name="arrow-back" size={22} color='#fff' className="p-2" />
                         </TouchableOpacity>
-                        <Text className="text-2xl text-white text-center">Lista de Confirmados</Text>
+                        <Text className="text-2xl text-white text-center font-nunitoBold">Lista de Confirmados</Text>
                     </View>
                     <ScrollView className="w-full mt-8">
                         {confirmeds.map((user) => (
@@ -94,8 +94,8 @@ export default function ComfirmedListModal({ visible, onClose }: ModalReviewProp
                                         resizeMode="cover"
                                     />
                                     <View className="flex-1">
-                                        <Text className="text-white font-bold text-xl">{user.username}</Text>
-                                        <Text className="text-gray-400 text-md">@{user.nickname}</Text>
+                                        <Text className="text-white font-nunitoBold text-xl">{user.username}</Text>
+                                        <Text className="text-gray-400 text-md font-nunito">@{user.nickname}</Text>
                                     </View>
                                 </View>
                             </View>

@@ -343,7 +343,7 @@ export default function Home() {
 
   return (
     <Background text={phrase} scrollable lockScroll={scrollDisabled} function1={loadMoreRoles}>
-      <GradientText className="mb-4 text-center text-3xl font-bold">ROLE BOMBANDO</GradientText>
+      <GradientText className="mb-4 text-center text-3xl font-nunitoBold">ROLE BOMBANDO</GradientText>
       <View className="mb-10 px-12">
         <Carousel
           loop
