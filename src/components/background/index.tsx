@@ -163,8 +163,8 @@ export default function Background({ children, text, scrollable, themeMode, lock
         </View>
         {text && (
           <Animated.View style={{ opacity: textOpacity }}>
-            <Animated.Text style={{ fontSize: textSize }} className="text-center font-bold text-white mb-8">
-              {text}
+            <Animated.Text style={{ fontSize: textSize }} className="text-center text-md text-white mb-8">
+              <Text className='text-lg'>{text}</Text>
             </Animated.Text>
           </Animated.View>
         )}
