@@ -6,7 +6,7 @@ type InstituteContextType = {
     getAll: () => Promise<getAllInstituteByIdResponseDTO>
     getInstituteById: (instituteId: string) => Promise<getInstituteByIdResponseDTO>
     getAllInstitutesByPartnerType: (idToken: string, partnerType: string) => Promise<getInstituteByPartnerTypeResponseDTO>
-    getAllFavoritesInstitutes: (idToken: string) => Promise<getAllFavoritesInstitutesResponseDTO>
+    getAllFavoritesInstitutes: () => Promise<getAllFavoritesInstitutesResponseDTO>
     updateFavoriteInstitute: (instituteId: string) => Promise<updateFavoriteInstituteResponseDTO>
 }
 
@@ -39,7 +39,7 @@ const defaultInstituteContext = {
             message: ''
         }
     },
-    getAllFavoritesInstitutes: async (_idToken: string) => {
+    getAllFavoritesInstitutes: async () => {
         return {
             institutes: [],
             message: ''
@@ -84,9 +84,9 @@ export function InstituteContextProvider({ children }: PropsWithChildren) {
     }
   }
 
-  async function getAllFavoritesInstitutes(idToken: string) { 
+  async function getAllFavoritesInstitutes() { 
     try { 
-      const response = await instituteRepository.getAllFavoritesInstitutes(idToken)
+      const response = await instituteRepository.getAllFavoritesInstitutes()
       return response
     } catch (error: any) { 
       return error

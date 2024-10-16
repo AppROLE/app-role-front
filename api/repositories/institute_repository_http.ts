@@ -40,8 +40,10 @@ export class InstituteRepositoryHttp {
     }
   }
 
-  async getAllFavoritesInstitutes(idToken: string) {
+  async getAllFavoritesInstitutes() {
     try {
+      const idToken = await AsyncStorage.getItem('idToken') || ''
+      if (idToken === '') return
       const response = await httpEvent.get(`/get-all-favorites-institutes`, {
         headers: {
           Authorization: `Bearer ${idToken}`,
