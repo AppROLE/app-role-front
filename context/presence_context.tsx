@@ -8,7 +8,7 @@ import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry"
 type PresenceContextType = {
     getAllPresence: (eventId: string) => Promise<getAllConfirmedUsersResponseDTO>
     confirmEvent: (eventId: string, profilePhoto?: string, promoterCode?: string) => Promise<confirmEventResponseDTO>
-    getAllConfirmedEvents: (idToken: string) => Promise<getAllConfirmedEventsResponseDTO>
+    getAllConfirmedEvents: () => Promise<getAllConfirmedEventsResponseDTO>
 }
 
 const defaultPresenceContext = { 
@@ -23,7 +23,7 @@ const defaultPresenceContext = {
             message: ''
         }
     },
-    getAllConfirmedEvents: async (_idToken: string) => {
+    getAllConfirmedEvents: async () => {
         return {
             events: [],
             message: ''
@@ -55,9 +55,9 @@ export function PresenceContextProvider({ children }: any) {
         }
     }
 
-    async function getAllConfirmedEvents(idToken: string) { 
+    async function getAllConfirmedEvents() { 
         try {
-            const response = await presenceRepository.getAllConfirmedEvents(idToken)
+            const response = await presenceRepository.getAllConfirmedEvents()
             return response
         } catch (error: any) {
             return error
