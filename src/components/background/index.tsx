@@ -170,6 +170,7 @@ export default function Background({ children, text, scrollable, themeMode, lock
             contentContainerStyle={{ justifyContent: 'flex-start', paddingBottom: 60 }}
             nestedScrollEnabled={true}
             scrollEnabled={!lockScroll}
+            bounces={false}
           >
             {children}
           </ScrollView>
