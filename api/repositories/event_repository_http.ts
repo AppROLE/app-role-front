@@ -42,4 +42,13 @@ export class EventRepositoryHttp {
             return error.response.data;
         }
     }
+
+    async getEventsByFilter(filters: any) {
+        try {
+            const response = await httpEvent.post('/get-all-events-by-filter?name=', filters);
+            return response.data;
+        } catch (error: any) {
+            return error.response.data;
+        }
+    }
 }
