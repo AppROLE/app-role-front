@@ -94,7 +94,11 @@ export default function RoleCard(role: any) {
                 <View className="flex flex-row gap-4">
                     <View className="flex flex-row gap-2 items-center">
                         <FontAwesome6 name="star" size={8} color="#BDBDBD" solid/>
-                        <Text className="text-sm text-[#BDBDBD]">4.5</Text>
+                        {role.rating ? (
+                            <Text className="text-sm text-[#BDBDBD]">{role.rating}</Text>
+                        ) : (
+                            <Text className="text-sm text-[#BDBDBD]">0</Text>
+                        )}
                     </View>
                     <View className="flex flex-row gap-2 items-center">
                         <FontAwesome6 name="location-dot" size={8} color="#BDBDBD" />
