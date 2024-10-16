@@ -44,8 +44,9 @@ export class EventRepositoryHttp {
     }
 
     async getEventsByFilter(filters: any) {
+        console.log('/get-all-events-by-filter?name=' + filters);
         try {
-            const response = await httpEvent.post('/get-all-events-by-filter?name=', filters);
+            const response = await httpEvent.get('/get-all-events-by-filter?name=' + filters);
             return response.data;
         } catch (error: any) {
             return error.response.data;
