@@ -181,15 +181,16 @@ export default function Home() {
       <View className="mx-auto">
         <Carousel
           loop
-          snapEnabled // Ativa o snap (encaixar) dos itens
+          snapEnabled
           snapToInterval={width * 0.8 + 20}
           width={width * 0.85}
           height={height * 0.21}
           autoPlay={true}
           autoPlayInterval={5000}
           data={carrosselData}
-          onScrollBegin={() => setScrollDisabled(true)} // Desabilita o scroll da tela
-          onScrollEnd={index => endScroll(index)} // Atualiza o slide ativo
+          onScrollBeginDrag={() => setScrollDisabled(true)} // Desativa o scroll vertical ao arrastar manualmente
+          onScrollEndDrag={() => setScrollDisabled(false)} // Reativa o scroll vertical após soltar o arrasto
+          onSnapToItem={(index) => endScroll(index)} // Atualiza o slide ativo
           scrollAnimationDuration={1000}
           renderItem={({ item }) => (
             <View style={{ }}>
@@ -197,7 +198,7 @@ export default function Home() {
             </View>
           )}
           panGestureHandlerProps={{
-            activeOffsetX: [-10, 10] // Para evitar conflitos com scroll vertical
+            activeOffsetX: [-10, 10]
           }}
         />
         <View className="mt-4 flex flex-row justify-center gap-2">
