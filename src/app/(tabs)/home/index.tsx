@@ -315,7 +315,9 @@ export default function Home() {
             <Text className="text-center text-lg text-[#BDBDBD]">
               Utilieze os nossos <Text className="font-bold text-white">Filtros!</Text>
             </Text>
-            <TouchableOpacity className="flex w-full justify-center rounded-2xl py-4">
+            <TouchableOpacity className="flex w-full justify-center rounded-2xl py-4"
+              onPress={() => router.push('/searching-filters')}
+            >
               <LinearGradient
                 colors={gradientColors}
                 start={{ x: 0, y: 0 }}
