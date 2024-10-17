@@ -1,9 +1,10 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Keyboard, KeyboardAvoidingView, Modal, Platform, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import RoleMainButton from "../roleMainButton";
 import { createReviewRequestDTO, createReviewResponseDTO } from "@/api/types/review_dto";
 import { ReviewContext } from "@/context/review_context";
+import { UserContext } from "@/context/user_context";
 
 
 interface ModalReviewProps {
@@ -19,6 +20,7 @@ export default function ModalReview({ visible, onClose }: ModalReviewProps) {
     const [reviewText, setReviewText] = useState("");
     const maxChars = 250;
     const { createReview } = useContext(ReviewContext);
+    const { getProfile } = useContext(UserContext);
 
     const clearFields = () => {
         setSelectedStars(0);
@@ -53,6 +55,14 @@ export default function ModalReview({ visible, onClose }: ModalReviewProps) {
         }
     }
 
+    async function userInfos() {
+        const user = await getProfile()
+        console.log("USER", user)
+    }
+
+    useEffect(() => {
+        userInfos()
+    }, [])
 
     return (
         <Modal
