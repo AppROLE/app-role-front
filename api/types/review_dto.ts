@@ -1,10 +1,11 @@
 
 export type createReviewRequestDTO = { 
     eventId: string;
-    instituteId: string;
     reviewedAt: number;
     star: number;
     review: string;
+    photoUrl: string;
+    name: string;
 }
 
 export type createReviewResponseDTO = {
