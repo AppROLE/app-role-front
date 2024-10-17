@@ -122,20 +122,7 @@ export default function Home() {
     }
   ])
 
-  const [carrosselData, setCarrosselData] = useState([
-    {
-      id: '1',
-      image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png'
-    },
-    {
-      id: '2',
-      image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png'
-    },
-    {
-      id: '3',
-      image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png'
-    }
-  ])
+  const [carrosselData, setCarrosselData] = useState([])
 
   const { width, height } = Dimensions.get('window')
 
@@ -174,10 +161,8 @@ export default function Home() {
 
   async function getBombando() {
     const response = await getRoleBombando()
-    console.log(response.data)
-    for (let i = 0; i < response.data.length; i++) {
-      console.log(response.data[i].events)
-    }
+    // console.log(response.data)
+    setCarrosselData(response.data)
   }
 
   async function getSearchFilter(filter: string) {
@@ -239,7 +224,7 @@ export default function Home() {
           scrollAnimationDuration={1000}
           renderItem={({ item }) => (
             <View style={{ }}>
-              <RoleEmphasis />
+              <RoleEmphasis {...item}/>
             </View>
           )}
           panGestureHandlerProps={{
