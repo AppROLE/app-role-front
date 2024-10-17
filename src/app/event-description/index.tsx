@@ -70,10 +70,11 @@ export default function EventDescription(eventId: string) {
         }
     ]);
     const [packagesImages, setPackagesImages] = useState([
-        { id: 1, image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png' },
-        { id: 2, image: 'https://placehold.co/600x400' },
-        { id: 3, image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png' },
+        { name: 'COMBO', image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png' },
+        { name: 'ANIVERSARIO', image: 'https://placehold.co/600x400' },
+        { name: 'CAMAROTE', image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png' },
     ]);
+    const [packages, setPackages] = useState<string[]>([]);
     const [buttonCondition, setButtonCondition] = useState(true);
     const [roleStars, setRoleStars] = useState(0);
     const [musicsTypes, setMusicsTypes] = useState<string[]>([]);
@@ -161,8 +162,8 @@ export default function EventDescription(eventId: string) {
                 setAddress(response.address);
                 setMenuLink(response.menuLink ?? '');
                 setFeatures(response.features);
-                setPackagesImages(response.packageType ? response.packageType.map((image: string, index: number) => ({ id: index, image })) : []);
                 setRoleStars(response.rating ?? 0);
+                setPackages(response.packageType ?? []);
             }
         } else {
             router.push('/home');
@@ -410,10 +411,10 @@ export default function EventDescription(eventId: string) {
                     <View className="mt-8">
                         <Text className="text-white text-2xl font-bold mb-2">Pacotes</Text>
                         <View className="flex flex-row gap-2">
-                            {packagesImages.map((packageImage, index) => (
-                                <TouchableOpacity key={`viewpackage-${packageImage.id}-${index}`} className="w-[32%] h-20 bg-[#1C1C1C] rounded-xl">
+                            {packages.map((packageE, index) => (
+                                <TouchableOpacity key={`viewpackage-${index}`} className="w-[32%] h-20 bg-[#1C1C1C] rounded-xl">
                                     <Image 
-                                        source={{ uri: packageImage.image }} 
+                                        source={{ uri: packagesImages.map((image) => image.name).includes(packageE) ? packagesImages.find((image) => image.name === packageE).image : 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png' }} 
                                         className="w-full h-full rounded-xl" 
                                         resizeMode="cover"
                                     />
