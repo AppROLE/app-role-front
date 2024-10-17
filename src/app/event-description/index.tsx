@@ -124,7 +124,7 @@ export default function EventDescription(eventId: string) {
         const id = await AsyncStorage.getItem('eventId');
         if (id) {
             const response = await getEventById(id);
-            console.log(response);
+            // console.log(response);
             if (response) {
                 priceDesign(response.price);
                 setMusicsTypes(response.musicType ?? []);
@@ -618,7 +618,7 @@ export default function EventDescription(eventId: string) {
                         <TouchableOpacity className="absolute top-16 right-4" onPress={() => setOpenGalleryModal(false)}>
                             <FontAwesome name="close" size={24} color="white" />
                         </TouchableOpacity>
-                        <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="w-full h-full" onScroll={()=>console.log('ola')}>
+                        <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="w-full h-full">
                             <View className="w-full h-full bg-white border-2 border-purple-600">
                                 <Image source={{ uri: gallery[selectedImagePosition] }} className="w-full h-full object-cover" />
                             </View>
