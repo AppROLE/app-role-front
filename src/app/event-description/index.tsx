@@ -13,11 +13,12 @@ import { View, Text, Image, ScrollView, TouchableOpacity, Animated, Easing } fro
 export default function EventDescription(eventId: string) {
     // Interfaces
     interface Review {
-        id: number;
-        nickname: string;
-        profilePhoto: string;
+        review: string;
+        reviewedAt: string;
         star: number;
-        comment: string;
+        username: string;
+        nickname: string;
+        profile_photo: string;
     }
 
     // States
@@ -164,6 +165,7 @@ export default function EventDescription(eventId: string) {
                 setFeatures(response.features);
                 setRoleStars(response.rating ?? 0);
                 setPackages(response.packageType ?? []);
+                setReviews(response.reviews ?? []);
             }
         } else {
             router.push('/home');
@@ -478,11 +480,11 @@ export default function EventDescription(eventId: string) {
                                     <View className="flex flex-row">
                                         <View className="flex flex-row w-3/5 gap-2">
                                             <View className="w-12 h-12 rounded-full flex flex-row">
-                                                <Image source={{ uri: review['profilePhoto'] }} style={{ width: '100%', height: '100%', borderRadius: 9999 }} />
+                                                <Image source={{ uri: review['profile_photo'] }} style={{ width: '100%', height: '100%', borderRadius: 9999 }} />
                                             </View>
                                             <View className="h-full flex flex-col">
-                                                <Text className="text-white text-lg font-bold" style={{lineHeight: 18}}>{review['username']}</Text>
-                                                <Text className="text-[#BDBDBD] text-sm" style={{lineHeight: 14}}>{review['nickname']}</Text>
+                                                <Text className="text-white text-lg font-bold" style={{lineHeight: 18}}>{review['nickname']}</Text>
+                                                <Text className="text-[#BDBDBD] text-sm" style={{lineHeight: 14}}>@{review['username']}</Text>
                                             </View>
                                         </View>
                                         <View className="flex flex-row gap-1 items-start w-2/5 justify-end">
@@ -505,7 +507,7 @@ export default function EventDescription(eventId: string) {
                                         </View>
                                     </View>
                                     <View className="flex flex-col">
-                                        <Text className="text-[#BDBDBD] text-xs text-center">{review['comment']}</Text>
+                                        <Text className="text-[#BDBDBD] text-xs text-center">{review['review']}</Text>
                                     </View>
                                 </View>
                             ))) 
@@ -515,11 +517,11 @@ export default function EventDescription(eventId: string) {
                                     <View className="flex flex-row">
                                         <View className="flex flex-row w-3/5 gap-2">
                                             <View className="w-12 h-12 rounded-full flex flex-row">
-                                                <Image source={{ uri: review['profilePhoto'] }} style={{ width: '100%', height: '100%', borderRadius: 9999 }} />
+                                                <Image source={{ uri: review['profile_photo'] }} style={{ width: '100%', height: '100%', borderRadius: 9999 }} />
                                             </View>
                                             <View className="h-full flex flex-col">
-                                                <Text className="text-white text-lg font-bold" style={{lineHeight: 18}}>{review['username']}</Text>
-                                                <Text className="text-[#BDBDBD] text-sm" style={{lineHeight: 14}}>{review['nickname']}</Text>
+                                                <Text className="text-white text-lg font-bold" style={{lineHeight: 18}}>{review['nickname']}</Text>
+                                                <Text className="text-[#BDBDBD] text-sm" style={{lineHeight: 14}}>@{review['username']}</Text>
                                             </View>
                                         </View>
                                         <View className="flex flex-row gap-1 items-start w-2/5 justify-end">
@@ -542,7 +544,7 @@ export default function EventDescription(eventId: string) {
                                         </View>
                                     </View>
                                     <View className="flex flex-col">
-                                        <Text className="text-[#BDBDBD] text-xs text-center">{review['comment']}</Text>
+                                        <Text className="text-[#BDBDBD] text-xs text-center">{review['review']}</Text>
                                     </View>
                                 </View>
                             ))
