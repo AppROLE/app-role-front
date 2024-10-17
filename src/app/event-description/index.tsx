@@ -478,7 +478,7 @@ export default function EventDescription(eventId: string) {
                     <Text className="text-white text-2xl font-bold mt-8">Reviews</Text>
                     <View>
                         { reviews.length === 0 ? (
-                            <Text className="text-white text-base mt-2">Nenhuma avaliação disponível</Text>
+                            <Text className="text-white text-base text-center mt-2">Nenhuma avaliação disponível</Text>
                         ) :
                         showAllReviews ? (
                             reviews.map((review, index) => (
