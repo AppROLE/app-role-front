@@ -53,9 +53,9 @@ export default function RoleEmphasis(role: object) {
         return name
     }
 
-    useEffect(() => {
-        console.log(role.events[0]);
-    }, []);
+    // useEffect(() => {
+    //     console.log(role.events[0]);
+    // }, []);
     
     useEffect(() => {
         setDate(new Date(role.events[0].date))
