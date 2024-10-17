@@ -18,6 +18,7 @@ import Carousel from 'react-native-reanimated-carousel'
 import { UserContext } from '@/context/user_context'
 import { EventContext } from '@/context/event_context'
 import { router } from 'expo-router'
+import React from 'react'
 
 export default function Home() {
   const [scrollDisabled, setScrollDisabled] = useState(false)
@@ -25,16 +26,16 @@ export default function Home() {
   const [roles, setRoles] = useState([])
   const [activeSlide, setActiveSlide] = useState(0)
   const [loadLock, setLoadLock] = useState(false)
-  const [phrase, setPhrase] = useState('')
   const [rolesLoaded, setRolesLoaded] = useState(20)
   const [search, setSearch] = useState('')
   const [typingTimeout, setTypingTimeout] = useState<any>(null)
   const [searchResults, setSearchResults] = useState([])
+  const [phrase, setPhrase] = useState<any>()
 
-  const { getPhrase } = useContext(UserContext)
   const { getAll } = useContext(EventContext)
   const { getRoleBombando } = useContext(EventContext)
   const { getEventsByFilter } = useContext(EventContext)
+  const { getPhrase } = useContext(UserContext)
 
   const [typesRole, setTypesRole] = useState([
     {
@@ -148,9 +149,24 @@ export default function Home() {
     }
   }
 
-  async function getThePhrase() {
-    const response = await getPhrase()
-    setPhrase(response.phrase)
+  async function phraseAndFormat() {
+      const response = await getPhrase()
+      console.log(response)
+      setPhrase(
+        <Text className='text-lg'>
+          {response.phrase.split('${username}').map((part, index) => (
+            <React.Fragment key={index}>
+              {part.split('ROLE').map((subPart, subIndex) => (
+                <React.Fragment key={subIndex}>
+                  {subPart}
+                  {subIndex !== part.split('ROLE').length - 1 && <Text className="font-bold">ROLE</Text>}
+                </React.Fragment>
+              ))}
+              {index !== response.phrase.split('${username}').length - 1 && <Text className="font-bold">{response.username}</Text>}
+            </React.Fragment>
+          ))}
+        </Text>
+      );
   }
 
   async function getEvents() {
@@ -190,10 +206,6 @@ export default function Home() {
   };
 
   useEffect(() => {
-    getThePhrase()
-  }, [])
-
-  useEffect(() => {
     getEvents()
   }, [])
 
@@ -202,8 +214,8 @@ export default function Home() {
   }, [])
 
   useEffect(() => {
-
-  }, [roles])
+    phraseAndFormat()
+  }, [])
 
   return (
     <Background text={phrase} scrollable lockScroll={scrollDisabled} function1={loadMoreRoles}>
