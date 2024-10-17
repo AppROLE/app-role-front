@@ -11,7 +11,6 @@ import { useEffect, useState, useRef, useContext } from "react";
 import { View, Text, Image, ScrollView, TouchableOpacity, Animated, Easing } from "react-native";
 
 export default function EventDescription(eventId: string) {
-    const { id } = useLocalSearchParams<{ id: string }>();
     // Interfaces
     interface Review {
         id: number;
@@ -150,9 +149,11 @@ export default function EventDescription(eventId: string) {
                 setDate(`${dateD} ${mouth}`);
                 let hourR = new Date(response.eventDate).toISOString().split('T')[1].split('.')[0];
                 setHour(hourR.split(':')[0] + ':' + hourR.split(':')[1]);
-                const weekDayR = new Date(response.eventDate).getDay();
+
+                const weekDayR = new Date(response.eventDate).getUTCDay();
+                console.log('Dia: ' + weekDayR);
                 let days = ['Domingo', 'Segunda-Feira', 'Terça-Feira', 'Quarta-Feira', 'Quinta-Feira', 'Sexta-Feira', 'Sábado'];
-                setWeekDay(days[weekDayR-1]);
+                setWeekDay(days[weekDayR]);
 
                 setDescription(response.description);
                 setGallery(response.galeryLink ?? []);
@@ -161,6 +162,7 @@ export default function EventDescription(eventId: string) {
                 setMenuLink(response.menuLink ?? '');
                 setFeatures(response.features);
                 setPackagesImages(response.packageType ? response.packageType.map((image: string, index: number) => ({ id: index, image })) : []);
+                setRoleStars(response.rating ?? 0);
             }
         } else {
             router.push('/home');
