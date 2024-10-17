@@ -8,13 +8,14 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { Link, router } from 'expo-router'
 import React from 'react'
-import { View, Pressable, Text, TouchableOpacity } from 'react-native'
-import Toast from 'react-native-toast-message'
+import { View, Pressable, Text } from 'react-native'
+import Toast, { ErrorToast } from 'react-native-toast-message'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function SignUp() {
   const [isVisible, setIsVisible] = React.useState(false)
   const [isChecked, setIsChecked] = React.useState(false)
+  const [checkedError, setCheckedError] = React.useState(false)
   const [user, setUser] = React.useState('')
   const [userError, setUserError] = React.useState('')
   const [email, setEmail] = React.useState('')
@@ -34,8 +35,8 @@ export default function SignUp() {
     const numberRegex = /[0-9]/
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if(user.length == 0){
-      setUserError("Digite seu nome")
+    if(user.length == 8){
+      setUserError("Nome inválido")
       isValid = false
     }
     if (!email || !emailRegex.test(email)) {
@@ -47,6 +48,11 @@ export default function SignUp() {
       setConfirmPasswordError('Senhas não conferem!')
       isValid = false
     }
+
+    if (!isChecked){
+      setCheckedError(true)
+      isValid = false
+    } 
 
     if (password.length < 6) {
       setPasswordError('Senha muito curta!')
@@ -80,8 +86,10 @@ export default function SignUp() {
       return
     }
 
+    const trimUser = user.trim()
+
     const data = {
-      name: user,
+      name: trimUser,
       email: email,
       password: password,
       acceptedTerms: isChecked
@@ -89,10 +97,7 @@ export default function SignUp() {
 
     try {
       const response: SignUpResponse = await signUp(data)
-      console.log(response)
-      if (!(response.message == 'User created successfully')){
-        return
-      }
+      if (!(response.message == 'User created successfully')) return
       Toast.show({
         type: 'success',
         text1: 'Sucesso',
@@ -104,14 +109,20 @@ export default function SignUp() {
       await AsyncStorage.setItem('user_email', email)
       await AsyncStorage.setItem('user_password', password)
       router.push('/recovery-code');    
-    } catch (error: any) {
+    } catch(error: any) {
       Toast.show({
-        type: 'error',
         text1: 'Erro',
-        text2: error.message || 'Ocorreu um erro ao realizar o cadastro.',
+        text2: error.replace("SignUpController, Error on handle: ", '') || 'Ocorreu um erro ao realizar o cadastro.',
+        position: 'top',
         visibilityTime: 3000,
-        topOffset: 0
-      })
+        type: 'error',
+        props: {
+          style: { backgroundColor: 'black' }, 
+          text1Style: { color: 'white', fontSize: 18, fontFamily: "nunito" }, 
+          text2Style: { color: 'white', fontFamily: "nunito" }, 
+          contentContainerStyle: { backgroundColor: 'black' } 
+        },
+      });
     }
     finally{
       setButtonDebounce(false)
@@ -144,7 +155,25 @@ export default function SignUp() {
 
   return (
     <Background>
-      <View className="flex h-[89%] w-full flex-col items-center gap-11 rounded-t-[54px] bg-background">
+      <View className="flex h-[89%] w-full flex-col items-center gap-10 rounded-t-[54px] bg-background">
+        <Toast config={{
+          error: (props) => (
+            <ErrorToast
+              {...props}
+              style={{ backgroundColor: 'purple'}}
+              text1Style={{
+                fontSize: 17,
+                color: 'white',
+                fontFamily: 'nunito', 
+              }}
+              text2Style={{
+                fontSize: 15,
+                color: 'white',
+                fontFamily: 'nunito',
+              }}
+            />
+          ),
+        }}/>
         <View className="flex items-center">
           <View className="flex flex-row gap-[5px]">
             <Text className="text-2xl font-nunitoBold text-white max-[320px]:text-xl">
@@ -193,8 +222,8 @@ export default function SignUp() {
                 />
               </View>
             </View>
-            <View className="mt-5 w-2/3 flex flex-row items-center  justify-center gap-3">
-              <Pressable onPress={() => setIsChecked(!isChecked)}>
+            <View className="mt-5 w-2/3 flex flex-row items-center justify-center gap-3">
+              <Pressable onPress={() => {setIsChecked(!isChecked); setCheckedError(false)}}>
                 {isChecked ? (
                   <Ionicons name="checkbox-outline" size={24} color="white" />
                 ) : (
@@ -209,6 +238,9 @@ export default function SignUp() {
                 e política de privacidade
               </Text>
             </View>
+            <Text className={`text-start w-[75%] font-nunito text-xs ${checkedError ? 'text-red-400' : 'text-transparent'}`}>
+                *Você precisa concordar com os termos de uso.
+              </Text>
           </View>
         </View>
         <View className="w-full gap-8 px-[8%]">
