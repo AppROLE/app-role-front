@@ -1,16 +1,17 @@
+import { UserContext } from '@/context/user_context';
 import Entypo from '@expo/vector-icons/Entypo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFocusEffect } from 'expo-router';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useContext } from 'react';
 import { Animated, Image, Text, View, ScrollView, TouchableOpacity, Platform } from 'react-native';
 
 const statusBarHeight = Constants.statusBarHeight;
 
 interface BackgroundProps {
   children: any
-  text?: string
+  text?: any
   scrollable?: boolean
   themeMode?: string
   lockScroll?: boolean
@@ -135,6 +136,9 @@ export default function Background({ children, text, scrollable, themeMode, lock
     }
   }
 
+  useEffect(() => {
+    console.log(text);
+  }, [])
 
   return (
     <LinearGradient
@@ -164,7 +168,7 @@ export default function Background({ children, text, scrollable, themeMode, lock
         {text && (
           <Animated.View style={{ opacity: textOpacity }}>
             <Animated.Text style={{ fontSize: textSize }} className="text-center text-md text-white mb-8">
-              <Text className='text-lg'>{text}</Text>
+              {text}
             </Animated.Text>
           </Animated.View>
         )}
