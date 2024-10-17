@@ -9,12 +9,13 @@ export class ReviewRepositoryHttp {
         try {
             const idToken = await AsyncStorage.getItem('idToken')
             if (idToken === '') return;
-            const response = await http.post('/create-review', data, {
+            const response = await httpEvent.post('/create-review', data, {
                 headers: {'Authorization': `Bearer ${idToken}`}
             })
             return response.data as createReviewResponseDTO
         } catch (error: any) {
             // console.log("ERRO NA REQUEST", error.response)
+            console.log(error.response.data)
             throw new Error(error)
         }
     }
