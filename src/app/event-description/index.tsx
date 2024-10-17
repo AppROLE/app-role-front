@@ -197,6 +197,12 @@ export default function EventDescription(eventId: string) {
     }, []);
 
     useEffect(() => {
+        if (!modalVisible){
+            getInfosEvent();
+        }
+    }, [modalVisible]);
+
+    useEffect(() => {
         Animated.timing(animatedHeight, {
             toValue: imageSize ? 40 : 16, // Muda entre 40% e 16% de altura
             duration: 300, // Duração da animação em milissegundos
