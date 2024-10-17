@@ -1,4 +1,6 @@
 import { FontAwesome6 } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { View, Text, Dimensions, Image, ColorValue } from "react-native";
 
@@ -35,6 +37,11 @@ export default function RoleEmphasis(role: object) {
             case 11:
                 return `${day} DEZ`
         }
+    }
+
+    async function handleRole() {
+        await AsyncStorage.setItem('eventId', role.events[0].eventId)
+        router.push(`/event-description`)
     }
 
     function nameFormat() {
