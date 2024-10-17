@@ -54,7 +54,7 @@ export default function Favorites() {
             } finally {
                 setLoading(false); // Finaliza o carregamento
             }
-        }, 300); // Atraso de 300ms para o debounce
+        }, 800); 
 
         // Limpa o timeout quando o componente for desmontado
         return () => {
