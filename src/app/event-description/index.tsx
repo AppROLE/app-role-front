@@ -356,9 +356,11 @@ export default function EventDescription(eventId: string) {
                     <Text className={`text-white text-base mt-2 ${descriptionHeight ? '' : 'max-h-[200px]'}`}>
                         {description}
                     </Text>
-                    <TouchableOpacity className="mt-4" onPress={() => setDescriptionHeight(!descriptionHeight)}>
-                        <Text className="text-purple-500 text-base text-center">{descriptionHeight ? 'Ler menos' : 'Ler mais'}</Text>
-                    </TouchableOpacity>
+                    {description.length > 200 && (
+                        <TouchableOpacity className="mt-4" onPress={() => setDescriptionHeight(!descriptionHeight)}>
+                            <Text className="text-purple-500 text-base text-center">{descriptionHeight ? 'Ler menos' : 'Ler mais'}</Text>
+                        </TouchableOpacity>
+                    )}
                 </View>
                 {/* Adress */}
                 <View className="mt-8">
