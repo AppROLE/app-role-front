@@ -27,8 +27,7 @@ export default function ModalReview({ visible, onClose }: ModalReviewProps) {
 
     async function create() {
         const data: createReviewRequestDTO = {
-            eventId: "d942a349-f74a-4d94-b591-ffb1fd143ad8",
-            instituteId: '15da4d9c-8b98-459c-8d02-14f644ad34f8',
+            eventId: "da1c716a-b4d2-4c85-b139-27740a9b5f89",
             reviewedAt: new Date().getTime(),
             star: selectedStars,
             review: reviewText
@@ -69,12 +68,12 @@ export default function ModalReview({ visible, onClose }: ModalReviewProps) {
                                 <TouchableOpacity className="rounded-full bg-button_color mr-5 absolute left-[12px] top-[12px]" onPress={onClose}>
                                     <Ionicons name="arrow-back" size={24} color='#fff' className="p-2" />
                                 </TouchableOpacity>
-                                <Text className="text-3xl text-white">
+                                <Text className="text-3xl text-white font-nunitoBold">
                                     Escreva sua Review
                                 </Text>
                             </View>
                             <View className="w-full mt-5">
-                                <Text className="text-white text-center text-lg">
+                                <Text className="text-white text-center text-lg font-nunito">
                                     Como foi a sua experiência nesse ROLE?
                                 </Text>
                                 <Text className="text-white text-center text-lg">Conta pra gente!</Text>
@@ -109,7 +108,7 @@ export default function ModalReview({ visible, onClose }: ModalReviewProps) {
                             </View>
                             <View className="w-[80%] mx-auto mt-10">
                                 <RoleMainButton type="gradient" buttonFunction={() => create()}>
-                                    <Text className="text-white text-md">Publicar</Text>
+                                    <Text className="text-white text-md font-nunito">Publicar</Text>
                                 </RoleMainButton>
                             </View>
                         </View>

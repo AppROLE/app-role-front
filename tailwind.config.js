@@ -20,7 +20,8 @@ module.exports = {
         sub_title: '#BDBDBD',
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif']
+        nunito: ['Nunito', 'nunito-serif'],
+        nunitoBold: ['NunitoBold', 'nunito-serif']
       },
       screens: {
         'big-cellphone': '1px'

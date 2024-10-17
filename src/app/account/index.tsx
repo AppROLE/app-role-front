@@ -83,7 +83,7 @@ export default function Account() {
             />
           </TouchableOpacity>
           <View className="flex-1 h-full mb-8">
-            <Text className="absolute left-1/2 transform -translate-x-1/2 text-white text-3xl font-bold">
+            <Text className="absolute left-1/2 transform -translate-x-1/2 text-white text-3xl font-nunitoBold">
               Conta
             </Text>
           </View>
@@ -91,7 +91,7 @@ export default function Account() {
 
         <ScrollView style={{marginBottom: tabBarHeight + 96}}>
           <View className="pl-6 gap-6 pt-6 items-start border-b-2 border-b-line_gray">
-            <Text className="text-white text-lg font-bold">
+            <Text className="text-white text-lg font-nunitoBold">
               Data de nascimento
             </Text>
             <View className="flex flex-row flex-wrap mb-8">
@@ -104,19 +104,19 @@ export default function Account() {
 
           </View>
           <View className="px-6 gap-6 pt-6 items-start border-b-2 border-b-line_gray">
-            <Text className="text-white text-lg font-bold">
+            <Text className="text-white text-lg font-nunitoBold">
               Telefone
             </Text>
             <RoleInput type="none" placeholder="(00) 0 0000-0000" value={phone} onChangeText={handlePhoneChange}/>
           </View>
           <View className="px-6 gap-6 pt-6 items-start border-b-2 border-b-line_gray">
-            <Text className="text-white text-lg font-bold">
+            <Text className="text-white text-lg font-nunitoBold">
               CPF
             </Text>
             <RoleInput type="none" placeholder="000.000.000-00" value={cpf} onChangeText={handleCpfChange}/>
           </View>
           <View className="px-6 gap-6 pt-6 items-start border-b-2 border-b-line_gray">
-            <Text className="text-white text-lg font-bold">
+            <Text className="text-white text-lg font-nunitoBold">
               Gênero
             </Text>
             <View className="flex flex-row gap-2 mb-8">
@@ -138,21 +138,21 @@ export default function Account() {
             </View>
           </View>
           <View className="gap-6 pt-6 items-start border-b-2 border-b-line_gray">
-            <Text className="ml-6 text-white text-lg font-bold">
+            <Text className="ml-6 text-white text-lg font-nunitoBold">
               E-mail
             </Text>
             <TouchableOpacity onPress={openChange} className="bg-button_color p-2 justify-center self-center rounded-3xl mb-8 w-10/12">
-              <Text className="text-white text-lg text-center">
+              <Text className="text-white text-lg text-center font-nunito">
                 Alterar E-mail
               </Text>
             </TouchableOpacity>
           </View>
           <View className="gap-6 pt-6 items-start">
-            <Text className="ml-6 text-white text-lg font-bold">
+            <Text className="ml-6 text-white text-lg font-nunitoBold">
               Senha
             </Text>
             <TouchableOpacity onPress={openChange} className="bg-button_color p-2 justify-center self-center rounded-3xl w-10/12">
-              <Text className="text-white text-lg text-center">
+              <Text className="text-white text-lg text-center font-nunito">
                 Alterar Senha
               </Text>
             </TouchableOpacity>
@@ -160,7 +160,7 @@ export default function Account() {
         </ScrollView>
         <View onLayout={handleLayout} className="absolute flex justify-end items-center py-4 bg-button_color w-full" style={{bottom: tabBarHeight}}>
           <BigButton buttonFunction={onSave}>
-            <Text className="text-white text-lg">
+            <Text className="text-white text-lg font-nunito">
               Salvar
             </Text>
           </BigButton>

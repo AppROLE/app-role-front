@@ -40,4 +40,21 @@ export class PresenceRepositoryHttp {
             return error.response.data.message
         }
     }
+
+    async getAllConfirmedEvents() { 
+        try {
+            const idToken = await AsyncStorage.getItem('idToken') || ''
+            if (idToken === '') return
+            const response = await http.get(`/get-all-confirmed-events-by-profile`, {
+                headers: {
+                    Authorization: `Bearer ${idToken}`
+                }
+            });
+            console.log("RESPOSTA DA REQUEST", response.data)
+            return response.data
+        } catch (error: any) {
+            console.log("ERRO NA REQUEST", error.response.data)
+            return error.response.data.message
+        }
+    }
 }

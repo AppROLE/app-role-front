@@ -74,3 +74,15 @@ export type deleteAccountResponseDTO = {
   message: string
 }
 
+export type updateProfileRequestDTO = { 
+  username?: string,
+  nickname?: string,
+  biography?: string
+  instagramLink?: string
+  tiktokLink?: string
+}
+
+
+export type updateProfileResponseDTO = {
+  message: string
+}

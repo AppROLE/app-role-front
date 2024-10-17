@@ -3,28 +3,46 @@ import { Link, router } from 'expo-router'
 import RoleCard from '../components/roleCard'
 import CategoryCard from '../components/category-musicalCard'
 import RoleMainButton from '../components/roleMainButton'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-
+import * as Font from 'expo-font';
+import Fonte from '../../assets/fonts/Nunito-Regular.ttf'
+import FonteBold from '../../assets/fonts/Nunito-Bold.ttf'
 export default function Index() {
   const [buttonDisabled, setButtonDisabled] = useState(false)
+  const [fontsLoaded, setFontsLoaded] = useState(false);
 
   function teste() {
     console.log('teste')
     // setButtonDisabled(true)
     // setTimeout(() => {
-    //   setButtonDisabled(false)
-    // }, 3000)
-  }
+      //   setButtonDisabled(false)
+      // }, 3000)
+    }
 
-  function saveAsync() {
-    AsyncStorage.setItem('emaiu', 'joao@emaiu')
-    AsyncStorage.setItem('passwordi', '123456')
-  }
+    function saveAsync() {
+      AsyncStorage.setItem('emaiu', 'joao@emaiu')
+      AsyncStorage.setItem('passwordi', '123456')
+    }
 
-  function clearAsync() {
-    AsyncStorage.clear()
-  }
+    function clearAsync() {
+      AsyncStorage.clear()
+    }
+
+    useEffect(() => {
+      async function loadFonts() {
+        await Font.loadAsync({
+          Nunito: Fonte,
+          NunitoBold: FonteBold
+        });
+        setFontsLoaded(true);
+      }
+      loadFonts();
+    }, []);
+
+    if (!fontsLoaded) {
+      return null; //
+    }
 
   return (
     <View className="flex h-full w-full items-center justify-center bg-blue-100">
