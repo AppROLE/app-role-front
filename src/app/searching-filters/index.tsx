@@ -254,7 +254,7 @@ export default function SearchingFilters() {
     }
 
     if (dateSelected) {
-      filt = filt + '&event_date=' + date.toISOString().split('T')[0]
+      filt = filt + '&event_date=' + date.toISOString().split('T')[0] //TEM QUE ACERTAR AINDA ou String ou Date
     }
     // console.log(filt)
     // console.log(search.replace(/ /g, '+'))
