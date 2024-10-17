@@ -195,17 +195,66 @@ export default function SearchingFilters() {
 
   async function getSearchFilter() {
     let filt = ''
+    let title = ''
     for (const filter of filters) {
       if (filter.selected) {
-        // console.log(filter.title)
-        filt = filt + '&' + filter.title + '='
-        // console.log(filt)
+        switch (filter.title) {
+          case 'Região':
+            title = 'district_id'
+            break
+          case 'Tipo de ROLE':
+            title = 'category'
+            break
+          case 'Gênero Musical':
+            title = 'music_type'
+            break
+          case 'Preço':
+            title = 'price'
+            break
+          case 'Idade':
+            title = 'age_range'
+            break
+          case 'Avaliação':
+            title = 'rating' //TEM QUE ACERTAR AINDA
+            break
+          case 'Features':
+            title = 'features'
+            break
+          case 'Amigos':
+            title = 'friends'
+            break
+        }
+        filt = filt + '&' + title + '='
         for (const selected of filter.selected) {
           // console.log(filter.options[selected].value)
-          filt = filt + filter.options[selected].value + ','
+          if (title === 'price') {
+            switch (filter.options[selected].value) {
+              case 'free':
+                filt = filt + '1' + '+'
+                break
+              case 'cheap':
+                filt = filt + '2' + '+'
+                break
+              case 'expensive':
+                filt = filt + '3' + '+'
+                break
+              case 'very-expensive':
+                filt = filt + '4' + '+'
+                break
+              case 'luxury':
+                filt = filt + '5' + '+'
+                break
+            }
+          }else {
+            filt = filt + filter.options[selected].value + '+'
+          }
         }
         filt = filt.slice(0, -1)
       }
+    }
+
+    if (dateSelected) {
+      filt = filt + '&event_date=' + date.toISOString().split('T')[0]
     }
     // console.log(filt)
     // console.log(search.replace(/ /g, '+'))
