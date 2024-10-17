@@ -151,7 +151,7 @@ export default function EventDescription(eventId: string) {
                 setHour(hourR.split(':')[0] + ':' + hourR.split(':')[1]);
 
                 const weekDayR = new Date(response.eventDate).getUTCDay();
-                console.log('Dia: ' + weekDayR);
+                // console.log('Dia: ' + weekDayR);
                 let days = ['Domingo', 'Segunda-Feira', 'Terça-Feira', 'Quarta-Feira', 'Quinta-Feira', 'Sexta-Feira', 'Sábado'];
                 setWeekDay(days[weekDayR]);
 
@@ -228,8 +228,10 @@ export default function EventDescription(eventId: string) {
                     }}
                 />
                 <TouchableOpacity className="w-12 h-12 bg-black flex justify-center items-center rounded-full absolute top-20 left-8"
-                    onPress={() =>
-                        router.push('/home')
+                    onPress={async () => {
+                            await AsyncStorage.removeItem('eventId')
+                            router.push('/home')
+                        }
                     }>
                     <FontAwesome name="arrow-left" size={32} color="white" />
                 </TouchableOpacity>
