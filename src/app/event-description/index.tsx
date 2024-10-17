@@ -3,6 +3,7 @@ import { InstituteContext } from "@/context/institute_context";
 import ModalListaConfirmados from "@/src/components/modalListaConfirmados";
 import ModalReview from "@/src/components/modalReview";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
 import { openURL } from "expo-linking";
 import { router, useLocalSearchParams } from "expo-router";
@@ -119,65 +120,50 @@ export default function EventDescription(eventId: string) {
     }
 
     async function getInfosEvent() {
-        const response = await getEventById('55d2b5a6-3995-4415-b072-8f87a2b66c13');
-        console.log(response);
-        if (response) {
-            priceDesign(response.price);
-            setMusicsTypes(response.musicType ?? []);
-            setCategory(response.category ?? '');
-            setAgeRange(response.ageRange ?? '');
+        const id = await AsyncStorage.getItem('eventId');
+        if (id) {
+            const response = await getEventById(id);
+            console.log(response);
+            if (response) {
+                priceDesign(response.price);
+                setMusicsTypes(response.musicType ?? []);
+                setCategory(response.category ?? '');
+                setAgeRange(response.ageRange ?? '');
 
-            let dateR = new Date(response.eventDate).toISOString().split('T')[0];
-            let dateD = dateR.split('-')[2];
-            let mouth = dateR.split('-')[1];
-            switch (mouth) {
-                case '01': mouth = 'JAN'; break;
-                case '02': mouth = 'FEV'; break;
-                case '03': mouth = 'MAR'; break;
-                case '04': mouth = 'ABR'; break;
-                case '05': mouth = 'MAI'; break;
-                case '06': mouth = 'JUN'; break;
-                case '07': mouth = 'JUL'; break;
-                case '08': mouth = 'AGO'; break;
-                case '09': mouth = 'SET'; break;
-                case '10': mouth = 'OUT'; break;
-                case '11': mouth = 'NOV'; break;
-                case '12': mouth = 'DEZ'; break;
+                let dateR = new Date(response.eventDate).toISOString().split('T')[0];
+                let dateD = dateR.split('-')[2];
+                let mouth = dateR.split('-')[1];
+                switch (mouth) {
+                    case '01': mouth = 'JAN'; break;
+                    case '02': mouth = 'FEV'; break;
+                    case '03': mouth = 'MAR'; break;
+                    case '04': mouth = 'ABR'; break;
+                    case '05': mouth = 'MAI'; break;
+                    case '06': mouth = 'JUN'; break;
+                    case '07': mouth = 'JUL'; break;
+                    case '08': mouth = 'AGO'; break;
+                    case '09': mouth = 'SET'; break;
+                    case '10': mouth = 'OUT'; break;
+                    case '11': mouth = 'NOV'; break;
+                    case '12': mouth = 'DEZ'; break;
+                }
+                setDate(`${dateD} ${mouth}`);
+                let hourR = new Date(response.eventDate).toISOString().split('T')[1].split('.')[0];
+                setHour(hourR.split(':')[0] + ':' + hourR.split(':')[1]);
+                const weekDayR = new Date(response.eventDate).getDay();
+                let days = ['Domingo', 'Segunda-Feira', 'Terça-Feira', 'Quarta-Feira', 'Quinta-Feira', 'Sexta-Feira', 'Sábado'];
+                setWeekDay(days[weekDayR-1]);
+
+                setDescription(response.description);
+                setGallery(response.galeryLink ?? []);
+                setBannerUrl(response.bannerUrl ?? 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png');
+                setAddress(response.address);
+                setMenuLink(response.menuLink ?? '');
+                setFeatures(response.features);
+                setPackagesImages(response.packageType ? response.packageType.map((image: string, index: number) => ({ id: index, image })) : []);
             }
-            setDate(`${dateD} ${mouth}`);
-            let hourR = new Date(response.eventDate).toISOString().split('T')[1].split('.')[0];
-            setHour(hourR.split(':')[0] + ':' + hourR.split(':')[1]);
-            const weekDayR = new Date(response.eventDate).getDay();
-            let days = ['Domingo', 'Segunda-Feira', 'Terça-Feira', 'Quarta-Feira', 'Quinta-Feira', 'Sexta-Feira', 'Sábado'];
-            setWeekDay(days[weekDayR-1]);
-
-            setDescription(response.description);
-            setGallery(response.galeryLink ?? []);
-            setBannerUrl(response.bannerUrl ?? 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png');
-            setAddress(response.address);
-            setMenuLink(response.menuLink ?? '');
-            setFeatures(response.features);
-            setPackagesImages(response.packageType ? response.packageType.map((image: string, index: number) => ({ id: index, image })) : []);
-        }
-    }
-
-    async function getReviewsEvent() {
-        const response = await getReviewsEventById('9017cfe4-c287-42a0-997c-39f67e9e37f5');
-        // console.log(response);
-        if (response.reviews.length > 0) {
-            const formattedReviews: Review[] = response.reviews.map((review: any) => ({
-                id: review.id,
-                nickname: review.nickname,
-                profilePhoto: review.profilePhoto,
-                star: review.star,
-                comment: review.comment,
-            }));
-            setReviews(formattedReviews);
-            let totalStars = 0;
-            formattedReviews.map((review) => totalStars += review.star);
-            const averageStars = totalStars / formattedReviews.length;
-            // console.log('Average stars:', averageStars);
-            setRoleStars(averageStars);
+        } else {
+            router.push('/home');
         }
     }
 
@@ -199,10 +185,6 @@ export default function EventDescription(eventId: string) {
 
     useEffect(() => {
         getInfosEvent();
-    }, []);
-
-    useEffect(() => {
-        getReviewsEvent();
     }, []);
 
     useEffect(() => {
@@ -234,7 +216,7 @@ export default function EventDescription(eventId: string) {
             >
                 <Image
                     source={{
-                        uri: bannerUrl,
+                        uri: bannerUrl ? bannerUrl : 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png',
                     }}
                     style={{
                         width: '100%',
@@ -253,7 +235,7 @@ export default function EventDescription(eventId: string) {
                     <View className="w-12 h-12 rounded-full">
                         <Image
                             source={{
-                                uri: logo_photo,
+                                uri: logo_photo ? logo_photo : 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png',
                             }}
                             style={{ width: '100%', height: '100%', borderRadius: 9999 }}
                         />
