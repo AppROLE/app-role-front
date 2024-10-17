@@ -17,8 +17,8 @@ export default function EventDescription(eventId: string) {
         reviewedAt: string;
         star: number;
         username: string;
-        nickname: string;
-        profile_photo: string;
+        name: string;
+        photoUrl: string;
     }
 
     // States
@@ -482,14 +482,14 @@ export default function EventDescription(eventId: string) {
                         ) :
                         showAllReviews ? (
                             reviews.map((review, index) => (
-                                <View key={`viewreview-${review['nickname']}-${index}`} className="flex flex-col gap-2 mt-4 bg-[#1C1C1C] p-4 rounded-xl">
+                                <View key={`viewreview-${review['name']}-${index}`} className="flex flex-col gap-2 mt-4 bg-[#1C1C1C] p-4 rounded-xl">
                                     <View className="flex flex-row">
                                         <View className="flex flex-row w-3/5 gap-2">
                                             <View className="w-12 h-12 rounded-full flex flex-row">
-                                                <Image source={{ uri: review['profile_photo'] }} style={{ width: '100%', height: '100%', borderRadius: 9999 }} />
+                                                <Image source={{ uri: review['photoUrl'] }} style={{ width: '100%', height: '100%', borderRadius: 9999 }} />
                                             </View>
                                             <View className="h-full flex flex-col">
-                                                <Text className="text-white text-lg font-bold" style={{lineHeight: 18}}>{review['nickname']}</Text>
+                                                <Text className="text-white text-lg font-bold" style={{lineHeight: 18}}>{review['name']}</Text>
                                                 <Text className="text-[#BDBDBD] text-sm" style={{lineHeight: 14}}>@{review['username']}</Text>
                                             </View>
                                         </View>
@@ -523,10 +523,10 @@ export default function EventDescription(eventId: string) {
                                     <View className="flex flex-row">
                                         <View className="flex flex-row w-3/5 gap-2">
                                             <View className="w-12 h-12 rounded-full flex flex-row">
-                                                <Image source={{ uri: review['profile_photo'] }} style={{ width: '100%', height: '100%', borderRadius: 9999 }} />
+                                                <Image source={{ uri: review['photoUrl'] }} style={{ width: '100%', height: '100%', borderRadius: 9999 }} />
                                             </View>
                                             <View className="h-full flex flex-col">
-                                                <Text className="text-white text-lg font-bold" style={{lineHeight: 18}}>{review['nickname']}</Text>
+                                                <Text className="text-white text-lg font-bold" style={{lineHeight: 18}}>{review['name']}</Text>
                                                 <Text className="text-[#BDBDBD] text-sm" style={{lineHeight: 14}}>@{review['username']}</Text>
                                             </View>
                                         </View>
