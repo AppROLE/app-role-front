@@ -23,6 +23,7 @@ export type findPersonResponseDTO = {
 
 export type getPhraseResponseDTO = {
     phrase: string
+    username: string
 }
 
 export type getProfileResponseDTO = { 
