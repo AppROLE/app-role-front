@@ -124,7 +124,7 @@ export default function EventDescription(eventId: string) {
         const id = await AsyncStorage.getItem('eventId');
         if (id) {
             const response = await getEventById(id);
-            // console.log(response);
+            console.log(response);
             if (response) {
                 priceDesign(response.price);
                 setMusicsTypes(response.musicType ?? []);
@@ -159,7 +159,7 @@ export default function EventDescription(eventId: string) {
 
                 setDescription(response.description);
                 setGallery(response.galeryLink ?? []);
-                setBannerUrl(response.bannerUrl ?? 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png');
+                setBannerUrl(response.eventPhotoLink ?? 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png');
                 setAddress(response.address);
                 setMenuLink(response.menuLink ?? '');
                 setFeatures(response.features);
