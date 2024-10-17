@@ -468,7 +468,10 @@ export default function EventDescription(eventId: string) {
                 <View>
                     <Text className="text-white text-2xl font-bold mt-8">Reviews</Text>
                     <View>
-                        {showAllReviews ? (
+                        { reviews.length === 0 ? (
+                            <Text className="text-white text-base mt-2">Nenhuma avaliação disponível</Text>
+                        ) :
+                        showAllReviews ? (
                             reviews.map((review, index) => (
                                 <View key={`viewreview-${review['nickname']}-${index}`} className="flex flex-col gap-2 mt-4 bg-[#1C1C1C] p-4 rounded-xl">
                                     <View className="flex flex-row">
@@ -543,9 +546,11 @@ export default function EventDescription(eventId: string) {
                                 </View>
                             ))
                         )}
-                        <TouchableOpacity className="mt-2" onPress={() => setShowAllReviews(!showAllReviews)}>
-                            <Text className="text-purple-500 text-base text-center">{showAllReviews ? 'Ver menos' : 'Ver mais'}</Text>
-                        </TouchableOpacity>
+                        {reviews.length > 1 && (
+                            <TouchableOpacity className="mt-2" onPress={() => setShowAllReviews(!showAllReviews)}>
+                                <Text className="text-purple-500 text-base text-center">{showAllReviews ? 'Ver menos' : 'Ver mais'}</Text>
+                            </TouchableOpacity>
+                        )}
                     </View>
                     <View className="mt-4">
                         <TouchableOpacity className="flex-row items-center bg-[#1C1C1C] rounded-full px-4 py-2" onPress={() => setModalVisible(true)}>
