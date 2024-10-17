@@ -3,7 +3,7 @@ import RoleMainButton from '@/src/components/roleMainButton'
 import SearchingBarInput from '@/src/components/searchingBarInput'
 import AnimatedOption from '@/src/components/selectedCard'
 import { useRouter } from 'expo-router'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import {
   View,
   Text,
@@ -12,6 +12,7 @@ import {
 } from 'react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import Svg from '@/src/components/svg'
+import { EventContext } from '@/context/event_context'
 
 interface Filter {
   icon: string
@@ -136,6 +137,8 @@ export default function SearchingFilters() {
   const [dateSelected, setDateSelected] = useState(false)
   const [formattedDate, setFormattedDate] = useState('DD/MM/YYYY')
 
+  const { getEventsByFilter } = useContext(EventContext)
+
   const [filters, setFilters] = useState<Filter[]>(
     initialFilters.map((filter) => ({ ...filter, selected: null }))
   )
@@ -190,6 +193,29 @@ export default function SearchingFilters() {
     setDateSelected(true)
   }
 
+  async function getSearchFilter() {
+    let filt = ''
+    for (const filter of filters) {
+      if (filter.selected) {
+        // console.log(filter.title)
+        filt = filt + '&' + filter.title + '='
+        // console.log(filt)
+        for (const selected of filter.selected) {
+          // console.log(filter.options[selected].value)
+          filt = filt + filter.options[selected].value + ','
+        }
+        filt = filt.slice(0, -1)
+      }
+    }
+    // console.log(filt)
+    // console.log(search.replace(/ /g, '+'))
+    console.log(search.replace(/ /g, '+') + filt)
+
+    // const response = await getEventsByFilter(search.replace(/ /g, '+'));
+    // console.log(response)
+    // setSearchResults(response.events)
+  }
+
   function handleVoltar() {
     navigation.back()
   }
@@ -197,6 +223,7 @@ export default function SearchingFilters() {
   function handleClosePicker() {
     setShowPicker(false)
   }
+  
 
   return (
     <Background>
@@ -275,7 +302,7 @@ export default function SearchingFilters() {
               </RoleMainButton>
             </View>
             <View className="w-[40%]">
-              <RoleMainButton type="gradient">
+              <RoleMainButton type="gradient" buttonFunction={() => getSearchFilter()}>
                 <Text className="text-white text-center">Pesquisar</Text>
               </RoleMainButton>
             </View>
