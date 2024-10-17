@@ -2,7 +2,8 @@ import { FontAwesome6 } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { View, Text, Dimensions, Image, ColorValue } from "react-native";
+import { View, Text, Dimensions, Image, ColorValue, Touchable } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 export default function RoleEmphasis(role: object) {
     const {width, height} = Dimensions.get('window');
@@ -62,7 +63,7 @@ export default function RoleEmphasis(role: object) {
 
     return (
         <>
-            <View className={`w-full bg-blue-500`} style={{height: height*0.21, borderRadius: 24}} >
+            <TouchableOpacity className={`w-full bg-blue-500`} style={{height: height*0.21, borderRadius: 24}} onPress={handleRole}>
                 <View className="absolute top-2 left-2 z-10 bg-[#121212]/70 px-2 py-1 rounded-lg">
                     <Text className="text-white text-base">{dateFormat()}</Text>
                 </View>
@@ -93,7 +94,7 @@ export default function RoleEmphasis(role: object) {
                         </View>
                     </View>
                 </View>
-            </View>
+            </TouchableOpacity>
         </>
     )
 }
