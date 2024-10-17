@@ -19,16 +19,26 @@ const defaultEventContext = {
     },
     getEventById: async (_id: string) => {
         return {
-            eventId: '',
-            name: '',
             address: '',
-            price: 0,
-            description: '',
             ageRange: '',
-            eventDate: new Date(),
+            bannerUrl: '',
+            category: '',
+            description: '',
             districtId: '',
+            eventDate: '',
+            eventId: '',
+            eventPhotoLink: '',
+            features: [],
+            galeryLink: [],
             instituteId: '',
-            features: []
+            menuLink: '',
+            musicType: [],
+            name: '',
+            packageType: [],
+            price: 0,
+            rating: 0,
+            reviews: [],
+            ticketUrl: ''
         }
     },
     getReviewsEventById: async (_id: string) => {
