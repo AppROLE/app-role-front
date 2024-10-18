@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { http, httpEvent } from "../http"
+import { getInstituteByPartnerTypeResponseDTO } from "../types/institute_dto"
 
 
 export class InstituteRepositoryHttp {
@@ -36,7 +37,7 @@ export class InstituteRepositoryHttp {
           Authorization: `Bearer ${idToken}`,
         }
       });
-      return response.data
+      return response.data as getInstituteByPartnerTypeResponseDTO
     } catch (error: any) {
       return error.response.data
     }
