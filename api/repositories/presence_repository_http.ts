@@ -45,7 +45,7 @@ export class PresenceRepositoryHttp {
         try {
             const idToken = await AsyncStorage.getItem('idToken') || ''
             if (idToken === '') return
-            const response = await http.get(`/get-all-confirmed-events-by-profile`, {
+            const response = await httpEvent.get(`/get-all-confirmed-event`, {
                 headers: {
                     Authorization: `Bearer ${idToken}`
                 }

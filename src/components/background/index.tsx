@@ -5,6 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Animated, Image, Text, View, ScrollView, TouchableOpacity, Modal } from 'react-native';
+import Svg from "@/src/components/svg";
 import { SvgUri } from 'react-native-svg';
 import { TextInput } from 'react-native-gesture-handler';
 import RoleMainButton from '../roleMainButton';
@@ -21,9 +22,10 @@ interface BackgroundProps {
   lockScroll?: boolean;
   function1?: any;
   centralize?: boolean;
+  scrollable2?: boolean
 }
 
-export default function Background({ children, text, scrollable, themeMode, lockScroll, function1, centralize }: BackgroundProps) {
+export default function Background({ children, text, scrollable, themeMode, lockScroll, function1, centralize, scrollable2 }: BackgroundProps) {
   const [scrolled, setScrolled] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false); // Controle do modal original
   const [isSecondModalVisible, setSecondModalVisible] = useState(false); // Controle do segundo modal
@@ -213,6 +215,43 @@ export default function Background({ children, text, scrollable, themeMode, lock
             </Animated.Text>
           </Animated.View>
         )}
+        {scrollable2 ?
+          <>
+            <View className="flex h-[89%] flex-col items-center rounded-t-[54px] pt-5" style={{ backgroundColor }}>
+              <View className='w-full'>
+                <Text className="text-3xl text-center text-white">Pacotes</Text>
+              </View>
+              <View className="w-full mt-5">
+                <View className="border border-['#2C2B2B'] w-full"></View>
+              </View>
+              <ScrollView
+                onScroll={handleScroll}
+                scrollEventThrottle={16}
+                className="rounded-t-[54px] pt-12 flex-grow w-[100%]"
+                contentContainerStyle={{ justifyContent: 'flex-start', paddingBottom: 60 }}
+                nestedScrollEnabled={true}
+              >
+                {children}
+              </ScrollView>
+            </View>
+          </>
+          :
+          !scrollable ? (
+            <View className="flex h-[89%] flex-col items-center rounded-t-[54px] pt-12" style={{ backgroundColor }}>
+              {children}
+            </View>
+          ) : (
+            <ScrollView
+              onScroll={handleScroll}
+              scrollEventThrottle={16}
+              className="bg-background rounded-t-[54px] pt-12 flex-grow"
+              contentContainerStyle={{ justifyContent: 'flex-start', paddingBottom: 60 }}
+              nestedScrollEnabled={true}
+              scrollEnabled={!lockScroll}
+            >
+              {children}
+            </ScrollView>
+          )}
         {!scrollable ? (
           <View className="flex h-[89%] flex-col items-center rounded-t-[54px] pt-12" style={{ backgroundColor }}>
             {children}
