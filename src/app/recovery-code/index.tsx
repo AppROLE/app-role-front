@@ -128,7 +128,7 @@ export default function RecoveryCode() {
       <View className="flex h-[89%] flex-col items-center gap-14 rounded-t-[54px] bg-background ">
         <View className="flex items-center">
           <View className="flex flex-row justify-center">
-            <Text adjustsFontSizeToFit={true} numberOfLines={2} className="w-[70%] text-center text-2xl font-normal text-white max-[320px]:text-xl ">
+            <Text adjustsFontSizeToFit={true} numberOfLines={2} className="w-[70%] text-center text-2xl  text-white max-[320px]:text-xl font-nunito">
               Escreva o código de 6 dígitos enviado ao seu e-mail
             </Text>
           </View>
@@ -148,10 +148,10 @@ export default function RecoveryCode() {
               
             <View className="ml-[2%] flex flex-col gap-4">
               <View className="-mt-2 flex w-full flex-row gap-4">
-                <Text className="text-xs text-white">
+                <Text className="text-xs text-white font-nunito">
                   Não recebeu um código?
                 </Text>
-                  <Text onPress={()=> handleResendCode(email)} className='text-[#D8A9FF] text-xs'>Reenviar</Text>
+                  <Text onPress={()=> handleResendCode(email)} className='text-[#D8A9FF] text-xs font-nunitoBold'>Reenviar</Text>
               </View>
             </View>
           </View>
@@ -159,10 +159,10 @@ export default function RecoveryCode() {
 
         <View className='w-[100vw] gap-12 px-[8%]'>
           <RoleMainButton type="gradient" buttonFunction={() => handlePost()}>
-            <Text className="text-white">Continuar</Text>
+            <Text className="text-white font-nunito">Continuar</Text>
           </RoleMainButton>
           <RoleMainButton type="simple" buttonFunction={() => handleVoltar()}>
-            <Text className="text-white">Voltar</Text>
+            <Text className="text-white font-nunito">Voltar</Text>
           </RoleMainButton>
         </View>
       </View>

@@ -224,7 +224,7 @@ export default function SearchingFilters() {
 
                   />
                 </View>
-                <Text className="ml-2 mt-4 text-lg text-white">Data</Text>
+                <Text className="ml-2 mt-4 text-lg text-white font-nunito">Data</Text>
               </View>
               <View className="mx-2 mt-2 flex flex-row flex-wrap">
                 <AnimatedOption
@@ -243,7 +243,7 @@ export default function SearchingFilters() {
                   <View className="ml-4 mt-4">
                     <Svg uri={process.env.EXPO_PUBLIC_URL_S3 + "/" + filter.icon + ".svg"} color="white"/>
                   </View>
-                  <Text className="ml-2 mt-4 text-lg text-white">
+                  <Text className="ml-2 mt-4 text-lg text-white font-nunito">
                     {filter.title}
                   </Text>
                 </View>
@@ -271,12 +271,12 @@ export default function SearchingFilters() {
           <View className="flex flex-row justify-evenly items-center">
             <View className="w-[40%]">
               <RoleMainButton type="simple" buttonFunction={handleClearFilters}>
-                <Text className="text-white text-center">Limpar Filtros</Text>
+                <Text className="text-white text-center font-nunito">Limpar Filtros</Text>
               </RoleMainButton>
             </View>
             <View className="w-[40%]">
               <RoleMainButton type="gradient">
-                <Text className="text-white text-center">Pesquisar</Text>
+                <Text className="text-white text-center font-nunito">Pesquisar</Text>
               </RoleMainButton>
             </View>
           </View>

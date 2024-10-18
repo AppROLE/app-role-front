@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { View, TextInput, Text } from 'react-native' // Import the 'Text' component from 'react-native'
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
+import Svg from '../svg'
 
 export type RoleInputType =
   | 'email'
@@ -42,77 +42,68 @@ export default function RoleInput({
     <View className="w-full">
       <View className="flex w-full flex-row items-baseline gap-2 border-b-[1px] border-[#BDBDBD] pb-1" style={{alignItems: 'flex-end'}}>
         {type === 'email' ? (
-          <FontAwesome6
-            name="envelope"
-            size={24}
-            color={error ? '#F87171' : '#BDBDBD'}
-            solid
+          <Svg
+            uri={process.env.EXPO_PUBLIC_URL_S3 + "/email.svg"}
           />
         ) : type === 'password' ? (
-          <FontAwesome6
-            name="key"
-            size={24}
+          <Svg
+            uri={process.env.EXPO_PUBLIC_URL_S3 + "/key.svg"}
             color={error ? '#F87171' : '#BDBDBD'}
           />
         ) : type === 'confirm-password' ? (
-          <FontAwesome6
-            name="key"
-            size={24}
+          <Svg
+            uri={process.env.EXPO_PUBLIC_URL_S3 + "/key.svg"}
             color={error ? '#F87171' : '#BDBDBD'}
           />
         ) : type === 'user' ? (
-          <FontAwesome6
-            name="user"
-            size={24}
+          <Svg
+            uri={process.env.EXPO_PUBLIC_URL_S3 + "/user.svg"}
             color={error ? '#F87171' : '#BDBDBD'}
-            solid
           />
         ) : type === 'at' ? (
-          <FontAwesome6
-            name="at"
-            size={24}
+          <Svg
+            uri={process.env.EXPO_PUBLIC_URL_S3 + "/at.svg"}
             color={error ? '#F87171' : '#BDBDBD'}
           />
         ) : type === 'hidden-password' ? (
-          <FontAwesome6
-            name="key"
-            size={24}
+          <Svg
+            uri={process.env.EXPO_PUBLIC_URL_S3 + "/key.svg"}
             color={error ? '#F87171' : '#BDBDBD'}
           />
         ) : type === 'hidden-confirm-password' ? (
-          <FontAwesome6
-            name="key"
-            size={24}
+          <Svg
+            uri={process.env.EXPO_PUBLIC_URL_S3 + "/key.svg"}
             color={error ? '#F87171' : '#BDBDBD'}
           />
         ) : type === 'nickname' ? (
-          <FontAwesome6
-            name="user"
-            size={24}
+          <Svg
+            uri={process.env.EXPO_PUBLIC_URL_S3 + "/user.svg"}
             color={error ? '#F87171' : '#BDBDBD'}
           />
         ) : null}
         <TextInput
           placeholder={
-            type === 'email'
-              ? 'Email'
-              : type === 'password'
-                ? 'Senha'
-                : type === 'confirm-password'
-                  ? 'Confirme a senha'
-                  : type === 'user'
-                    ? 'Nome de usuário'
-                    : type === 'at'
-                      ? 'Nome de usuário'
-                      : type === 'hidden-password'
-                        ? 'Senha'
-                        : type === 'hidden-confirm-password'
-                          ? 'Confirme a senha'
-                          : type === 'nickname'
-                            ? 'Apelido'
-                            : type === 'none'
-                            ? placeholder
-                              : ''
+            placeholder
+            ? placeholder + ':'
+              : type === 'email'
+                ? 'E-mail:'
+                : type === 'password'
+                  ? 'Senha:'
+                  : type === 'confirm-password'
+                    ? 'Confirme sua senha:'
+                    : type === 'user'
+                      ? 'Nome completo:'
+                      : type === 'at'
+                        ? 'Nome de usuário'
+                        : type === 'hidden-password'
+                          ? 'Senha:'
+                          : type === 'hidden-confirm-password'
+                            ? 'Confirme sua senha:'
+                            : type === 'nickname'
+                              ? 'Apelido:'
+                              : type === 'none'
+                                ? ''
+                                : ''
 
           }
           className={`w-[75%] ${!error ? 'text-white placeholder:text-[#BDBDBD]' : 'placeholder:text-red-400] text-red-400 opacity-80'} text-[16px] outline-none`}
@@ -127,20 +118,16 @@ export default function RoleInput({
         />
         {(type === 'hidden-password' || type === 'hidden-confirm-password') &&
           (hidden === true ? (
-            <FontAwesome6
-              name="eye"
-              size={24}
-              color="#BDBDBD"
+            <Svg
+              uri={process.env.EXPO_PUBLIC_URL_S3 + "/eye.svg"}
+              color={'#BDBDBD'}
               onPress={hiddenToggle}
-              solid
             />
           ) : (
-            <FontAwesome6
-              name="eye-slash"
-              size={24}
-              color="#BDBDBD"
+            <Svg
+              uri={process.env.EXPO_PUBLIC_URL_S3 + "/eye-slash.svg"}
+              color={'#BDBDBD'}
               onPress={hiddenToggle}
-              solid
             />
           ))}
       </View>

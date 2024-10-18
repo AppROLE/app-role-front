@@ -99,7 +99,7 @@ export default function RoleDescription() {
                                 </View>
                             </View>
                             <View className="mt-12">
-                                <Text className="text-[#DFA9FD] text-md mt-5 font-sans">Lista de confirmados</Text>
+                                <Text className="text-[#DFA9FD] text-md mt-5 font-nunito">Lista de confirmados</Text>
                             </View>
                         </View>
                     </TouchableOpacity>
@@ -143,14 +143,14 @@ export default function RoleDescription() {
                                 ))}
                             </View>
                             <View className="w-px h-6 bg-white mx-3"></View>
-                            <Text className="text-sm text-white font-sans">
+                            <Text className="text-sm text-white font-nunito">
                                 Deixe sua Avaliação
                             </Text>
                         </TouchableOpacity>
                     </View>
                     <View className="mt-20">
                         <RoleMainButton type='gradient' buttonFunction={fetchConfirmEvent} >
-                            <Text className="text-white text-lg font-sans">
+                            <Text className="text-white text-lg font-nunito">
                                 Confirmar Presença
                             </Text>
                         </RoleMainButton>
