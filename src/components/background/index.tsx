@@ -219,7 +219,7 @@ export default function Background({ children, text, scrollable, themeMode, lock
           <>
             <View className="flex h-[89%] flex-col items-center rounded-t-[54px] pt-5" style={{ backgroundColor }}>
               <View className='w-full'>
-                <Text className="text-3xl text-center text-white">Pacotes</Text>
+                <Text className="text-3xl text-center font-nunitoBold text-white">Pacotes</Text>
               </View>
               <View className="w-full mt-5">
                 <View className="border border-['#2C2B2B'] w-full"></View>
