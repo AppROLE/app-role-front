@@ -19,7 +19,7 @@ export default function Packages() {
     const { getAllInstitutesByPartnerType } = useContext(InstituteContext);
 
     const [institutes, setInstitutes] = useState<Institute[]>([]);
-    
+
     const [date, setDate] = useState(new Date());
     const [formattedDate, setFormattedDate] = useState('DD/MM/YYYY')
     const [dateSelected, setDateSelected] = useState(false)
@@ -52,13 +52,19 @@ export default function Packages() {
             }
         }
     };
-
     async function getInstitutes() {
-        const response = await getAllInstitutesByPartnerType(partnerType);
-        console.log("RESPOSTA DA GET ALL", response)
-        if (response) {
-            const data = response as getInstituteByPartnerTypeResponseDTO
-            setInstitutes(data.institutes)
+        try {
+            const response = await getAllInstitutesByPartnerType(partnerType);
+            console.log("Response:", response); // Logue a resposta para entender a estrutura
+
+            if (response) {
+                const data = response as getInstituteByPartnerTypeResponseDTO;
+                setInstitutes(data.institutes);
+            } else {
+                console.error("A resposta não contém a propriedade 'data'");
+            }
+        } catch (error) {
+            console.error("Erro ao buscar institutos:", error);
         }
     }
 
@@ -89,7 +95,7 @@ export default function Packages() {
                 <SafeAreaView className="flex-1 justify-center items-center">
                     <ScrollView className="flex-1 w-[100%]" contentContainerStyle={{ paddingBottom: 90 }}>
                         <View className="w-full pl-6">
-                            <Text className="text-2xl text-white">Selecione</Text>
+                            <Text className="text-2xl font-nunitoBold text-white">Selecione</Text>
                         </View>
                         <View className="px-5 flex-row justify-between gap-3 mt-5">
                             {data.map(item => (
@@ -126,10 +132,46 @@ export default function Packages() {
                             ))}
                         </View>
                         <View className="w-full mt-10 pl-6">
-                            <Text className="text-2xl text-white">Estabelecimento</Text>
+                            <Text className="text-2xl font-nunitoBold text-white">Estabelecimento</Text>
                         </View>
                         <ScrollView className="w-full flex flex-1 mt-5 ">
                             <View className="flex flex-wrap flex-row justify-start pl-5">
+                                {institutes && institutes.length > 0 ? (
+                                    institutes.map((institute: Institute) => (
+                                        <TouchableOpacity className="flex h-[76px]" onPress={() => handleSelectCard(institute.instituteId)}>
+                                            {selectedCard?.toString() === institute.instituteId ? (
+                                                <View
+                                                    className="flex-row  bg-button_color m-2 h-[75%] justify-center items-center rounded-full"
+                                                >
+                                                    <Pressable onPress={() => handleSelectCard(institute.instituteId)}>
+                                                        <LinearGradient
+                                                            key={institute.instituteId}
+                                                            colors={["#5A189A", "#9C4EDC"]}
+                                                            style={{ borderRadius: 999, flexDirection: 'row', alignItems: 'center', height: '100%', width: 157 }}
+                                                        >
+                                                            <View className="mx-1">
+                                                                <Image source={institute.logoPhoto ? { uri: institute.logoPhoto } : { uri: process.env.EXPO_PUBLIC_URL_S3 + "/images/profile_default.png" }} />
+                                                            </View>
+                                                            <Text className="text-white text-center text-lg mx-3">{institute.name}</Text>
+                                                        </LinearGradient>
+                                                    </Pressable>
+                                                </View>
+                                            ) : (
+                                                <View
+                                                    key={institute.instituteId}
+                                                    className="flex-row w-[157px] bg-button_color m-2 h-[75%] justify-center items-center rounded-full"
+                                                >
+                                                    <View className="mx-1">
+                                                        <Image source={institute.logoPhoto ? { uri: institute.logoPhoto } : { uri: process.env.EXPO_PUBLIC_URL_S3 + "/images/profile_default.png" }} />
+                                                    </View>
+                                                    <Text className="text-white text-center text-lg mx-3">{institute.name}</Text>
+                                                </View>
+                                            )}
+                                        </TouchableOpacity>
+                                    ))
+                                ) : (
+                                    <Text className="text-xl text-white text-center">Não há institutos disponíveis.</Text>
+                                )}
                                 {institutes.map((institute: Institute) => (
                                     <TouchableOpacity className="flex h-[76px]" onPress={() => handleSelectCard(institute.instituteId)}>
                                         {selectedCard?.toString() === institute.instituteId ? (
@@ -165,7 +207,7 @@ export default function Packages() {
                             </View>
                         </ScrollView>
                         <View className="w-full mt-5 pl-6">
-                            <Text className="text-2xl text-white">Data</Text>
+                            <Text className="text-2xl font-nunitoBold text-white">Data</Text>
                         </View>
                         <View
                             className={` mb-8 flex flex-col gap-2  pb-2 pt-5`}
