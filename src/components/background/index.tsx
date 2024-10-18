@@ -5,6 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useFocusEffect } from 'expo-router';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Animated, Image, Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import Svg from "@/src/components/svg";
 
 const statusBarHeight = Constants.statusBarHeight;
 
@@ -15,9 +16,10 @@ interface BackgroundProps {
   themeMode?: string
   lockScroll?: boolean
   function1?: any
+  scrollable2?: boolean
 }
 
-export default function Background({ children, text, scrollable, themeMode, lockScroll, function1 }: BackgroundProps) {
+export default function Background({ children, text, scrollable, themeMode, lockScroll, function1, scrollable2 }: BackgroundProps) {
   const [scrolled, setScrolled] = useState(false)
   const slideAnim = useRef(new Animated.Value(0)).current // Animação de deslocamento
   const textOpacity = useRef(new Animated.Value(1)).current // Animação de opacidade
@@ -158,22 +160,43 @@ export default function Background({ children, text, scrollable, themeMode, lock
             </Animated.Text>
           </Animated.View>
         )}
-        {!scrollable ? (
-          <View className="flex h-[89%] flex-col items-center rounded-t-[54px] pt-12" style={{ backgroundColor }}>
-            {children}
-          </View>
-        ) : (
-          <ScrollView
-            onScroll={handleScroll}
-            scrollEventThrottle={16}
-            className="bg-background rounded-t-[54px] pt-12 flex-grow"
-            contentContainerStyle={{ justifyContent: 'flex-start', paddingBottom: 60 }}
-            nestedScrollEnabled={true}
-            scrollEnabled={!lockScroll}
-          >
-            {children}
-          </ScrollView>
-        )}
+        {scrollable2 ?
+          <>
+            <View className="flex h-[89%] flex-col items-center rounded-t-[54px] pt-5" style={{ backgroundColor }}>
+              <View className='w-full'>
+                <Text className="text-3xl text-center text-white">Pacotes</Text>
+              </View>
+              <View className="w-full mt-5">
+                <View className="border border-['#2C2B2B'] w-full"></View>
+              </View>
+              <ScrollView
+                onScroll={handleScroll}
+                scrollEventThrottle={16}
+                className="rounded-t-[54px] pt-12 flex-grow w-[100%]"
+                contentContainerStyle={{ justifyContent: 'flex-start', paddingBottom: 60 }}
+                nestedScrollEnabled={true}
+              >
+                {children}
+              </ScrollView>
+            </View>
+          </>
+          :
+          !scrollable ? (
+            <View className="flex h-[89%] flex-col items-center rounded-t-[54px] pt-12" style={{ backgroundColor }}>
+              {children}
+            </View>
+          ) : (
+            <ScrollView
+              onScroll={handleScroll}
+              scrollEventThrottle={16}
+              className="bg-background rounded-t-[54px] pt-12 flex-grow"
+              contentContainerStyle={{ justifyContent: 'flex-start', paddingBottom: 60 }}
+              nestedScrollEnabled={true}
+              scrollEnabled={!lockScroll}
+            >
+              {children}
+            </ScrollView>
+          )}
       </View>
     </LinearGradient>
   );
