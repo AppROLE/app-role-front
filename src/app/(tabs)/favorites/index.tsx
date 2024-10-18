@@ -47,7 +47,7 @@ export default function Favorites() {
         <Background>
             <View className="items-start h-full w-full">
                 <View className='flex-row justify-between w-full px-8'>
-                    <Text className="text-3xl text-white font-medium">Social</Text>
+                    <Text className="text-3xl text-white font-nunitoBold">Social</Text>
                     <View className='flex-row items-center gap-4'>
                         <TouchableOpacity
                             className='flex flex-row border-2 border-white rounded-lg bg-transparent gap-2'
@@ -59,7 +59,7 @@ export default function Favorites() {
                             }}
                             onPress={navigateToFriends}
                         >
-                            <Text className='text-white text-sm'>Adicione um amigo!</Text>
+                            <Text className='text-white font-nunitoBold text-sm'>Adicione um amigo!</Text>
                         </TouchableOpacity>
                         <TouchableOpacity className="relative" onPress={navigateToNotifications}>
                             <Svg
@@ -75,7 +75,7 @@ export default function Favorites() {
                     </View>
                 </View>
                 <View className="border-t-line_gray border-t-2 mt-8 p-10 w-full">
-                    <Text className="text-2xl text-white mb-3">Instituições Favoritas</Text>
+                    <Text className="text-2xl font-nunitoBold text-white mb-3">Instituições Favoritas</Text>
                     <FlatList
                         data={institutes?.institutes}
                         keyExtractor={(institute) => institute.instituteId}
