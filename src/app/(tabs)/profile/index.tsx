@@ -12,6 +12,7 @@ import { Events, getAllConfirmedEventsResponseDTO } from "@/api/types/presence_d
 
 export default function Profile() {
   const navigation = useRouter();
+  const { getAllConfirmedEvents } = useContext(PresenceContext);
 
   // Instanciar a classe UserRepositoryHttp
   const userRepository = new UserRepositoryHttp();
@@ -64,7 +65,6 @@ export default function Profile() {
   }
 
   const [roles, setRoles] = useState<getAllConfirmedEventsResponseDTO>();
-  const { getAllConfirmedEvents } = useContext(PresenceContext);
 
   async function fetchRoles() {
     const response = await getAllConfirmedEvents();
