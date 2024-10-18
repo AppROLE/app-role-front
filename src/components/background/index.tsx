@@ -252,23 +252,7 @@ export default function Background({ children, text, scrollable, themeMode, lock
               {children}
             </ScrollView>
           )}
-        {!scrollable ? (
-          <View className="flex h-[89%] flex-col items-center rounded-t-[54px] pt-12" style={{ backgroundColor }}>
-            {children}
-          </View>
-        ) : (
-          <ScrollView
-            onScroll={handleScroll}
-            scrollEventThrottle={16}
-            className="bg-background rounded-t-[54px] pt-12 flex-grow"
-            contentContainerStyle={{ justifyContent: 'flex-start', paddingBottom: 60 }}
-            nestedScrollEnabled={true}
-            scrollEnabled={!lockScroll}
-          >
-            {children}
-          </ScrollView>
-        )}
-
+       
         {/* Modal original */}
 
         <Modal
