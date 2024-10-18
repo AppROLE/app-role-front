@@ -29,30 +29,32 @@ export default function AnimatedOption({ selected, label, onPress }: AnimatedOpt
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={{
-              paddingVertical: 12,
-              paddingHorizontal: 30,
-              borderRadius: 20,
+              paddingVertical: 5,
+              paddingHorizontal: 12,
+              borderRadius: 8,
               alignItems: 'center',
               shadowColor: 'rgba(156, 78, 220, 0.3)',
               shadowOffset: { width: 0, height: 7 },
               shadowOpacity: 1,
               shadowRadius: 11,
               elevation: 10,
+              marginLeft: 10,
             }}
           >
-            <Text className="text-xs text-white">{label}</Text>
+            <Text className="text-xl text-white">{label}</Text>
           </LinearGradient>
         ) : (
           <View
             style={{
-              paddingVertical: 12,
-              paddingHorizontal: 30,
-              borderRadius: 20,
+              paddingVertical: 5,
+              paddingHorizontal: 12,
+              borderRadius: 8,
               backgroundColor: '#1C1C1C',
               alignItems: 'center',
+              marginLeft: 10,
             }}
           >
-            <Text className="text-xs text-[#BDBDBD]">{label}</Text>
+            <Text className="text-xl text-[#BDBDBD]">{label}</Text>
           </View>
         )}
       </Animated.View>
