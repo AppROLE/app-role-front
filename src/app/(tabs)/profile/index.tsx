@@ -8,7 +8,7 @@ import { UserRepositoryHttp } from "@/api/repositories/user_repository_http"; //
 import RoleCard from "@/src/components/roleCard";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { PresenceContext } from "@/context/presence_context";
-import { Events, getAllConfirmedEventsResponseDTO } from "@/api/types/presence_dto";
+import { Events } from "@/api/types/presence_dto";
 
 export default function Profile() {
   const navigation = useRouter();
@@ -63,14 +63,14 @@ export default function Profile() {
     }
   }
 
-  const [roles, setRoles] = useState<getAllConfirmedEventsResponseDTO>();
+  const [roles, setRoles] = useState<Events[] | undefined>([]);
   const { getAllConfirmedEvents } = useContext(PresenceContext);
 
   async function fetchRoles() {
     const response = await getAllConfirmedEvents();
     console.log('RESPOSTA DA GET ALL ROLES', response);
     if (response) {
-      setRoles(response);
+      setRoles(response.events);
     }
   }
 
@@ -136,19 +136,19 @@ export default function Profile() {
         <View className="mt-8 border-b-2 border-[#DFA9FD]">
           <Text className="text-[#DFA9FD]">ROLEs Confirmados</Text>
         </View>
-        {roles?.events && roles.events.length > 0 ? (
-          roles.events.slice(0, 5).map((role, index) => (
-            <RoleCard
-              data={role.eventDate}
-              image={role.eventPhotoLink}
-              title={role.name}
-              type={role.category}
-              local={role.address}
-              key={`id${role.eventId}ind${index}`}
-              {...role}
-            />
-          ))
-        ) : (
+        {roles? roles.slice(0, 5).map((role, index) => (
+          <RoleCard
+            data={role.eventDate}
+            image={role.eventPhotoLink}
+            title={role.name}
+            type={role.category}
+            local={role.address}
+            key={`id${role.eventId}ind${index}`}
+            {...role}
+          />
+        )) : <></>}
+
+        {(!roles || roles.length === 0) && (
           <>
             <View className="mt-8">
               <Text className="text-white">Você ainda não possui um ROLE confirmado :(</Text>
