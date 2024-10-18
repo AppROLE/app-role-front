@@ -5,7 +5,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Animated, Image, Text, View, ScrollView, TouchableOpacity, Modal } from 'react-native';
-import Svg from "@/src/components/svg";
 import { SvgUri } from 'react-native-svg';
 import { TextInput } from 'react-native-gesture-handler';
 import RoleMainButton from '../roleMainButton';
@@ -22,10 +21,9 @@ interface BackgroundProps {
   lockScroll?: boolean;
   function1?: any;
   centralize?: boolean;
-  scrollable2?: boolean
 }
 
-export default function Background({ children, text, scrollable, themeMode, lockScroll, function1, centralize, scrollable2 }: BackgroundProps) {
+export default function Background({ children, text, scrollable, themeMode, lockScroll, function1, centralize }: BackgroundProps) {
   const [scrolled, setScrolled] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false); // Controle do modal original
   const [isSecondModalVisible, setSecondModalVisible] = useState(false); // Controle do segundo modal
