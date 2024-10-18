@@ -54,9 +54,7 @@ export default function Packages() {
     };
 
     async function getInstitutes() {
-        const idToken = (await AsyncStorage.getItem('idToken')) || ''
-        if (idToken === '') return
-        const response = await getAllInstitutesByPartnerType(idToken, partnerType);
+        const response = await getAllInstitutesByPartnerType(partnerType);
         console.log("RESPOSTA DA GET ALL", response)
         if (response) {
             const data = response as getInstituteByPartnerTypeResponseDTO
