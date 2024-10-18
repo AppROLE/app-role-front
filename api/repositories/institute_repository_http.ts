@@ -27,8 +27,10 @@ export class InstituteRepositoryHttp {
     }
   }
 
-  async getAllInstitutesByPartnerType(idToken: string, partnerType: string) {
+  async getAllInstitutesByPartnerType(partnerType: string) {
     try {
+      const idToken = await AsyncStorage.getItem('idToken') || ''
+      if (idToken === '') return
       const response = await httpEvent.get(`/get-all-institutes-by-partner-type?partnerType=${partnerType}`, {
         headers: {
           Authorization: `Bearer ${idToken}`,
