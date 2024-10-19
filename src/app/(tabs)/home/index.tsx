@@ -189,7 +189,7 @@ export default function Home() {
   }
 
   async function getSearchFilter(filter: string) {
-    const response = await getEventsByFilter(filter)
+    const response = await getEventsByFilter('name=' + filter)
     setSearchResults(response.events)
   }
 
