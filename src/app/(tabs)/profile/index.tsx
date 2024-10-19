@@ -19,7 +19,7 @@ export default function Profile() {
   // Estados para armazenar os dados do perfil
   const [profileData, setProfileData] = useState({
     user_id: '',
-    name: '',
+    nickname: '',
     username: '',
     biography: '',
     profilePhoto: '',
@@ -101,7 +101,7 @@ export default function Profile() {
           <Text className="text-white text-lg">Seguindo</Text>
         </View>
         <View className="">
-          <Text className="text-white text-center text-3xl mt-10">{profileData.name}</Text>
+          <Text className="text-white text-center text-3xl mt-10">{profileData.nickname}</Text>
           <Text className="text-[#BDBDBD] mt-1 text-center">@{profileData.username}</Text>
           <Text className="text-center text-[#BDBDBD] mt-8 w-72">{profileData.biography}</Text>
         </View>
@@ -114,29 +114,36 @@ export default function Profile() {
             />
             <Text className="text-white">Editar Perfil</Text>
           </RoleMainButton>
-          <View
-            className="bg-[#1C1C1C] flex flex-row gap-6"
-            style={{ paddingVertical: 8, paddingHorizontal: 30, borderRadius: 20 }}>
-            <TouchableOpacity onPress={() => openLink(profileData.linkTiktok)}>
-              <SvgUri
-                uri={process.env.EXPO_PUBLIC_URL_S3 + '/tiktok.svg'}
-                width={30}
-                height={30}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity className="top-[2px]" onPress={() => openLink(profileData.linkInstagram)}>
-              <SvgUri
-                uri={process.env.EXPO_PUBLIC_URL_S3 + '/instagram.svg'}
-                width={26}
-                height={26}
-              />
-            </TouchableOpacity>
-          </View>
+          {/* Renderizar botões de redes sociais apenas se os links estiverem presentes */}
+          { (profileData.linkTiktok || profileData.linkInstagram) && (
+            <View
+              className="bg-[#1C1C1C] flex flex-row gap-6"
+              style={{ paddingVertical: 8, paddingHorizontal: 30, borderRadius: 20 }}>
+              {profileData.linkTiktok && (
+                <TouchableOpacity onPress={() => openLink(profileData.linkTiktok)}>
+                  <SvgUri
+                    uri={process.env.EXPO_PUBLIC_URL_S3 + '/tiktok.svg'}
+                    width={30}
+                    height={30}
+                  />
+                </TouchableOpacity>
+              )}
+              {profileData.linkInstagram && (
+                <TouchableOpacity className="top-[2px]" onPress={() => openLink(profileData.linkInstagram)}>
+                  <SvgUri
+                    uri={process.env.EXPO_PUBLIC_URL_S3 + '/instagram.svg'}
+                    width={26}
+                    height={26}
+                  />
+                </TouchableOpacity>
+              )}
+            </View>
+          )}
         </View>
         <View className="mt-8 border-b-2 border-[#DFA9FD]">
           <Text className="text-[#DFA9FD]">ROLEs Confirmados</Text>
         </View>
-        {roles? roles.slice(0, 5).map((role, index) => (
+        {roles ? roles.slice(0, 5).map((role, index) => (
           <RoleCard
             data={role.eventDate}
             image={role.eventPhotoLink}
