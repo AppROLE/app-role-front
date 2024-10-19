@@ -337,7 +337,6 @@ export default function SearchingFilters() {
                   <View className="ml-4 mt-4">
                     <Svg
                         uri={process.env.EXPO_PUBLIC_URL_S3 + '/calendar.svg'}
-
                     />
                   </View>
                   <Text className="ml-2 mt-4 text-lg text-white">Data</Text>

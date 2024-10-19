@@ -1,3 +1,4 @@
+import { CATEGORY } from "@/api/enums/catetegory_enum";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";

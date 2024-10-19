@@ -19,6 +19,7 @@ import { UserContext } from '@/context/user_context'
 import { EventContext } from '@/context/event_context'
 import { router } from 'expo-router'
 import React from 'react'
+import { GradientText } from '@/src/components/gradientText'
 
 export default function Home() {
   const [scrollDisabled, setScrollDisabled] = useState(false)
@@ -226,7 +227,7 @@ export default function Home() {
 
   return (
     <Background text={phrase} scrollable lockScroll={scrollDisabled} function1={loadMoreRoles}>
-      <Text className="mb-4 text-center text-3xl font-bold text-white">ROLE BOMBANDO</Text>
+      <GradientText className="mb-4 text-center text-3xl font-nunitoBold">ROLE BOMBANDO</GradientText>
       {carrosselData.length > 1 ? (
         <View className="mx-auto">
           <Carousel

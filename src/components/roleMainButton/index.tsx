@@ -31,25 +31,30 @@ export default function RoleMainButton ({ children, buttonFunction, type, disabl
             activeOpacity={0.9}
         >
             {type === 'gradient' ? (
+                <View 
+                style={{ 
+                    shadowColor: 'rgba(156, 78, 220, 1)', 
+                    shadowOffset: { width: 0, height: 7 }, 
+                    shadowOpacity: 0.3, 
+                    shadowRadius: 11, 
+                    elevation: 10, 
+                    borderRadius: 20, 
+                }}
+            >
                 <LinearGradient
                     colors={gradientColors}
                     start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 1 }} // Gradiente diagonal suave
+                    end={{ x: 1, y: 1 }}
                     style={{ 
-                        paddingVertical: 12, 
+                        paddingVertical: 9, 
                         paddingHorizontal: 30, 
-                        borderRadius: 20, // Bordas arredondadas
+                        borderRadius: 20, 
                         alignItems: 'center',
-
-                        shadowColor: 'rgba(156, 78, 220, 1)', // Cor da sombra
-                        shadowOffset: { width: 0, height: 7 }, // Deslocamento da sombra
-                        shadowOpacity: 1, // Opacidade da sombra
-                        shadowRadius: 11, // Raio de desfoque
-                        elevation: 10,
                     }}
                 >
                     {children}
                 </LinearGradient>
+            </View>
             ) : (
                 <View 
                     className="bg-[#1C1C1C] items-center flex flex-row gap-4 justify-center" 

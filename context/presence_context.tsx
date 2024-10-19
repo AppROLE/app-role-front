@@ -1,12 +1,14 @@
 import { PresenceRepositoryHttp } from "@/api/repositories/presence_repository_http"
-import { confirmEventResponseDTO, getAllConfirmedUsersResponseDTO } from "@/api/types/presence_dto"
+import { confirmEventResponseDTO, getAllConfirmedEventsResponseDTO, getAllConfirmedUsersResponseDTO } from "@/api/types/presence_dto"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { createContext } from "react"
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry"
 
 
 type PresenceContextType = {
     getAllPresence: (eventId: string) => Promise<getAllConfirmedUsersResponseDTO>
     confirmEvent: (eventId: string, profilePhoto?: string, promoterCode?: string) => Promise<confirmEventResponseDTO>
+    getAllConfirmedEvents: () => Promise<getAllConfirmedEventsResponseDTO>
 }
 
 const defaultPresenceContext = { 
@@ -18,6 +20,12 @@ const defaultPresenceContext = {
     },
     confirmEvent: async () => {
         return {
+            message: ''
+        }
+    },
+    getAllConfirmedEvents: async () => {
+        return {
+            events: [],
             message: ''
         }
     }
@@ -47,8 +55,17 @@ export function PresenceContextProvider({ children }: any) {
         }
     }
 
+    async function getAllConfirmedEvents() { 
+        try {
+            const response = await presenceRepository.getAllConfirmedEvents()
+            return response
+        } catch (error: any) {
+            return error
+        }
+    }
+
     return (
-        <PresenceContext.Provider value={{ getAllPresence, confirmEvent }}>
+        <PresenceContext.Provider value={{ getAllPresence, confirmEvent, getAllConfirmedEvents }}>
             {children}
         </PresenceContext.Provider>
     )
