@@ -33,7 +33,7 @@ export default function MenuHamburguer() {
             <Modal
                 visible={modalVisible}
                 transparent={true}
-                animationType="slide"
+                animationType="fade"
             >
                 {/* View para escurecer o fundo */}
                 <TouchableOpacity
