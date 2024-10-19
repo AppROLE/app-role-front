@@ -223,7 +223,7 @@ export default function EditingPerfil() {
               <View className="flex flex-row items-center gap-8">
                 <View className="flex flex-col w-full">
                     <TextInput
-                      placeholder='Um pouco sobre você...'
+                      placeholder='Conte sobre a sua vida no ROLE!'
                       value={bio}
                       maxLength={100}
                       className="h-24 w-full text-[16px] text-white outline-none placeholder:text-[#BDBDBD] rounded-lg border-[2px] p-4 border-[#1c1c1c]"
