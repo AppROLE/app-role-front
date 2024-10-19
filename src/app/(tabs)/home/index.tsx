@@ -227,38 +227,50 @@ export default function Home() {
   return (
     <Background text={phrase} scrollable lockScroll={scrollDisabled} function1={loadMoreRoles}>
       <Text className="mb-4 text-center text-3xl font-bold text-white">ROLE BOMBANDO</Text>
-      <View className="mx-auto">
-        <Carousel
-          loop
-          snapEnabled
-          snapToInterval={width * 0.8 + 20}
-          width={width * 0.85}
-          height={height * 0.21}
-          autoPlay={true}
-          autoPlayInterval={5000}
-          data={carrosselData}
-          onScrollBeginDrag={() => setScrollDisabled(true)} // Desativa o scroll vertical ao arrastar manualmente
-          onScrollEndDrag={() => setScrollDisabled(false)} // Reativa o scroll vertical após soltar o arrasto
-          onSnapToItem={(index) => endScroll(index)} // Atualiza o slide ativo
-          scrollAnimationDuration={1000}
-          renderItem={({ item }) => (
-            <View style={{ }}>
-              <RoleEmphasis {...item}/>
-            </View>
-          )}
-          panGestureHandlerProps={{
-            activeOffsetX: [-10, 10]
-          }}
-        />
-        <View className="mt-4 flex flex-row justify-center gap-2">
-          {carrosselData.map((_, index) => (
-            <View
-              key={index}
-              className={`h-[6px] rounded-full ${activeSlide === index ? 'w-[18px] bg-white' : 'w-[6px] bg-[#BDBDBD]'}`}
-            />
-          ))}
+      {carrosselData.length > 1 ? (
+        <View className="mx-auto">
+          <Carousel
+            loop
+            snapEnabled
+            snapToInterval={width * 0.8 + 20}
+            width={width * 0.85}
+            height={height * 0.21}
+            autoPlay={true}
+            autoPlayInterval={5000}
+            data={carrosselData}
+            onScrollBeginDrag={() => setScrollDisabled(true)} // Desativa o scroll vertical ao arrastar manualmente
+            onScrollEndDrag={() => setScrollDisabled(false)} // Reativa o scroll vertical após soltar o arrasto
+            onSnapToItem={(index) => endScroll(index)} // Atualiza o slide ativo
+            scrollAnimationDuration={1000}
+            renderItem={({ item }) => (
+              <View style={{ }}>
+                <RoleEmphasis {...item}/>
+              </View>
+            )}
+            panGestureHandlerProps={{
+              activeOffsetX: [-10, 10]
+            }}
+          />
+          <View className="mt-4 flex flex-row justify-center gap-2">
+            {carrosselData.length > 1 && (
+              carrosselData.map((_, index) => (
+                <View
+                  key={index}
+                  className={`h-[6px] rounded-full ${activeSlide === index ? 'w-[18px] bg-white' : 'w-[6px] bg-[#BDBDBD]'}`}
+                />
+              ))
+            )}
+          </View>
         </View>
-      </View>
+      ) : carrosselData.length == 1 ? (
+        <View className='mx-auto' style={{width: width * 0.85}}>
+          <RoleEmphasis {...carrosselData[0]}/>
+        </View>
+      ) : (
+        <View className="flex flex-row justify-center items-center">
+          <Text className="text-xl font-bold text-white">Sem ROLE Bombando? Bora agitar ai!!!</Text>
+        </View>
+      )}
       <View className="my-8 px-8">
         <View className="flex flex-row items-center justify-center rounded-full bg-[#1C1C1C] px-4 py-2">
           <TouchableOpacity className="w-[12%] flex items-start">
