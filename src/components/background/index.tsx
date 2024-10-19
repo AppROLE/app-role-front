@@ -37,6 +37,7 @@ export default function Background({ children, text, scrollable, themeMode, lock
   const navigation = useRouter();
   const [promoterCode, setPromoterCode] = useState(''); // Estado para armazenar o código do promoter
   const [buttonText, setButtonText] = useState('Suporte um promoter');
+  const scrollRef = useRef();
 
   useEffect(() => {
     if (scrolled) {
@@ -226,6 +227,7 @@ export default function Background({ children, text, scrollable, themeMode, lock
             nestedScrollEnabled={true}
             scrollEnabled={!lockScroll}
             bounces={false}
+            ref={scrollRef}
           >
             {children}
           </ScrollView>
