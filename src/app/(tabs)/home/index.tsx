@@ -177,7 +177,14 @@ export default function Home() {
 
   async function getBombando() {
     const response = await getRoleBombando()
-    // console.log(response.data)
+    // console.log('Response:' , response.data)
+    for (let i = response.data.length - 1; i >= 0; i--) {
+      // console.log('EventoFor', response.data[i].events[0]);
+      if (response.data[i].events[0] === undefined) {
+          response.data.splice(i, 1);
+      }
+    }
+    // console.log('Response:', response.data)
     setCarrosselData(response.data)
   }
 
