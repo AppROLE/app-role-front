@@ -262,11 +262,14 @@ export default function SearchingFilters() {
     }
 
     let stringSearch = search.replace(/ /g, '+') + filt;
+    if (search) {
+        stringSearch = `name=${stringSearch}`;
+    }
     if (stringSearch.charAt(0) === '&') {
         stringSearch = stringSearch.slice(1);
     }
 
-    console.log(stringSearch);
+    // console.log(stringSearch)
 
     const response = await getEventsByFilter(stringSearch);
     console.log(response);
