@@ -15,6 +15,7 @@ export class ReviewRepositoryHttp {
             return response.data as createReviewResponseDTO
         } catch (error: any) {
             // console.log("ERRO NA REQUEST", error.response)
+            console.log(error.response.data)
             throw new Error(error)
         }
     }

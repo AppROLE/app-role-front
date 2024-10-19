@@ -3,20 +3,22 @@ import { InstituteContext } from "@/context/institute_context";
 import ModalListaConfirmados from "@/src/components/modalListaConfirmados";
 import ModalReview from "@/src/components/modalReview";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
 import { openURL } from "expo-linking";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState, useRef, useContext } from "react";
 import { View, Text, Image, ScrollView, TouchableOpacity, Animated, Easing } from "react-native";
 
-export default function EventDescription() {
+export default function EventDescription(eventId: string) {
     // Interfaces
     interface Review {
-        id: number;
-        nickname: string;
-        profilePhoto: string;
+        review: string;
+        reviewedAt: string;
         star: number;
-        comment: string;
+        username: string;
+        name: string;
+        photoUrl: string;
     }
 
     // States
@@ -69,10 +71,11 @@ export default function EventDescription() {
         }
     ]);
     const [packagesImages, setPackagesImages] = useState([
-        { id: 1, image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png' },
-        { id: 2, image: 'https://placehold.co/600x400' },
-        { id: 3, image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png' },
+        { name: 'COMBO', image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png' },
+        { name: 'ANIVERSARIO', image: 'https://placehold.co/600x400' },
+        { name: 'CAMAROTE', image: 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png' },
     ]);
+    const [packages, setPackages] = useState<string[]>([]);
     const [buttonCondition, setButtonCondition] = useState(true);
     const [roleStars, setRoleStars] = useState(0);
     const [musicsTypes, setMusicsTypes] = useState<string[]>([]);
@@ -118,65 +121,54 @@ export default function EventDescription() {
     }
 
     async function getInfosEvent() {
-        const response = await getEventById('55d2b5a6-3995-4415-b072-8f87a2b66c13');
-        console.log(response);
-        if (response) {
-            priceDesign(response.price);
-            setMusicsTypes(response.musicType ?? []);
-            setCategory(response.category ?? '');
-            setAgeRange(response.ageRange ?? '');
+        const id = await AsyncStorage.getItem('eventId');
+        if (id) {
+            const response = await getEventById(id);
+            console.log(response);
+            if (response) {
+                priceDesign(response.price);
+                setMusicsTypes(response.musicType ?? []);
+                setCategory(response.category ?? '');
+                setAgeRange(response.ageRange ?? '');
 
-            let dateR = new Date(response.eventDate).toISOString().split('T')[0];
-            let dateD = dateR.split('-')[2];
-            let mouth = dateR.split('-')[1];
-            switch (mouth) {
-                case '01': mouth = 'JAN'; break;
-                case '02': mouth = 'FEV'; break;
-                case '03': mouth = 'MAR'; break;
-                case '04': mouth = 'ABR'; break;
-                case '05': mouth = 'MAI'; break;
-                case '06': mouth = 'JUN'; break;
-                case '07': mouth = 'JUL'; break;
-                case '08': mouth = 'AGO'; break;
-                case '09': mouth = 'SET'; break;
-                case '10': mouth = 'OUT'; break;
-                case '11': mouth = 'NOV'; break;
-                case '12': mouth = 'DEZ'; break;
+                let dateR = new Date(response.eventDate).toISOString().split('T')[0];
+                let dateD = dateR.split('-')[2];
+                let mouth = dateR.split('-')[1];
+                switch (mouth) {
+                    case '01': mouth = 'JAN'; break;
+                    case '02': mouth = 'FEV'; break;
+                    case '03': mouth = 'MAR'; break;
+                    case '04': mouth = 'ABR'; break;
+                    case '05': mouth = 'MAI'; break;
+                    case '06': mouth = 'JUN'; break;
+                    case '07': mouth = 'JUL'; break;
+                    case '08': mouth = 'AGO'; break;
+                    case '09': mouth = 'SET'; break;
+                    case '10': mouth = 'OUT'; break;
+                    case '11': mouth = 'NOV'; break;
+                    case '12': mouth = 'DEZ'; break;
+                }
+                setDate(`${dateD} ${mouth}`);
+                let hourR = new Date(response.eventDate).toISOString().split('T')[1].split('.')[0];
+                setHour(hourR.split(':')[0] + ':' + hourR.split(':')[1]);
+
+                const weekDayR = new Date(response.eventDate).getUTCDay();
+                // console.log('Dia: ' + weekDayR);
+                let days = ['Domingo', 'Segunda-Feira', 'Terça-Feira', 'Quarta-Feira', 'Quinta-Feira', 'Sexta-Feira', 'Sábado'];
+                setWeekDay(days[weekDayR]);
+
+                setDescription(response.description);
+                setGallery(response.galeryLink ?? []);
+                setBannerUrl(response.eventPhotoLink ?? 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png');
+                setAddress(response.address);
+                setMenuLink(response.menuLink ?? '');
+                setFeatures(response.features);
+                setRoleStars(response.rating ?? 0);
+                setPackages(response.packageType ?? []);
+                setReviews(response.reviews ?? []);
             }
-            setDate(`${dateD} ${mouth}`);
-            let hourR = new Date(response.eventDate).toISOString().split('T')[1].split('.')[0];
-            setHour(hourR.split(':')[0] + ':' + hourR.split(':')[1]);
-            const weekDayR = new Date(response.eventDate).getDay();
-            let days = ['Domingo', 'Segunda-Feira', 'Terça-Feira', 'Quarta-Feira', 'Quinta-Feira', 'Sexta-Feira', 'Sábado'];
-            setWeekDay(days[weekDayR-1]);
-
-            setDescription(response.description);
-            setGallery(response.galeryLink ?? []);
-            setBannerUrl(response.bannerUrl ?? 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png');
-            setAddress(response.address);
-            setMenuLink(response.menuLink ?? '');
-            setFeatures(response.features);
-            setPackagesImages(response.packageType ? response.packageType.map((image: string, index: number) => ({ id: index, image })) : []);
-        }
-    }
-
-    async function getReviewsEvent() {
-        const response = await getReviewsEventById('9017cfe4-c287-42a0-997c-39f67e9e37f5');
-        // console.log(response);
-        if (response.reviews.length > 0) {
-            const formattedReviews: Review[] = response.reviews.map((review: any) => ({
-                id: review.id,
-                nickname: review.nickname,
-                profilePhoto: review.profilePhoto,
-                star: review.star,
-                comment: review.comment,
-            }));
-            setReviews(formattedReviews);
-            let totalStars = 0;
-            formattedReviews.map((review) => totalStars += review.star);
-            const averageStars = totalStars / formattedReviews.length;
-            // console.log('Average stars:', averageStars);
-            setRoleStars(averageStars);
+        } else {
+            router.push('/home');
         }
     }
 
@@ -201,12 +193,14 @@ export default function EventDescription() {
     }, []);
 
     useEffect(() => {
-        getReviewsEvent();
+        getInstituteEvent();
     }, []);
 
     useEffect(() => {
-        getInstituteEvent();
-    }, []);
+        if (!modalVisible){
+            getInfosEvent();
+        }
+    }, [modalVisible]);
 
     useEffect(() => {
         Animated.timing(animatedHeight, {
@@ -233,7 +227,7 @@ export default function EventDescription() {
             >
                 <Image
                     source={{
-                        uri: bannerUrl,
+                        uri: bannerUrl ? bannerUrl : 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png',
                     }}
                     style={{
                         width: '100%',
@@ -243,8 +237,10 @@ export default function EventDescription() {
                     }}
                 />
                 <TouchableOpacity className="w-12 h-12 bg-black flex justify-center items-center rounded-full absolute top-20 left-8"
-                    onPress={() =>
-                        router.push('/home')
+                    onPress={async () => {
+                            await AsyncStorage.removeItem('eventId')
+                            router.push('/home')
+                        }
                     }>
                     <FontAwesome name="arrow-left" size={32} color="white" />
                 </TouchableOpacity>
@@ -252,7 +248,7 @@ export default function EventDescription() {
                     <View className="w-12 h-12 rounded-full">
                         <Image
                             source={{
-                                uri: logo_photo,
+                                uri: logo_photo ? logo_photo : 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png',
                             }}
                             style={{ width: '100%', height: '100%', borderRadius: 9999 }}
                         />
@@ -369,9 +365,11 @@ export default function EventDescription() {
                     <Text className={`text-white text-base mt-2 ${descriptionHeight ? '' : 'max-h-[200px]'}`}>
                         {description}
                     </Text>
-                    <TouchableOpacity className="mt-4" onPress={() => setDescriptionHeight(!descriptionHeight)}>
-                        <Text className="text-purple-500 text-base text-center">{descriptionHeight ? 'Ler menos' : 'Ler mais'}</Text>
-                    </TouchableOpacity>
+                    {description.length > 200 && (
+                        <TouchableOpacity className="mt-4" onPress={() => setDescriptionHeight(!descriptionHeight)}>
+                            <Text className="text-purple-500 text-base text-center">{descriptionHeight ? 'Ler menos' : 'Ler mais'}</Text>
+                        </TouchableOpacity>
+                    )}
                 </View>
                 {/* Adress */}
                 <View className="mt-8">
@@ -421,10 +419,10 @@ export default function EventDescription() {
                     <View className="mt-8">
                         <Text className="text-white text-2xl font-bold mb-2">Pacotes</Text>
                         <View className="flex flex-row gap-2">
-                            {packagesImages.map((packageImage, index) => (
-                                <TouchableOpacity key={`viewpackage-${packageImage.id}-${index}`} className="w-[32%] h-20 bg-[#1C1C1C] rounded-xl">
+                            {packages.map((packageE, index) => (
+                                <TouchableOpacity key={`viewpackage-${index}`} className="w-[32%] h-20 bg-[#1C1C1C] rounded-xl">
                                     <Image 
-                                        source={{ uri: packageImage.image }} 
+                                        source={{ uri: packagesImages.map((image) => image.name).includes(packageE) ? packagesImages.find((image) => image.name === packageE).image : 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png' }} 
                                         className="w-full h-full rounded-xl" 
                                         resizeMode="cover"
                                     />
@@ -479,17 +477,20 @@ export default function EventDescription() {
                 <View>
                     <Text className="text-white text-2xl font-bold mt-8">Reviews</Text>
                     <View>
-                        {showAllReviews ? (
+                        { reviews.length === 0 ? (
+                            <Text className="text-white text-base text-center mt-2">Nenhuma avaliação disponível</Text>
+                        ) :
+                        showAllReviews ? (
                             reviews.map((review, index) => (
-                                <View key={`viewreview-${review['nickname']}-${index}`} className="flex flex-col gap-2 mt-4 bg-[#1C1C1C] p-4 rounded-xl">
+                                <View key={`viewreview-${review['name']}-${index}`} className="flex flex-col gap-2 mt-4 bg-[#1C1C1C] p-4 rounded-xl">
                                     <View className="flex flex-row">
                                         <View className="flex flex-row w-3/5 gap-2">
                                             <View className="w-12 h-12 rounded-full flex flex-row">
-                                                <Image source={{ uri: review['profilePhoto'] }} style={{ width: '100%', height: '100%', borderRadius: 9999 }} />
+                                                <Image source={{ uri: review['photoUrl'] }} style={{ width: '100%', height: '100%', borderRadius: 9999 }} />
                                             </View>
                                             <View className="h-full flex flex-col">
-                                                <Text className="text-white text-lg font-bold" style={{lineHeight: 18}}>{review['username']}</Text>
-                                                <Text className="text-[#BDBDBD] text-sm" style={{lineHeight: 14}}>{review['nickname']}</Text>
+                                                <Text className="text-white text-lg font-bold" style={{lineHeight: 18}}>{review['name']}</Text>
+                                                <Text className="text-[#BDBDBD] text-sm" style={{lineHeight: 14}}>@{review['username']}</Text>
                                             </View>
                                         </View>
                                         <View className="flex flex-row gap-1 items-start w-2/5 justify-end">
@@ -512,7 +513,7 @@ export default function EventDescription() {
                                         </View>
                                     </View>
                                     <View className="flex flex-col">
-                                        <Text className="text-[#BDBDBD] text-xs text-center">{review['comment']}</Text>
+                                        <Text className="text-[#BDBDBD] text-xs text-center">{review['review']}</Text>
                                     </View>
                                 </View>
                             ))) 
@@ -522,11 +523,11 @@ export default function EventDescription() {
                                     <View className="flex flex-row">
                                         <View className="flex flex-row w-3/5 gap-2">
                                             <View className="w-12 h-12 rounded-full flex flex-row">
-                                                <Image source={{ uri: review['profilePhoto'] }} style={{ width: '100%', height: '100%', borderRadius: 9999 }} />
+                                                <Image source={{ uri: review['photoUrl'] }} style={{ width: '100%', height: '100%', borderRadius: 9999 }} />
                                             </View>
                                             <View className="h-full flex flex-col">
-                                                <Text className="text-white text-lg font-bold" style={{lineHeight: 18}}>{review['username']}</Text>
-                                                <Text className="text-[#BDBDBD] text-sm" style={{lineHeight: 14}}>{review['nickname']}</Text>
+                                                <Text className="text-white text-lg font-bold" style={{lineHeight: 18}}>{review['name']}</Text>
+                                                <Text className="text-[#BDBDBD] text-sm" style={{lineHeight: 14}}>@{review['username']}</Text>
                                             </View>
                                         </View>
                                         <View className="flex flex-row gap-1 items-start w-2/5 justify-end">
@@ -549,14 +550,16 @@ export default function EventDescription() {
                                         </View>
                                     </View>
                                     <View className="flex flex-col">
-                                        <Text className="text-[#BDBDBD] text-xs text-center">{review['comment']}</Text>
+                                        <Text className="text-[#BDBDBD] text-xs text-center">{review['review']}</Text>
                                     </View>
                                 </View>
                             ))
                         )}
-                        <TouchableOpacity className="mt-2" onPress={() => setShowAllReviews(!showAllReviews)}>
-                            <Text className="text-purple-500 text-base text-center">{showAllReviews ? 'Ver menos' : 'Ver mais'}</Text>
-                        </TouchableOpacity>
+                        {reviews.length > 1 && (
+                            <TouchableOpacity className="mt-2" onPress={() => setShowAllReviews(!showAllReviews)}>
+                                <Text className="text-purple-500 text-base text-center">{showAllReviews ? 'Ver menos' : 'Ver mais'}</Text>
+                            </TouchableOpacity>
+                        )}
                     </View>
                     <View className="mt-4">
                         <TouchableOpacity className="flex-row items-center bg-[#1C1C1C] rounded-full px-4 py-2" onPress={() => setModalVisible(true)}>
@@ -621,7 +624,7 @@ export default function EventDescription() {
                         <TouchableOpacity className="absolute top-16 right-4" onPress={() => setOpenGalleryModal(false)}>
                             <FontAwesome name="close" size={24} color="white" />
                         </TouchableOpacity>
-                        <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="w-full h-full" onScroll={()=>console.log('ola')}>
+                        <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="w-full h-full">
                             <View className="w-full h-full bg-white border-2 border-purple-600">
                                 <Image source={{ uri: gallery[selectedImagePosition] }} className="w-full h-full object-cover" />
                             </View>
