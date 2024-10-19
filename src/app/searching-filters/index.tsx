@@ -258,10 +258,14 @@ export default function SearchingFilters() {
     }
     // console.log(filt)
     // console.log(search.replace(/ /g, '+'))
-    console.log(search.replace(/ /g, '+') + filt)
+    let stringSearch = search.replace(/ /g, '+') + filt
+    if (stringSearch.charAt(0) === '&') {
+      stringSearch = stringSearch.slice(1)
+    }
+    console.log(stringSearch)
 
-    // const response = await getEventsByFilter(search.replace(/ /g, '+'));
-    // console.log(response)
+    const response = await getEventsByFilter(stringSearch);
+    console.log(response)
     // setSearchResults(response.events)
   }
 
