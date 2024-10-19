@@ -115,6 +115,7 @@ export default function RoleInput({
           }
           onFocus={onFocus}
           style={style}
+          keyboardType={type === 'email' ? 'email-address' : 'default'}
         />
         {(type === 'hidden-password' || type === 'hidden-confirm-password') &&
           (hidden === true ? (
