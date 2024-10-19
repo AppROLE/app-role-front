@@ -95,9 +95,7 @@ export default function Favorites() {
                 </View>
                 <View className="p-10 mt-8 w-full">
                     {loading ? (
-                        <View className="justify-center items-center pb-20">
-                            <Text className="text-[#DFA9FD] text-xl">Carregando...</Text>
-                        </View>
+                        <></>
                     ) : filteredFriends.length === 0 ? (
                         <View className="justify-center items-center pb-20">
                             <Text className="text-[#DFA9FD] text-xl">{message}</Text>
