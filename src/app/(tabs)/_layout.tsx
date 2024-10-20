@@ -61,6 +61,14 @@ export default function TabLayout() {
                 >
                     <Tabs.Screen
                         name="home/index"
+                        listeners={({ navigation }) => ({
+                            tabPress: (e) => {
+                                navigation.navigate('home/index', {
+                                    // Adicione qualquer parâmetro necessário
+                                    
+                                });
+                            },
+                        })}
                         options={{
                             tabBarLabel: '', // Oculta o nome da aba
                             tabBarIcon: ({ focused }) => (
