@@ -4,7 +4,7 @@ import RoleCard from '@/src/components/roleCard'
 import RoleEmphasis from '@/src/components/roleEmphasis'
 import { FontAwesome6 } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
-import { SetStateAction, useContext, useEffect, useState } from 'react'
+import { SetStateAction, useCallback, useContext, useEffect, useState } from 'react'
 import {
   View,
   Text,
@@ -17,7 +17,7 @@ import Carousel from 'react-native-reanimated-carousel'
 
 import { UserContext } from '@/context/user_context'
 import { EventContext } from '@/context/event_context'
-import { router } from 'expo-router'
+import { router, useFocusEffect, useNavigation } from 'expo-router'
 import React from 'react'
 import { GradientText } from '@/src/components/gradientText'
 
@@ -32,6 +32,8 @@ export default function Home() {
   const [typingTimeout, setTypingTimeout] = useState<any>(null)
   const [searchResults, setSearchResults] = useState([])
   const [phrase, setPhrase] = useState<any>()
+  const [goTop, setGoTop] = useState(false)
+  const navigation = useNavigation();
 
   const { getAll } = useContext(EventContext)
   const { getRoleBombando } = useContext(EventContext)
@@ -213,6 +215,12 @@ export default function Home() {
     setTypingTimeout(timeout);
   };
 
+  function navToTop() {
+    console.log('Teste')
+    console.log(goTop)
+    setGoTop(true)
+  }
+
   useEffect(() => {
     getEvents()
   }, [])
@@ -225,8 +233,36 @@ export default function Home() {
     phraseAndFormat()
   }, [])
 
+  useFocusEffect(
+    useCallback(() => {
+      // Código que você quer executar toda vez que a tela for focada
+      console.log("Tela foi focada!");
+      setGoTop(true)
+      setTimeout(() => {
+        setGoTop(false)
+        console.log('GoTop', goTop)
+      }, 1000)
+
+      // Se precisar limpar algum efeito, retorne uma função de cleanup
+      return () => {
+        console.log("Tela deixou de ser focada!");
+        setGoTop(false)
+      };
+    }, [])
+  );
+
+  useFocusEffect(() => {
+    const unsubscribe = navigation.addListener('tabPress', () => {
+      // Código que você quer executar toda vez que a aba for pressionada
+      console.log("Aba foi pressionada!");
+      navToTop()
+    });
+
+    return unsubscribe;
+  });
+
   return (
-    <Background text={phrase} scrollable lockScroll={scrollDisabled} function1={loadMoreRoles}>
+    <Background text={phrase} scrollable lockScroll={scrollDisabled} function1={loadMoreRoles} getToTop={goTop}>
       <GradientText className="mb-4 text-center text-3xl font-nunitoBold">ROLE BOMBANDO</GradientText>
       {carrosselData.length > 1 ? (
         <View className="mx-auto">
