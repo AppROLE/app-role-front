@@ -76,8 +76,6 @@ export default function AlmostThere() {
         loginVerify()
     }, [])
     
-    console.log(imageUri)
-
     async function handleFinishSignUp() {
         if (username === '') {
             setUsernameError('Campo obrigatório')

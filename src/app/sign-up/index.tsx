@@ -1,20 +1,21 @@
-import { signUpRequestDTO } from '@/api/types/auth_dto'
+// import { signUpRequestDTO } from '@/api/types/auth_dto'
 import { AuthContext } from '@/context/auth_context'
 import TermsAndConditionsModal from '@/src/components/TermsAndConditionsModal'
 import Background from '@/src/components/background'
 import RoleInput from '@/src/components/input'
 import RoleMainButton from '@/src/components/roleMainButton'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
-import Ionicons from '@expo/vector-icons/Ionicons'
 import { Link, router } from 'expo-router'
 import React from 'react'
-import { View, Pressable, Text, TouchableOpacity } from 'react-native'
-import Toast from 'react-native-toast-message'
+import {View, Pressable, Text, ActivityIndicator} from 'react-native'
+import Toast, { ErrorToast } from 'react-native-toast-message'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import Svg from '@/src/components/svg'
 
 export default function SignUp() {
   const [isVisible, setIsVisible] = React.useState(false)
   const [isChecked, setIsChecked] = React.useState(false)
+  const [checkedError, setCheckedError] = React.useState(false)
   const [user, setUser] = React.useState('')
   const [userError, setUserError] = React.useState('')
   const [email, setEmail] = React.useState('')
@@ -23,13 +24,37 @@ export default function SignUp() {
   const [passwordError, setPasswordError] = React.useState('')
   const [confirmPassword, setConfirmPassword] = React.useState('')
   const [confirmPasswordError, setConfirmPasswordError] = React.useState('')
+  const [buttonDebounce, setButtonDebounce] = React.useState(false)
   const { signUp } = React.useContext(AuthContext)
 
-  function verifyPassword() {
+  function verifyCredentials() {
+    var isValid = true
     const specialCharacterRegex = /[!@#$%^&*(),.?":{}|<>]/
     const uppercaseLetterRegex = /[A-Z]/
     const lowercaseLetterRegex = /[a-z]/
     const numberRegex = /[0-9]/
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    setUser(user.trim())
+
+    if(user.trim().length == 0){
+      setUserError("Nome inválido")
+      isValid = false
+    }
+    if (!email || !emailRegex.test(email)) {
+      setEmailError("E-mail inválido")
+      isValid = false
+    }
+    
+    if (password !== confirmPassword) {
+      setConfirmPasswordError('Senhas não conferem!')
+      isValid = false
+    }
+
+    if (!isChecked){
+      setCheckedError(true)
+      isValid = false
+    } 
 
     if (password.length < 6) {
       setPasswordError('Senha muito curta!')
@@ -43,22 +68,29 @@ export default function SignUp() {
       setPasswordError('A senha deve conter pelo menos um número!')
     } else if (password.trim() === '') {
       setPasswordError('Senha inválida!')
-    } else if (password !== confirmPassword) {
-      setConfirmPasswordError('Senhas não conferem!')
     } else {
       console.log('Senha válida!')
+      return isValid
     }
+    return false
   }
 
   interface SignUpResponse {
     message?: string
   }
 
-  async function changePassword() {
-    verifyPassword()
+  async function createAccount() {
+    setButtonDebounce(true)
+    
+    if (!verifyCredentials()){
+      setButtonDebounce(false)
+      return
+    }
+
+    const trimUser = user.trim()
 
     const data = {
-      name: user,
+      name: trimUser,
       email: email,
       password: password,
       acceptedTerms: isChecked
@@ -66,7 +98,7 @@ export default function SignUp() {
 
     try {
       const response: SignUpResponse = await signUp(data)
-      console.log(response)
+      if (!(response.message == 'User created successfully')) return
       Toast.show({
         type: 'success',
         text1: 'Sucesso',
@@ -77,15 +109,24 @@ export default function SignUp() {
       await AsyncStorage.setItem('ScreenRequestToCode', 'sign-up')
       await AsyncStorage.setItem('user_email', email)
       await AsyncStorage.setItem('user_password', password)
-      router.push('/recovery-code');
-    } catch (error: any) {
+      router.push('/recovery-code');    
+    } catch(error: any) {
       Toast.show({
-        type: 'error',
         text1: 'Erro',
-        text2: error.message || 'Ocorreu um erro ao realizar o cadastro.',
+        text2: error.replace("SignUpController, Error on handle: ", '') || 'Ocorreu um erro ao realizar o cadastro.',
+        position: 'top',
         visibilityTime: 3000,
-        topOffset: 0
-      })
+        type: 'error',
+        props: {
+          style: { backgroundColor: 'black' },
+          text1Style: { color: 'white', fontSize: 18, fontFamily: "nunito" },
+          text2Style: { color: 'white', fontFamily: "nunito" }, 
+          contentContainerStyle: { backgroundColor: 'white' }
+        },
+      });
+    }
+    finally{
+      setButtonDebounce(false)
     }
   }
 
@@ -115,7 +156,7 @@ export default function SignUp() {
 
   return (
     <Background>
-      <View className="flex h-[89%] w-full flex-col items-center gap-11 rounded-t-[54px] bg-background">
+      <View className="flex h-[89%] w-full flex-col items-center gap-10 rounded-t-[54px] bg-background">
         <View className="flex items-center">
           <View className="flex flex-row gap-[5px]">
             <Text className="text-2xl font-nunitoBold text-white max-[320px]:text-xl">
@@ -164,12 +205,22 @@ export default function SignUp() {
                 />
               </View>
             </View>
-            <View className="mt-5 w-2/3 flex flex-row items-center  justify-center gap-3">
-              <Pressable onPress={() => setIsChecked(!isChecked)}>
+            <View className="mt-5 w-2/3 flex flex-row items-center justify-center gap-3">
+              <Pressable onPress={() => {setIsChecked(!isChecked); setCheckedError(false)}}>
                 {isChecked ? (
-                  <Ionicons name="checkbox-outline" size={24} color="white" />
+                  <Svg
+                      uri={process.env.EXPO_PUBLIC_URL_S3 + "/checkbox_check.svg"}
+                      color={'#BDBDBD'}
+                      width={24}
+                      height={20}
+                  />
                 ) : (
-                  <Ionicons name="square-outline" size={24} color="white" />
+                  <Svg
+                      uri={process.env.EXPO_PUBLIC_URL_S3 + "/checkbox_empty.svg"}
+                      color={'#BDBDBD'}
+                      width={24}
+                      height={20}
+                  />
                 )}
               </Pressable>
               <Text className="flex items-center font-nunito justify-center text-xs text-white">
@@ -180,14 +231,22 @@ export default function SignUp() {
                 e política de privacidade
               </Text>
             </View>
+            <Text className={`text-start w-[75%] font-nunito text-xs ${checkedError ? 'text-red-400' : 'text-transparent'}`}>
+                *Você precisa concordar com os termos de uso.
+              </Text>
           </View>
         </View>
         <View className="w-full gap-8 px-[8%]">
           <RoleMainButton
             type="gradient"
-            buttonFunction={() => changePassword()}
+            buttonFunction={() => createAccount()}
+            disabled={buttonDebounce}
           >
-            <Text className="text-white font-nunito">Cadastrar</Text>
+            {buttonDebounce ?
+                <ActivityIndicator color={'white'}/>
+                :
+                <Text className="text-white font-nunito">Cadastrar</Text>
+            }
           </RoleMainButton>
           <RoleMainButton type="simple">
             <FontAwesome6 name="google" size={24} color="white" />
@@ -196,11 +255,31 @@ export default function SignUp() {
         </View>
         <View className="flex flex-row gap-2">
           <Text className="text-sm text-white font-nunito">Já possui uma conta?</Text>
-          <Link href={'/'} className="text-sm text-[#D8A9FF] font-nunitoBold">
+          <Link href={'/sign-in'} className="text-sm text-[#D8A9FF] font-nunitoBold">
             Entrar
           </Link>
         </View>
       </View>
+      <Toast config={{
+        error: (props) => (
+            <ErrorToast
+                {...props}
+                style={{
+                  backgroundColor: '#240046',
+                }}
+                text1Style={{
+                  fontSize: 17,
+                  color: 'white',
+                  fontFamily: 'NunitoBold',
+                }}
+                text2Style={{
+                  fontSize: 15,
+                  color: 'white',
+                  fontFamily: 'Nunito',
+                }}
+            />
+        ),
+      }}/>
       <TermsAndConditionsModal isVisible={isVisible} />
     </Background>
   )
