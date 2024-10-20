@@ -46,7 +46,7 @@ export default function AnimatedOption({ selected, label, onPress }: AnimatedOpt
           <View
             style={{
               paddingVertical: 12,
-              paddingHorizontal: 30,
+              paddingHorizontal: 22,
               borderRadius: 20,
               backgroundColor: '#1C1C1C',
               alignItems: 'center',

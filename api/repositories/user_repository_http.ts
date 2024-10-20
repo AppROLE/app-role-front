@@ -21,7 +21,10 @@ export class UserRepositoryHttp {
 
     async getPhrase() {
         try {
-            const response = await httpEvent.get('/get-phrase')
+            const idToken = await AsyncStorage.getItem('idToken') || '';
+            const response = await httpEvent.get('/get-phrase', {
+                headers: { 'Authorization': `Bearer ${idToken}` }
+            })
             return response.data as getPhraseResponseDTO
         } catch (error: any) {
             return error.response.data

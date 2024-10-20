@@ -172,39 +172,6 @@ export default function Packages() {
                                 ) : (
                                     <Text className="text-xl text-white text-center">Não há institutos disponíveis.</Text>
                                 )}
-                                {institutes.map((institute: Institute) => (
-                                    <TouchableOpacity className="flex h-[76px]" onPress={() => handleSelectCard(institute.instituteId)}>
-                                        {selectedCard?.toString() === institute.instituteId ? (
-                                            <View
-                                                className="flex-row  bg-button_color m-2 h-[75%] justify-center items-center rounded-full"
-                                            >
-                                                <Pressable onPress={() => handleSelectCard(institute.instituteId)}>
-                                                    <LinearGradient
-                                                        key={institute.instituteId}
-                                                        colors={["#5A189A", "#9C4EDC"]}
-                                                        style={{ borderRadius: 999, flexDirection: 'row', alignItems: 'center', height: '100%', width: 157 }}
-                                                    >
-                                                        <View className="mx-1">
-                                                            <Image source={institute.logoPhoto ? { uri: institute.logoPhoto } : { uri: process.env.EXPO_PUBLIC_URL_S3 + "/images/profile_default.png" }} />
-                                                        </View>
-                                                        <Text className="text-white text-center text-lg mx-3">{institute.name}</Text>
-                                                    </LinearGradient>
-                                                </Pressable>
-                                            </View>
-                                        ) : (
-                                            <View
-                                                key={institute.instituteId}
-                                                className="flex-row w-[157px] bg-button_color m-2 h-[75%] justify-center items-center rounded-full"
-                                            >
-                                                <View className="mx-1">
-                                                    <Image source={institute.logoPhoto ? { uri: institute.logoPhoto } : { uri: process.env.EXPO_PUBLIC_URL_S3 + "/images/profile_default.png" }} />
-                                                </View>
-                                                <Text className="text-white text-center text-lg mx-3">{institute.name}</Text>
-                                            </View>
-                                        )}
-                                    </TouchableOpacity>
-                                ))}
-                            </View>
                         </ScrollView>
                         <View className="w-full mt-5 pl-6">
                             <Text className="text-2xl font-nunitoBold text-white">Data</Text>

@@ -1,25 +1,25 @@
+import { UserContext } from '@/context/user_context';
 import Entypo from '@expo/vector-icons/Entypo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Animated, Image, Text, View, ScrollView, TouchableOpacity, Platform, Modal, KeyboardAvoidingView } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Animated, Image, Text, View, ScrollView, TouchableOpacity, Modal } from 'react-native';
 import { SvgUri } from 'react-native-svg';
 import { TextInput } from 'react-native-gesture-handler';
 import RoleMainButton from '../roleMainButton';
-import { KeyboardAvoidingView, Platform } from 'react-native'; // Importe o KeyboardAvoidingView e Platform
 import Toast from 'react-native-toast-message';
 
 const statusBarHeight = Constants.statusBarHeight;
 
 interface BackgroundProps {
-  children: any;
-  text?: string;
-  scrollable?: boolean;
-  themeMode?: string;
-  lockScroll?: boolean;
-  function1?: any;
+  children: any
+  text?: any
+  scrollable?: boolean
+  themeMode?: string
+  lockScroll?: boolean
+  function1?: any
   centralize?: boolean;
 }
 
@@ -37,6 +37,7 @@ export default function Background({ children, text, scrollable, themeMode, lock
   const navigation = useRouter();
   const [promoterCode, setPromoterCode] = useState(''); // Estado para armazenar o código do promoter
   const [buttonText, setButtonText] = useState('Suporte um promoter');
+  const scrollRef = useRef();
 
   useEffect(() => {
     if (scrolled) {
@@ -208,11 +209,12 @@ export default function Background({ children, text, scrollable, themeMode, lock
         </View>
         {text && (
           <Animated.View style={{ opacity: textOpacity }}>
-            <Animated.Text style={{ fontSize: textSize }} className="text-center font-bold text-white mb-8">
+            <Animated.Text style={{ fontSize: textSize }} className="text-center text-md text-white mb-8">
               {text}
             </Animated.Text>
           </Animated.View>
         )}
+
         {scrollable2 ?
           <>
             <View className="flex h-[89%] flex-col items-center rounded-t-[54px] pt-5" style={{ backgroundColor }}>
@@ -250,7 +252,7 @@ export default function Background({ children, text, scrollable, themeMode, lock
               {children}
             </ScrollView>
           )}
-       
+      
         {/* Modal original */}
 
         <Modal
