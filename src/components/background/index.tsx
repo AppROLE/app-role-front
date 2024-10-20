@@ -21,9 +21,10 @@ interface BackgroundProps {
   lockScroll?: boolean
   function1?: any
   centralize?: boolean;
+  getToTop?: boolean;
 }
 
-export default function Background({ children, text, scrollable, themeMode, lockScroll, function1, centralize }: BackgroundProps) {
+export default function Background({ children, text, scrollable, themeMode, lockScroll, function1, centralize, getToTop }: BackgroundProps) {
   const [scrolled, setScrolled] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false); // Controle do modal original
   const [isSecondModalVisible, setSecondModalVisible] = useState(false); // Controle do segundo modal
@@ -172,6 +173,17 @@ export default function Background({ children, text, scrollable, themeMode, lock
     setSecondModalVisible(!isSecondModalVisible);
   };
 
+  const scrollViewRef = useRef<ScrollView | null>(null);
+  const scrollToTop = () => {
+      scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+  };
+
+  useEffect(() => {
+    if (getToTop){
+      scrollToTop();
+    }
+  }, [getToTop]);
+
   return (
     <LinearGradient
       style={{ flex: 1 }}
@@ -227,7 +239,7 @@ export default function Background({ children, text, scrollable, themeMode, lock
             nestedScrollEnabled={true}
             scrollEnabled={!lockScroll}
             bounces={false}
-            ref={scrollRef}
+            ref={scrollViewRef}
           >
             {children}
           </ScrollView>
