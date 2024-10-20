@@ -5,7 +5,7 @@ import { createContext, PropsWithChildren } from "react"
 type InstituteContextType = { 
     getAll: () => Promise<getAllInstituteByIdResponseDTO>
     getInstituteById: (instituteId: string) => Promise<getInstituteByIdResponseDTO>
-    getAllInstitutesByPartnerType: (idToken: string, partnerType: string) => Promise<getInstituteByPartnerTypeResponseDTO>
+    getAllInstitutesByPartnerType: (partnerType: string) => Promise<getInstituteByPartnerTypeResponseDTO>
     getAllFavoritesInstitutes: () => Promise<getAllFavoritesInstitutesResponseDTO>
     updateFavoriteInstitute: (instituteId: string) => Promise<updateFavoriteInstituteResponseDTO>
 }
@@ -33,7 +33,7 @@ const defaultInstituteContext = {
             price: 0, 
         }
     },
-    getAllInstitutesByPartnerType: async (_idToken: string, _partnerType: string) => {
+    getAllInstitutesByPartnerType: async ( _partnerType: string) => {
         return {
             institutes: [],
             message: ''
@@ -75,9 +75,9 @@ export function InstituteContextProvider({ children }: PropsWithChildren) {
     }
   }
 
-  async function getAllInstitutesByPartnerType(idToken: string, partnerType: string) { 
+  async function getAllInstitutesByPartnerType(partnerType: string) { 
     try { 
-      const response = await instituteRepository.getAllInstitutesByPartnerType(idToken, partnerType)
+      const response = await instituteRepository.getAllInstitutesByPartnerType(partnerType)
       return response
     } catch (error: any) { 
       return error

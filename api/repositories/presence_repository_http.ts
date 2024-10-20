@@ -1,6 +1,7 @@
 import Toast from "react-native-toast-message";
 import { http, httpEvent } from "../http";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getAllConfirmedEventsResponseDTO } from "../types/presence_dto";
 
 
 export class PresenceRepositoryHttp {
@@ -51,7 +52,7 @@ export class PresenceRepositoryHttp {
                 }
             });
             console.log("RESPOSTA DA REQUEST", response.data)
-            return response.data
+            return response.data as getAllConfirmedEventsResponseDTO
         } catch (error: any) {
             console.log("ERRO NA REQUEST", error.response.data)
             return error.response.data.message

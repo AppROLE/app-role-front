@@ -8,10 +8,12 @@ import { UserRepositoryHttp } from "@/api/repositories/user_repository_http"; //
 import RoleCard from "@/src/components/roleCard";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { PresenceContext } from "@/context/presence_context";
-import { Events } from "@/api/types/presence_dto";
+import { Events, getAllConfirmedEventsResponseDTO } from "@/api/types/presence_dto";
 
 export default function Profile() {
   const navigation = useRouter();
+  const [roles, setRoles] = useState<Events[]>([]);
+  const { getAllConfirmedEvents } = useContext(PresenceContext);
 
   // Instanciar a classe UserRepositoryHttp
   const userRepository = new UserRepositoryHttp();
@@ -62,9 +64,6 @@ export default function Profile() {
       Alert.alert("Erro", "Link não disponível.");
     }
   }
-
-  const [roles, setRoles] = useState<Events[] | undefined>([]);
-  const { getAllConfirmedEvents } = useContext(PresenceContext);
 
   async function fetchRoles() {
     const response = await getAllConfirmedEvents();
