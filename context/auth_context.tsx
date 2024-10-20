@@ -106,7 +106,7 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
 
       return response
     } catch (error: any) {
-      return error
+      throw error
     }
   }
 

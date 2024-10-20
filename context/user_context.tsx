@@ -12,7 +12,10 @@ type UserContextType = {
 
 const defaultUserContext = {
     getPhrase: async () => {
-        return { phrase: '' }
+        return { 
+            phrase: '' ,
+            username: ''
+        }
     },
     getFriends: async () => {
         return {

@@ -4,6 +4,8 @@ export type createReviewRequestDTO = {
     reviewedAt: number;
     star: number;
     review: string;
+    photoUrl: string;
+    name: string;
 }
 
 export type createReviewResponseDTO = {

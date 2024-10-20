@@ -33,4 +33,22 @@ export class EventRepositoryHttp {
             return error.response.data;
         }
     }
+
+    async getRoleBombando() {
+        try {
+            const response = await httpEvent.get('/get-top-events');
+            return response.data;
+        } catch (error: any) {
+            return error.response.data;
+        }
+    }
+
+    async getEventsByFilter(filters: any) {
+        try {
+            const response = await httpEvent.get('/get-all-events-by-filter?' + filters);
+            return response.data;
+        } catch (error: any) {
+            return error.response.data;
+        }
+    }
 }

@@ -23,7 +23,7 @@ export class AuthRepositoryHttp {
       const response = await http.post('/sign-up', data)
       return response.data
     } catch (error: any) {
-      return error.response.data
+      throw error.response.data
     }
   }
 
