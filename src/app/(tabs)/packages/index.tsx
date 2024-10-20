@@ -5,6 +5,7 @@ import RoleMainButton from "@/src/components/roleMainButton";
 import AnimatedOption from "@/src/components/selectedCard";
 import { FontAwesome6 } from "@expo/vector-icons";
 import DateTimePicker from '@react-native-community/datetimepicker'
+
 import { LinearGradient } from "expo-linear-gradient";
 import { useContext, useEffect, useState } from "react";
 import { Animated, Image, KeyboardAvoidingView, Linking, Platform, Pressable, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
@@ -14,16 +15,16 @@ import { Animated, Image, KeyboardAvoidingView, Linking, Platform, Pressable, Sa
 export default function Packages() {
     const [selected, setSelected] = useState<number | null>(null);
     const [selectedCard, setSelectedCard] = useState<string | number | null>(null);
-    const [isDateFocused, setIsDateFocused] = useState(false);
     const { getAllInstitutesByPartnerType } = useContext(InstituteContext);
+
     const [institutes, setInstitutes] = useState<Institute[]>([]);
     const [dateChange, setDateChange] = useState('');
+
 
     const [date, setDate] = useState(new Date());
     const [formattedDate, setFormattedDate] = useState('DD/MM/YYYY')
     const [dateSelected, setDateSelected] = useState(false)
     const [showPicker, setShowPicker] = useState(false)
-
 
     const data = [
         { id: 1, imageSource: require('@/assets/images/aniversarios.png'), grayImageSource: require('@/assets/images/aniversarioGray.png'), label: 'Aniversário' },
@@ -43,6 +44,7 @@ export default function Packages() {
         setSelectedCard(prevSelectedCard => (prevSelectedCard === id ? null : id));
     }
 
+
     
     function handleClosePicker() {
         setShowPicker(false)
@@ -58,7 +60,6 @@ export default function Packages() {
         setFormattedDate(`${day}/${month}/${year}`)
         setDateSelected(true)
     }
-
 
     const handleWhatsAppRedirect = () => {
         if (selectedCard !== null) {
@@ -86,27 +87,19 @@ export default function Packages() {
         }
     }
 
-
     useEffect(() => {
         getInstitutes();
     }, []);
 
     return (
-        <Background>
-            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}
-                style={{ flex: 1 }}>
+        <Background scrollable2 >
+            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
                 <SafeAreaView className="flex-1 justify-center items-center">
                     <ScrollView className="flex-1 w-[100%]" contentContainerStyle={{ paddingBottom: 90 }}>
                         <View className="w-full pl-6">
                             <Text className="text-2xl font-nunitoBold text-white">Selecione</Text>
                         </View>
-                        <View className="w-full mt-5">
-                            <View className="border border-['#2C2B2B'] w-full"></View>
-                        </View>
-                        <View className="w-full mt-10 ml-10">
-                            <Text className="text-2xl text-white">Selecione:</Text>
-                        </View>
-                        <View className="mx-10 flex-row justify-between gap-3 mt-5">
+                        <View className="px-5 flex-row justify-between gap-3 mt-5">
                             {data.map(item => (
                                 <TouchableOpacity onPress={() => handleSelect(item.id)} className="h-[20%]">
                                     <View key={item.id} className="flex gap-2 items-center">

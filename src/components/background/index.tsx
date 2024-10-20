@@ -21,9 +21,10 @@ interface BackgroundProps {
   lockScroll?: boolean
   function1?: any
   centralize?: boolean;
+  scrollable2?: boolean;
 }
 
-export default function Background({ children, text, scrollable, themeMode, lockScroll, function1, centralize }: BackgroundProps) {
+export default function Background({ children, text, scrollable,scrollable2, themeMode, lockScroll, function1, centralize }: BackgroundProps) {
   const [scrolled, setScrolled] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false); // Controle do modal original
   const [isSecondModalVisible, setSecondModalVisible] = useState(false); // Controle do segundo modal
@@ -38,7 +39,6 @@ export default function Background({ children, text, scrollable, themeMode, lock
   const [promoterCode, setPromoterCode] = useState(''); // Estado para armazenar o código do promoter
   const [buttonText, setButtonText] = useState('Suporte um promoter');
   const scrollRef = useRef();
-  const [scrollable2, setScrollable2] = useState(false);
 
   useEffect(() => {
     if (scrolled) {
@@ -253,7 +253,7 @@ export default function Background({ children, text, scrollable, themeMode, lock
               {children}
             </ScrollView>
           )}
-       
+
         {/* Modal original */}
 
         <Modal
