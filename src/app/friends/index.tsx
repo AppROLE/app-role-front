@@ -11,7 +11,7 @@ export default function Favorites() {
     const [search, setSearch] = useState('');
     const [filteredFriends, setFilteredFriends] = useState<{ username: string; profilePhoto: string; nickname: string; }[]>([]);
     const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState('Pesquise por nome e apelido...');
+    const [message, setMessage] = useState('Pesquise por usuário ou apelido');
     const { findPerson } = useContext(UserContext);
     const navigation = useRouter();
 
@@ -27,7 +27,7 @@ export default function Favorites() {
         timeoutInputFindPerson = setTimeout(async () => {
             if (search === '') {
                 setFilteredFriends([]);
-                setMessage('Pesquise por nome e apelido...');
+                setMessage('Pesquise por usuário ou apelido');
                 return;
             }
 
@@ -95,9 +95,7 @@ export default function Favorites() {
                 </View>
                 <View className="p-10 mt-8 w-full">
                     {loading ? (
-                        <View className="justify-center items-center pb-20">
-                            <Text className="text-[#DFA9FD] text-xl">Carregando...</Text>
-                        </View>
+                        <></>
                     ) : filteredFriends.length === 0 ? (
                         <View className="justify-center items-center pb-20">
                             <Text className="text-[#DFA9FD] text-xl">{message}</Text>

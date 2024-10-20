@@ -135,7 +135,7 @@ export default function Packages() {
                         <ScrollView className="w-full flex flex-1 mt-5 ">
                             <View className="flex flex-wrap flex-row justify-start ml-10">
                                 {institutes.map((institute : Institute) => (
-                                    <TouchableOpacity className="flex h-[76px]" onPress={() => handleSelectCard(institute.instituteId)}>
+                                    <TouchableOpacity key={institute.instituteId + 'id'} className="flex h-[76px]" onPress={() => handleSelectCard(institute.instituteId)}>
                                         {selectedCard?.toString() === institute.instituteId ? (
                                             <View
                                                 className="flex-row  bg-button_color m-2 h-[75%] justify-center items-center rounded-full"
