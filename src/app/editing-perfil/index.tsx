@@ -4,7 +4,7 @@ import RoleMainButton from '@/src/components/roleMainButton'
 import * as ImagePicker from 'expo-image-picker'
 import { FontAwesome6 } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
-import { useEffect, useState } from 'react'
+import {useContext, useEffect, useState} from 'react'
 import {
   TouchableOpacity,
   View,
