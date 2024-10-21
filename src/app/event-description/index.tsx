@@ -1,5 +1,7 @@
+import { Reviews } from "@/api/types/review_dto";
 import { EventContext } from "@/context/event_context";
 import { InstituteContext } from "@/context/institute_context";
+import { ReviewContext } from "@/context/review_context";
 import ModalListaConfirmados from "@/src/components/modalListaConfirmados";
 import ModalReview from "@/src/components/modalReview";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
@@ -11,15 +13,6 @@ import { useEffect, useState, useRef, useContext } from "react";
 import { View, Text, Image, ScrollView, TouchableOpacity, Animated, Easing } from "react-native";
 
 export default function EventDescription(eventId: string) {
-    // Interfaces
-    interface Review {
-        review: string;
-        reviewedAt: string;
-        star: number;
-        username: string;
-        name: string;
-        photoUrl: string;
-    }
 
     // States
     const [darkLight, setDarkLight] = useState(false);
@@ -32,7 +25,7 @@ export default function EventDescription(eventId: string) {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalList, setModalList] = useState(false);
     const stars = [1, 2, 3, 4, 5];
-    const [reviews, setReviews] = useState<Review[]>([]);
+    const [reviews, setReviews] = useState<Reviews[]>([]);
     const [showAllReviews, setShowAllReviews] = useState(false)
     const [selectedImagePosition, setSelectedImagePosition] = useState(0)
     const [openGalletyModal, setOpenGalleryModal] = useState(false)
@@ -90,10 +83,10 @@ export default function EventDescription(eventId: string) {
     const gradientColors = buttonCondition
         ? ['rgba(90, 24, 154, 0.25)', 'rgba(156, 78, 220, 0.25)'] // Cores do gradiente com brilho reduzido
         : ['#5A189A', '#9C4EDC']; // Cores normais do gradiente
-
+    const [instituteName, setInstituteName] = useState('');
     const { getEventById } = useContext(EventContext);
-    const { getReviewsEventById } = useContext(EventContext);
-    const { getById } = useContext(InstituteContext);
+    const { getAllReviewsByEvent } = useContext(ReviewContext);
+    const { getInstituteById } = useContext(InstituteContext);
 
     function priceDesign(value: number) {
         const tempPrice = '$'.repeat(value);
@@ -121,10 +114,10 @@ export default function EventDescription(eventId: string) {
     }
 
     async function getInfosEvent() {
-        const id = await AsyncStorage.getItem('eventId');
+        const id = 'd55a02b0-5417-4c8c-bf4c-bacb23188408';
         if (id) {
             const response = await getEventById(id);
-            console.log(response);
+            console.log("Get event by id ", response);
             if (response) {
                 priceDesign(response.price);
                 setMusicsTypes(response.musicType ?? []);
@@ -168,12 +161,13 @@ export default function EventDescription(eventId: string) {
                 setReviews(response.reviews ?? []);
             }
         } else {
-            router.push('/home');
+         
         }
     }
 
     async function getInstituteEvent() {
-        const response = await getById('2f3073ac-3633-4fc7-9cfe-c2084399bbc3');
+        const response = await getInstituteById('2f3073ac-3633-4fc7-9cfe-c2084399bbc3');
+        console.log('Institute by id ', response);
         // console.log(response);
         if (response) {
             setTypePartner(response.partner_type);
@@ -184,6 +178,9 @@ export default function EventDescription(eventId: string) {
                 setLogoPhoto('https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png');
             } else {
                 setLogoPhoto(response.logo_photo ?? 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png');
+            }
+            if (response.name === '') {
+                setInstituteName('Nenhum instituto encontrado');
             }
         }
     }
@@ -244,17 +241,17 @@ export default function EventDescription(eventId: string) {
                     }>
                     <FontAwesome name="arrow-left" size={32} color="white" />
                 </TouchableOpacity>
-                <View className="w-11/12 h-16 mx-auto bg-black mt-auto rounded-full flex flex-row items-center p-2 gap-4 mb-4">
-                    <View className="w-12 h-12 rounded-full">
+                <View className="w-11/12 h-16 mx-auto bg-black/70 mt-auto rounded-full flex flex-row items-center p-2 gap-4 mb-4">
+                    <TouchableOpacity className="w-12 h-12 rounded-full" onPress={() => router.push('/institution')}>
                         <Image
                             source={{
                                 uri: logo_photo ? logo_photo : 'https://d2sw4frthbnrzj.cloudfront.net/teste/role_bombando_teste.png',
                             }}
                             style={{ width: '100%', height: '100%', borderRadius: 9999 }}
                         />
-                    </View>
+                    </TouchableOpacity>
                     <View>
-                        <Text className="text-white text-2xl">Mahau Bar</Text>
+                        <Text className="text-white font-nunitoBold text-2xl">{instituteName}</Text>
                     </View>
                     <View className="ms-auto me-4">
                         <FontAwesome name="upload" size={24} color="white" />
@@ -475,7 +472,7 @@ export default function EventDescription(eventId: string) {
                 </View>
                 {/* Review */}
                 <View>
-                    <Text className="text-white text-2xl font-bold mt-8">Reviews</Text>
+                    <Text className="text-white text-2xl font-nunitoBold mt-8">Reviews</Text>
                     <View>
                         { reviews.length === 0 ? (
                             <Text className="text-white text-base text-center mt-2">Nenhuma avaliação disponível</Text>
