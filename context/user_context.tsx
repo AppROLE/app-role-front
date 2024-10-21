@@ -30,7 +30,7 @@ const defaultUserContext = {
             nickname: '',
             profilePhoto: '',
             followers: 0,
-            folowing: 0
+            following: 0
         }
     },
     findPerson: async () => {
