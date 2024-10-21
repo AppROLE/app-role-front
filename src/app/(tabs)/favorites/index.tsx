@@ -6,7 +6,6 @@ import Svg from "@/src/components/svg";
 
 import { router } from 'expo-router'
 import { InstituteContext } from "@/context/institute_context";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getAllFavoritesInstitutesResponseDTO, Institute } from "@/api/types/institute_dto";
 
 
@@ -27,7 +26,7 @@ export default function Favorites() {
         try {
             const response = await getAllFavoritesInstitutes();
             if (response) {
-                console.log('RESPOSTA DA GET ALL', response) 
+                console.log('RESPOSTA DA GET ALL FAVORITES INSTITUTES', response) 
                 setInstitutes(response)
             }
             if (response.institutes.length === 0) { 
@@ -45,8 +44,8 @@ export default function Favorites() {
 
     return (
         <Background>
-            <View className="items-start h-full w-full">
-                <View className='flex-row justify-between w-full px-8'>
+            <View className="items-start h-full  w-full">
+                <View className='flex-row justify-between  w-full px-8'>
                     <Text className="text-3xl text-white font-nunitoBold">Social</Text>
                     <View className='flex-row items-center gap-4'>
                         <TouchableOpacity
