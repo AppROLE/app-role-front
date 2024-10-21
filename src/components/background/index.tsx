@@ -182,7 +182,7 @@ export default function Background({ children, text, scrollable,scrollable2, the
     >
       <Toast/>
       <View style={{ marginTop: statusBarHeight }} className="flex h-full w-full flex-col justify-between">
-        <View style={{ flexDirection: 'row', alignItems: centralize ? 'center' : 'start', justifyContent: centralize ? 'center' : 'left', marginTop: 32, paddingHorizontal: 20 }}>
+        <View className='bg-red-500 flex flex-rwo items-center' style={{ flexDirection: 'row', justifyContent: centralize ? 'center' : 'flex-start', marginTop: 32, paddingHorizontal: 20 }}>
           <Animated.View style={{ transform: [{ translateX: slideAnim }] }}>
             <Image style={{ width: 140, height: 70 }} source={require('../../../assets/images/ROLE.png')} />
           </Animated.View>
