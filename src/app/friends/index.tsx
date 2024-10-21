@@ -6,43 +6,45 @@ import Svg from "@/src/components/svg";
 import { useRouter } from "expo-router";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { UserContext } from "@/context/user_context";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import RoleMainButton from "@/src/components/roleMainButton";
 
 export default function Favorites() {
     const [search, setSearch] = useState('');
     const [filteredFriends, setFilteredFriends] = useState<{ username: string; profilePhoto: string; nickname: string; }[]>([]);
     const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState('Pesquise por nome e apelido...');
+    const [message, setMessage] = useState('Pesquise por usuário e apelido...');
+    const [recentSearches, setRecentSearches] = useState<{ username: string; profilePhoto: string; nickname: string; }[]>([]);
+
     const { findPerson } = useContext(UserContext);
     const navigation = useRouter();
 
     let timeoutInputFindPerson: NodeJS.Timeout | null = null;
 
     useEffect(() => {
-        // Limpa o timeout anterior, se houver
         if (timeoutInputFindPerson) {
             clearTimeout(timeoutInputFindPerson);
         }
 
-        // Define um novo timeout para o debounce
         timeoutInputFindPerson = setTimeout(async () => {
             if (search === '') {
                 setFilteredFriends([]);
-                setMessage('Pesquise por nome e apelido...');
-                return;
+                setMessage('Pesquise por usuário e apelido...');
+                return; 
             }
 
-            setLoading(true); // Inicia o carregamento
+            setLoading(true);
             try {
                 const response = await findPerson(search);
                 if (response && response.users && response.users.length > 0) {
                     setFilteredFriends(response.users);
                     setMessage('');
+                    saveRecentSearch(response.users[0]);
                 } else {
                     setFilteredFriends([]);
                     setMessage(response?.message || 'Nenhum usuário encontrado!');
                 }
             } catch (error: any) {
-                // Lidar com erros de rede
                 console.log('Erro ao buscar usuários:', error);
                 if (error.response) {
                     setMessage('Erro ao buscar usuários: ' + (error.response.data.message || 'Erro desconhecido.'));
@@ -52,17 +54,58 @@ export default function Favorites() {
                     setMessage('Erro: ' + error.message);
                 }
             } finally {
-                setLoading(false); // Finaliza o carregamento
+                setLoading(false);
             }
-        }, 800); 
+        }, 800);
 
-        // Limpa o timeout quando o componente for desmontado
         return () => {
             if (timeoutInputFindPerson) {
                 clearTimeout(timeoutInputFindPerson);
             }
         };
     }, [search]);
+
+    const saveRecentSearch = async (profile: { username: string; profilePhoto: string; nickname: string; }) => {
+        try {
+            const storedSearches = await AsyncStorage.getItem('recentSearches');
+            let searches = storedSearches ? JSON.parse(storedSearches) : [];
+
+            searches = [profile, ...searches.filter((item: any) => item.username !== profile.username)];
+
+            if (searches.length > 5) {
+                searches = searches.slice(0, 5);
+            }
+
+            await AsyncStorage.setItem('recentSearches', JSON.stringify(searches));
+            setRecentSearches(searches);
+        } catch (error) {
+            console.error('Erro ao salvar o histórico de pesquisas:', error);
+        }
+    };
+
+    const loadRecentSearches = async () => {
+        try {
+            const storedSearches = await AsyncStorage.getItem('recentSearches');
+            if (storedSearches) {
+                setRecentSearches(JSON.parse(storedSearches));
+            }
+        } catch (error) {
+            console.error('Erro ao carregar o histórico de pesquisas:', error);
+        }
+    };
+
+    const clearRecentSearches = async () => {
+        try {
+            await AsyncStorage.removeItem('recentSearches');
+            setRecentSearches([]);
+        } catch (error) {
+            console.error('Erro ao limpar o histórico de pesquisas:', error);
+        }
+    };
+
+    useEffect(() => {
+        loadRecentSearches();
+    }, []);
 
     function handleVoltar() {
         navigation.back();
@@ -94,15 +137,34 @@ export default function Favorites() {
                     </View>
                 </View>
                 <View className="p-10 mt-8 w-full">
-                    {loading ? (
-                        <View className="justify-center items-center pb-20">
-                            <Text className="text-[#DFA9FD] text-xl">Carregando...</Text>
+                    {search === '' && recentSearches.length > 0 && (
+                        <View>
+                            <View className="flex-row justify-between items-center">
+                                <Text className="text-white text-2xl mb-4 font-bold">Últimas pesquisas</Text>
+                                <View className="mb-4">
+                                    <RoleMainButton type={'gradient'} buttonFunction={clearRecentSearches}>
+                                        <Text className="text-white font-bold">Limpar</Text>
+                                    </RoleMainButton>
+                                </View>
+                            </View>
+                            {recentSearches.map((item) => (
+                                <FriendCard
+                                    key={item.username}
+                                    image={item.profilePhoto}
+                                    nickname={item.nickname}
+                                    user={item.username}
+                                />
+                            ))}
                         </View>
-                    ) : filteredFriends.length === 0 ? (
+                    )}
+
+                    {search === '' && recentSearches.length === 0 && (
                         <View className="justify-center items-center pb-20">
-                            <Text className="text-[#DFA9FD] text-xl">{message}</Text>
+                            <Text className="text-[#DFA9FD] text-xl">Pesquise por usuário e apelido...</Text>
                         </View>
-                    ) : (
+                    )}
+
+                    {search !== '' && filteredFriends.length > 0 ? (
                         <FlatList
                             data={filteredFriends}
                             keyExtractor={(item) => item.username}
@@ -113,10 +175,11 @@ export default function Favorites() {
                                     user={item.username}
                                 />
                             )}
-                            ListEmptyComponent={
-                                search === '' ? null : <Text className="text-white text-center mt-20">Nenhum amigo encontrado!</Text>
-                            }
                         />
+                    ) : search !== '' && (
+                        <View className="justify-center items-center pb-20">
+                            <Text className="text-[#DFA9FD] text-xl">{message}</Text>
+                        </View>
                     )}
                 </View>
             </View>
