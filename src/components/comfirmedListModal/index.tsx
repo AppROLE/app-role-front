@@ -20,7 +20,6 @@ export default function ComfirmedListModal({ visible, onClose }: ModalReviewProp
     const [loading, setLoading] = useState(true);
     const { getAllPresence } = useContext(PresenceContext);
     const { getFriends } = useContext(UserContext);
-    const eventId = "d942a349-f74a-4d94-b591-ffb1fd143ad8";
     // Função para buscar amigos
     async function fetchFriends() {
         try {
@@ -36,9 +35,11 @@ export default function ComfirmedListModal({ visible, onClose }: ModalReviewProp
     // Função para buscar usuários confirmados
     async function fetchAllConfirmedUsers() {
         try {
+            const eventId = "d942a349-f74a-4d94-b591-ffb1fd143ad8";
             const response = await getAllPresence(eventId);
+            console.log("RESPOSTA DA GET ALL PRECENSE", response)
             if (response) {
-                setPresence(response.users || []); // Garantir que seja um array
+                setPresence(response.users); 
             }
         } catch (error) {
             console.error("Erro ao buscar presenças: ", error);
@@ -53,7 +54,7 @@ export default function ComfirmedListModal({ visible, onClose }: ModalReviewProp
             setLoading(false);
         }
         fetchData();
-    }, [eventId]);
+    }, []);
 
     if (loading) {
         return (
@@ -75,7 +76,7 @@ export default function ComfirmedListModal({ visible, onClose }: ModalReviewProp
     });
 
     return (
-        <Modal transparent={true} visible={visible} animationType="slide" onRequestClose={onClose}>
+        <Modal transparent={true} visible={visible} animationType="fade" onRequestClose={onClose}>
             <View className="flex-1 justify-end items-center bg-black/70">
                 <View className="flex-end bg-background rounded-t-[50px] p-3 h-[695px] w-full">
                     <View className="flex-row items-center justify-center pt-[15px]">
