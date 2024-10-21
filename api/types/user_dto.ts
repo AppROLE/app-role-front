@@ -37,5 +37,5 @@ export type getProfileResponseDTO = {
     profilePhoto?: string;
     nickname: string;
     followers: number;
-    folowing: number;
+    following: number;
 }
