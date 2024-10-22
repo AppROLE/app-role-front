@@ -3,15 +3,18 @@ import RoleMainButton from '@/src/components/roleMainButton'
 import SearchingBarInput from '@/src/components/searchingBarInput'
 import AnimatedOption from '@/src/components/selectedCard'
 import { useRouter } from 'expo-router'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import {
   View,
   Text,
   ScrollView,
   TouchableOpacity,
+  useWindowDimensions,
 } from 'react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import Svg from '@/src/components/svg'
+import { EventContext } from '@/context/event_context'
+import RoleCard from '@/src/components/roleCard'
 
 interface Filter {
   icon: string
@@ -135,6 +138,11 @@ export default function SearchingFilters() {
   const [showPicker, setShowPicker] = useState(false)
   const [dateSelected, setDateSelected] = useState(false)
   const [formattedDate, setFormattedDate] = useState('DD/MM/YYYY')
+  const [searchResults, setSearchResults] = useState([])
+
+  const { width } = useWindowDimensions()
+
+  const { getEventsByFilter } = useContext(EventContext)
 
   const [filters, setFilters] = useState<Filter[]>(
     initialFilters.map((filter) => ({ ...filter, selected: null }))
@@ -190,6 +198,85 @@ export default function SearchingFilters() {
     setDateSelected(true)
   }
 
+  async function getSearchFilter() {
+    let filt = '';
+    let title = '';
+    for (const filter of filters) {
+        if (filter.selected && filter.selected.length > 0) { // Verifica se 'selected' não está vazio
+            switch (filter.title) {
+                case 'Região':
+                    title = 'district_id';
+                    break;
+                case 'Tipo de ROLE':
+                    title = 'category';
+                    break;
+                case 'Gênero Musical':
+                    title = 'music_type';
+                    break;
+                case 'Preço':
+                    title = 'price';
+                    break;
+                case 'Idade':
+                    title = 'age_range';
+                    break;
+                case 'Avaliação':
+                    title = 'rating'; //TEM QUE ACERTAR AINDA
+                    break;
+                case 'Features':
+                    title = 'features';
+                    break;
+                case 'Amigos':
+                    title = 'friends';
+                    break;
+            }
+            filt += `&${title}=`;
+            for (const selected of filter.selected) {
+                if (title === 'price') {
+                    switch (filter.options[selected].value) {
+                        case 'free':
+                            filt += '1+';
+                            break;
+                        case 'cheap':
+                            filt += '2+';
+                            break;
+                        case 'expensive':
+                            filt += '3+';
+                            break;
+                        case 'very-expensive':
+                            filt += '4+';
+                            break;
+                        case 'luxury':
+                            filt += '5+';
+                            break;
+                    }
+                } else {
+                    filt += `${filter.options[selected].value}+`;
+                }
+            }
+            filt = filt.slice(0, -1); // Remove o último '+'
+        }
+    }
+
+    if (dateSelected) {
+        filt += `&event_date=${date.toISOString().split('T')[0]}`; // TEM QUE ACERTAR AINDA ou String ou Date
+    }
+
+    let stringSearch = search.replace(/ /g, '+') + filt;
+    if (search) {
+        stringSearch = `name=${stringSearch}`;
+    }
+    if (stringSearch.charAt(0) === '&') {
+        stringSearch = stringSearch.slice(1);
+    }
+
+    // console.log(stringSearch)
+
+    const response = await getEventsByFilter(stringSearch);
+    console.log(response);
+    setSearchResults(response.events);
+  }
+
+
   function handleVoltar() {
     navigation.back()
   }
@@ -197,6 +284,7 @@ export default function SearchingFilters() {
   function handleClosePicker() {
     setShowPicker(false)
   }
+  
 
   return (
     <Background>
@@ -212,99 +300,128 @@ export default function SearchingFilters() {
           </TouchableOpacity>
           <SearchingBarInput search={search} setSearch={setSearch} />
         </View>
-        <View className="flex-1">
-          <ScrollView className="mt-12 flex-1">
-            <View
-              className={` mb-8 flex flex-col gap-2  pb-2 pt-5`}
-            >
-              <View className="flex flex-row">
-                <View className="ml-4 mt-4">
-                  <Svg
-                      uri={process.env.EXPO_PUBLIC_URL_S3 + '/calendar.svg'}
-
-                  />
-                </View>
-                <Text className="ml-2 mt-4 text-lg text-white font-nunito">Data</Text>
+        {searchResults == undefined ?
+        <>
+          <View className='flex-1 mt-24'>
+            <Text className="text-lg text-center font-bold text-purple-500">Opa parece não ter nenhum <Text className='font-bold'>ROLE</Text> desse jeito!</Text>
+          </View>
+          <View className='flex-1 justify-end mb-24 w-3/5 mx-auto'>
+            <RoleMainButton type="gradient" buttonFunction={() => setSearchResults([])}>
+              <Text className="text-white text-center">Escolher novos filtros</Text>
+            </RoleMainButton>
+          </View>
+        </>
+        : searchResults.length > 0 ? 
+        <>
+          <ScrollView className='flex flex-col mx-auto mt-24' style={{width: width * 0.85}}>
+            {searchResults.map((role, index) => (
+              <View className='mb-4'>
+                <RoleCard key={`id${role.idRole}ind${index}`} {...role} />
               </View>
-              <View className="mx-2 mt-2 flex flex-row flex-wrap">
-                <AnimatedOption
-                  label={formattedDate}
-                  selected={dateSelected}
-                  onPress={() => setShowPicker(true)}
-                />
-              </View>
+            ))}
+            <View className='justify-end w-auto mx-auto mt-4'>
+              <RoleMainButton type="gradient" buttonFunction={() => setSearchResults([])}>
+                <Text className="text-white text-center text-xs">Escolher novos filtros</Text>
+              </RoleMainButton>
             </View>
-            {filters.map((filter, index) => (
+          </ScrollView>
+        </>
+        :
+        <>
+          <View className="flex-1">
+            <ScrollView className="mt-12 flex-1">
               <View
-                key={index}
-                className={`border-t-2 mb-8 flex flex-col gap-2 border-t-[#2C2B2B] pb-2 pt-5`}
+                className={` mb-8 flex flex-col gap-2  pb-2 pt-5`}
               >
                 <View className="flex flex-row">
                   <View className="ml-4 mt-4">
-                    <Svg uri={process.env.EXPO_PUBLIC_URL_S3 + "/" + filter.icon + ".svg"} color="white"/>
+                    <Svg
+                        uri={process.env.EXPO_PUBLIC_URL_S3 + '/calendar.svg'}
+                    />
                   </View>
-                  <Text className="ml-2 mt-4 text-lg text-white font-nunito">
-                    {filter.title}
-                  </Text>
+                  <Text className="ml-2 mt-4 text-lg text-white">Data</Text>
                 </View>
-                <View className={`mx-2 mt-2 flex flex-row flex-wrap`}>
-                  {filter.options.map((option, optionIndex) => (
-                    <View key={optionIndex} className="m-1">
-                      <AnimatedOption
-                        label={option.label}
-                        selected={
-                          filter.title === 'Avaliação'
-                            ? filter.selected === optionIndex
-                            : Array.isArray(filter.selected) &&
-                            filter.selected.includes(optionIndex)
-                        }
-                        onPress={() => handleOptionSelect(index, optionIndex)}
-                      />
-                    </View>
-                  ))}
+                <View className="mx-2 mt-2 flex flex-row flex-wrap">
+                  <AnimatedOption
+                    label={formattedDate}
+                    selected={dateSelected}
+                    onPress={() => setShowPicker(true)}
+                  />
                 </View>
               </View>
-            ))}
-          </ScrollView>
-        </View>
-        <View className="flex w-full h-[20%] py-4 border-t-2 border-t-[#2C2B2B] bg-background">
-          <View className="flex flex-row justify-evenly items-center">
-            <View className="w-[40%]">
-              <RoleMainButton type="simple" buttonFunction={handleClearFilters}>
-                <Text className="text-white text-center font-nunito">Limpar Filtros</Text>
-              </RoleMainButton>
-            </View>
-            <View className="w-[40%]">
-              <RoleMainButton type="gradient">
-                <Text className="text-white text-center font-nunito">Pesquisar</Text>
-              </RoleMainButton>
-            </View>
-          </View>
-        </View>
-
-        {showPicker && (
-          <View className="absolute inset-0 flex z-50 bg-transparent mt-20 w-[100vw] p-5">
-            <View className="relative flex justify-center items-center bg-black rounded-3xl">
-              <View className="w-[90%] flex p-4 rounded-lg mx-auto">
-                <DateTimePicker
-                  value={date}
-                  mode="date"
-                  display="inline"
-                  accentColor="#9C4EDC"
-                  themeVariant='dark'
-                  minimumDate={new Date()}
-                  onChange={handleDateChange}
-                />
-                <TouchableOpacity
-                  onPress={handleClosePicker}
-                  className="mt-4 p-2 bg-[#1C1C1C] rounded-full items-center justify-center"
+              {filters.map((filter, index) => (
+                <View
+                  key={index}
+                  className={`border-t-2 mb-8 flex flex-col gap-2 border-t-[#2C2B2B] pb-2 pt-5`}
                 >
-                  <Text className="text-white">Fechar</Text>
-                </TouchableOpacity>
+                  <View className="flex flex-row">
+                    <View className="ml-4 mt-4">
+                      <Svg uri={process.env.EXPO_PUBLIC_URL_S3 + "/" + filter.icon + ".svg"} color="white"/>
+                    </View>
+                    <Text className="ml-2 mt-4 text-lg text-white">
+                      {filter.title}
+                    </Text>
+                  </View>
+                  <View className={`mx-2 mt-2 flex flex-row flex-wrap`}>
+                    {filter.options.map((option, optionIndex) => (
+                      <View key={optionIndex} className="m-1">
+                        <AnimatedOption
+                          label={option.label}
+                          selected={
+                            filter.title === 'Avaliação'
+                              ? filter.selected === optionIndex
+                              : Array.isArray(filter.selected) &&
+                              filter.selected.includes(optionIndex)
+                          }
+                          onPress={() => handleOptionSelect(index, optionIndex)}
+                        />
+                      </View>
+                    ))}
+                  </View>
+                </View>
+              ))}
+            </ScrollView>
+          </View>
+          <View className="flex w-full h-[20%] py-4 border-t-2 border-t-[#2C2B2B] bg-background">
+            <View className="flex flex-row justify-evenly items-center">
+              <View className="w-[40%]">
+                <RoleMainButton type="simple" buttonFunction={handleClearFilters}>
+                  <Text className="text-white text-center">Limpar Filtros</Text>
+                </RoleMainButton>
+              </View>
+              <View className="w-[40%]">
+                <RoleMainButton type="gradient" buttonFunction={() => getSearchFilter()}>
+                  <Text className="text-white text-center">Pesquisar</Text>
+                </RoleMainButton>
               </View>
             </View>
           </View>
-        )}
+        
+          {showPicker && (
+            <View className="absolute inset-0 flex z-50 bg-transparent mt-20 w-[100vw] p-5">
+              <View className="relative flex justify-center items-center bg-black rounded-3xl">
+                <View className="w-[90%] flex p-4 rounded-lg mx-auto">
+                  <DateTimePicker
+                    value={date}
+                    mode="date"
+                    display="inline"
+                    accentColor="#9C4EDC"
+                    themeVariant='dark'
+                    minimumDate={new Date()}
+                    onChange={handleDateChange}
+                  />
+                  <TouchableOpacity
+                    onPress={handleClosePicker}
+                    className="mt-4 p-2 bg-[#1C1C1C] rounded-full items-center justify-center"
+                  >
+                    <Text className="text-white">Fechar</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          )}
+        </>
+        }
       </View>
     </Background>
   )

@@ -1,15 +1,17 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Keyboard, KeyboardAvoidingView, Modal, Platform, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import RoleMainButton from "../roleMainButton";
 import { createReviewRequestDTO, createReviewResponseDTO } from "@/api/types/review_dto";
 import { ReviewContext } from "@/context/review_context";
+import { UserContext } from "@/context/user_context";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 interface ModalReviewProps {
     visible: boolean;
     onClose: () => void;
-    // eventId: string;
+    // eventIdS: string;
     // instituteId: string;
 }
 
@@ -18,7 +20,10 @@ export default function ModalReview({ visible, onClose }: ModalReviewProps) {
     const stars = [1, 2, 3, 4, 5];
     const [reviewText, setReviewText] = useState("");
     const maxChars = 250;
+    const [photoUrl, setPhotoUrl] = useState("");
+    const [name, setName] = useState("");
     const { createReview } = useContext(ReviewContext);
+    const { getProfile } = useContext(UserContext);
 
     const clearFields = () => {
         setSelectedStars(0);
@@ -27,12 +32,15 @@ export default function ModalReview({ visible, onClose }: ModalReviewProps) {
 
     async function create() {
         const data: createReviewRequestDTO = {
-            eventId: "da1c716a-b4d2-4c85-b139-27740a9b5f89",
+            // eventId: await AsyncStorage.getItem('eventId') ?? '',
+            eventId: "d942a349-f74a-4d94-b591-ffb1fd143ad8",
             reviewedAt: new Date().getTime(),
             star: selectedStars,
-            review: reviewText
+            review: reviewText,
+            photoUrl: photoUrl,
+            name: name
         }
-
+        console.log("DATA", data)
         if (reviewText.length === 0) {
             alert('Por favor, digite uma avaliação')
             return
@@ -52,6 +60,15 @@ export default function ModalReview({ visible, onClose }: ModalReviewProps) {
         }
     }
 
+    async function userInfos() {
+        const user = await getProfile()
+        setPhotoUrl(user.profilePhoto ?? "")
+        setName(user.nickname)
+    }
+
+    useEffect(() => {
+        userInfos()
+    }, [])
 
     return (
         <Modal

@@ -44,6 +44,8 @@ export default function RoleInput({
         {type === 'email' ? (
           <Svg
             uri={process.env.EXPO_PUBLIC_URL_S3 + "/email.svg"}
+            color={error ? '#F87171' : '#BDBDBD'}
+
           />
         ) : type === 'password' ? (
           <Svg
@@ -106,7 +108,7 @@ export default function RoleInput({
                                 : ''
 
           }
-          className={`w-[75%] ${!error ? 'text-white placeholder:text-[#BDBDBD]' : 'placeholder:text-red-400] text-red-400 opacity-80'} text-[16px] outline-none`}
+          className={`w-[75%] ${!error ? 'text-white placeholder:text-[#BDBDBD]' : 'placeholder:text-red-400 text-white opacity-80'} text-[16px] outline-none`}
           value={value}
           onChangeText={onChangeText}
           secureTextEntry={
@@ -115,6 +117,7 @@ export default function RoleInput({
           }
           onFocus={onFocus}
           style={style}
+          keyboardType={type === 'email' ? 'email-address' : 'default'}
         />
         {(type === 'hidden-password' || type === 'hidden-confirm-password') &&
           (hidden === true ? (

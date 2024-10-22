@@ -4,7 +4,7 @@ import RoleMainButton from '@/src/components/roleMainButton'
 import * as ImagePicker from 'expo-image-picker'
 import { FontAwesome6 } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import {
   TouchableOpacity,
   View,
@@ -25,7 +25,7 @@ export default function EditingPerfil() {
   const [instaErr, setInstaErr] = useState('')
   const [tiktokErr, setTiktokErr] = useState('')
 
-  const [profileImage, setProfileImage] = useState('')
+  const [profileImage, setProfileImage] = useState(process.env.EXPO_PUBLIC_URL_S3 + '/images/profile_default.png')
   const [imageType, setImageType] = useState('')
   const [banner, setBanner] = useState('')
   const [bannerType, setBannerType] = useState('')
@@ -63,9 +63,7 @@ export default function EditingPerfil() {
   }
 
   useEffect(() => {
-    setUser('@isa.saab')
-    setNick('Isa Saab')
-    setBio('Atriz e cantora')
+    // setBio('Atriz e cantora')
     setInsta('@isa.saab')
     setTiktok('@isa.saab')
   }, [])
@@ -100,7 +98,6 @@ export default function EditingPerfil() {
     navigation.back()
   }
 
-
   const { updateProfile } = useContext(AuthContext)
 
   async function fetchUpdateProfile() {
@@ -120,14 +117,14 @@ export default function EditingPerfil() {
       return response
     } catch (error: any) {
       console.error("Erro ao atualizar perfil")
+    }
   }
-}
 
   return (
     <Background>
       <View className="relative w-full flex-1">
         <View className="relative top-0 flex h-12 w-full flex-row items-center gap-3 border-b-2 border-b-[#2C2B2B] pb-8">
-          <View className="absolute top-[-120%] z-40 h-12">
+          <View className="absolute top-[-120%] z-40">
             <TouchableOpacity
               onPress={() => handleVoltar()}
               className="ml-5 flex h-12 w-12 items-center justify-center rounded-full bg-[#1C1C1C]"
@@ -135,11 +132,12 @@ export default function EditingPerfil() {
               <FontAwesome6 name="arrow-left" size={18} color="white" />
             </TouchableOpacity>
           </View>
-          <View className="flex h-[300%] w-[100%] items-center">
-            <Text className="flex h-[300%] items-center text-3xl text-white font-nunitoBold">
-              Editar Perfil
-            </Text>
-          </View>
+
+            <View className="flex w-[100%] h-10 items-center justify-center">
+              <Text className="flex items-center  text-3xl text-white font-nunitoBold">
+                Editar Perfil
+              </Text>
+            </View>
         </View>
         <View className="flex-1">
           <ScrollView className="flex-1">
@@ -173,19 +171,14 @@ export default function EditingPerfil() {
             <View className="gap-5 border-b-2 border-b-[#1C1C1C] p-8 pl-10">
               <Text className="text-2xl text-white font-nunitoBold">Banner</Text>
               <View className="flex flex-row items-center gap-8">
-                <View className="flex h-24 w-48 items-center justify-center bg-[#1c1c1c]">
+                <View className={`flex h-24 w-48 items-center justify-center ${banner ? 'bg-[#1c1c1c]' : 'bg-[#999999] rounded-lg'}`}>
                   {banner ? (
                     <Image
                       source={{ uri: banner }}
-                      style={{ width: 168, height: 84 }}
+                      style={{ width: 168, height: 84, borderRadius: 8 }}
                     />
                   ) : (
-                    <FontAwesome6
-                      name="landscape"
-                      size={64}
-                      color="white"
-                      className="items-center justify-center p-3"
-                    />
+                    <></>
                   )}
                 </View>
                 <TouchableOpacity
@@ -201,10 +194,11 @@ export default function EditingPerfil() {
               <View className="flex flex-row items-center gap-8">
                 <View className="flex w-full flex-row items-baseline gap-2 border-b-[1px] border-[#BDBDBD] pb-1">
                   <TextInput
-                    placeholder={user}
+                    placeholder='@'
+                    value={user}
                     maxLength={16}
                     className="h-6 w-[90%] text-[16px] text-white outline-none placeholder:text-[#BDBDBD]"
-                    onChangeText={(e) => setUser(e)}
+                    onChangeText={setUser}
                   />
                   <Text className="text-white">{user.length}/16</Text>
                 </View>
@@ -215,7 +209,8 @@ export default function EditingPerfil() {
               <View className="flex flex-row items-center gap-8">
                 <View className="flex w-full flex-row items-baseline gap-2 border-b-[1px] border-[#BDBDBD] pb-1">
                   <TextInput
-                    placeholder={nick}
+                    placeholder='Isa Saab'
+                    value={nick}
                     maxLength={20}
                     className="h-6 w-[90%] text-[16px] text-white outline-none placeholder:text-[#BDBDBD]"
                     onChangeText={(e) => setNick(e)}
@@ -227,16 +222,15 @@ export default function EditingPerfil() {
             <View className="gap-5 border-b-2 border-b-[#1C1C1C] p-8 pl-10">
               <Text className="text-2xl text-white font-nunitoBold">Biografia</Text>
               <View className="flex flex-row items-center gap-8">
-                <View className="flex flex-col">
-                  <View className="flex h-20 w-full flex-row items-baseline gap-2 rounded-lg border-[2px] p-2 border-[#1c1c1c] pb-1">
-                    <TextInput
-                      placeholder={bio}
-                      maxLength={100}
-                      className="h-20 w-full text-center text-[16px] text-white outline-none placeholder:text-[#BDBDBD]"
-                      onChangeText={(e) => setBio(e)}
-                      multiline={true}
-                    />
-                  </View>
+                <View className="flex flex-col w-full">
+                  <TextInput
+                    placeholder='Conte sobre a sua vida no ROLE!'
+                    value={bio}
+                    maxLength={100}
+                    className="h-24 w-full text-[16px] text-white outline-none placeholder:text-[#BDBDBD] rounded-lg border-[2px] p-4 border-[#1c1c1c]"
+                    onChangeText={(e) => setBio(e)}
+                    multiline={true}
+                  />
                   <Text className="left-[86%] text-white">
                     {bio.length}/100
                   </Text>
@@ -251,7 +245,8 @@ export default function EditingPerfil() {
                 </View>
                 <View className="flex w-[80%] flex-row items-baseline gap-2 border-b-[1px] border-[#BDBDBD] pb-1">
                   <TextInput
-                    placeholder={insta}
+                    placeholder='instagram.com/'
+                    value={insta}
                     className="h-6 w-full text-[16px] text-white outline-none placeholder:text-[#BDBDBD]"
                     onChangeText={(e) => setInsta(e)}
                   />
@@ -263,7 +258,8 @@ export default function EditingPerfil() {
                 </View>
                 <View className="flex w-[80%] flex-row items-baseline gap-2 border-b-[1px] border-[#BDBDBD] pb-1">
                   <TextInput
-                    placeholder={tiktok}
+                    placeholder='tiktok.com/@'
+                    value={tiktok}
                     className="h-6 w-full text-[16px] text-white outline-none placeholder:text-[#BDBDBD]"
                     onChangeText={(e) => setTiktok(e)}
                   />

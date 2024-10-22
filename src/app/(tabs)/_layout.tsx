@@ -47,6 +47,7 @@ export default function TabLayout() {
                     screenOptions={{
                         tabBarActiveTintColor: 'blue',
                         headerShown: false,
+                        tabBarHideOnKeyboard: true,
                         tabBarStyle: {
                             backgroundColor: '#1C1C1C',
                             borderTopWidth: 2,

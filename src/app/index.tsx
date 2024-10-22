@@ -67,12 +67,15 @@ export default function Index() {
       <Link href={'/searching-filters'}>Searching-filters</Link>
       <Link href={'/forgot-password'}>Forgot Password</Link>
       <Link href={'/home'}>Home</Link>
+      <Link href={'/packages'}>Packages</Link>
+      <Link href={'/profile'}>Profile</Link>
       <Link href={'/editing-perfil'}>Editing perfil</Link>
       <Link href={'/role-description'}>Role description</Link>
       <Link href={'/configs'}>Configs</Link>
       <Link href={'/institution'}>Institution</Link>
       <Link href={'/privacy'}>Privacy</Link>
       <Link href={'/account'}>Account</Link>
+      <Link href={'/event-description'}>Event Description</Link>
       {/* View para testar os components */}
       <View className="my-5 w-full bg-[#121212]">
         {/* <RoleMainButton type='gradient' buttonFunction={teste} disabled={buttonDisabled}>

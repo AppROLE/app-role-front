@@ -15,7 +15,6 @@ export default function Favorites() {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('Pesquise por usuário e apelido...');
     const [recentSearches, setRecentSearches] = useState<{ username: string; profilePhoto: string; nickname: string; }[]>([]);
-
     const { findPerson } = useContext(UserContext);
     const navigation = useRouter();
 

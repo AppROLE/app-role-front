@@ -87,7 +87,7 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
         await AsyncStorage.setItem('accessToken', response.accessToken)
         await AsyncStorage.setItem('idToken', response.idToken)
         await AsyncStorage.setItem('refreshToken', response.refreshToken)
-        router.replace('/(tabs)/home')
+        router.replace('/(tabs)/profile')
         return ''
       }
       else {
@@ -106,7 +106,7 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
 
       return response
     } catch (error: any) {
-      return error
+      throw error
     }
   }
 

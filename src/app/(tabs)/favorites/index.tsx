@@ -6,7 +6,6 @@ import Svg from "@/src/components/svg";
 
 import { router } from 'expo-router'
 import { InstituteContext } from "@/context/institute_context";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getAllFavoritesInstitutesResponseDTO, Institute } from "@/api/types/institute_dto";
 
 
@@ -27,7 +26,7 @@ export default function Favorites() {
         try {
             const response = await getAllFavoritesInstitutes();
             if (response) {
-                console.log('RESPOSTA DA GET ALL', response) 
+                console.log('RESPOSTA DA GET ALL FAVORITES INSTITUTES', response) 
                 setInstitutes(response)
             }
             if (response.institutes.length === 0) { 
@@ -45,9 +44,9 @@ export default function Favorites() {
 
     return (
         <Background>
-            <View className="items-start h-full w-full">
-                <View className='flex-row justify-between w-full px-8'>
-                    <Text className="text-3xl text-white font-medium">Social</Text>
+            <View className="items-start h-full  w-full">
+                <View className='flex-row justify-between  w-full px-8'>
+                    <Text className="text-3xl text-white font-nunitoBold">Social</Text>
                     <View className='flex-row items-center gap-4'>
                         <TouchableOpacity
                             className='flex flex-row border-2 border-white rounded-lg bg-transparent gap-2'
@@ -59,7 +58,7 @@ export default function Favorites() {
                             }}
                             onPress={navigateToFriends}
                         >
-                            <Text className='text-white text-sm'>Adicione um amigo!</Text>
+                            <Text className='text-white font-nunitoBold text-sm'>Adicione um amigo!</Text>
                         </TouchableOpacity>
                         <TouchableOpacity className="relative" onPress={navigateToNotifications}>
                             <Svg
@@ -75,7 +74,7 @@ export default function Favorites() {
                     </View>
                 </View>
                 <View className="border-t-line_gray border-t-2 mt-8 p-10 w-full">
-                    <Text className="text-2xl text-white mb-3">Instituições Favoritas</Text>
+                    <Text className="text-2xl font-nunitoBold text-white mb-3">Instituições Favoritas</Text>
                     <FlatList
                         data={institutes?.institutes}
                         keyExtractor={(institute) => institute.instituteId}

@@ -15,6 +15,7 @@ export class ReviewRepositoryHttp {
             return response.data as createReviewResponseDTO
         } catch (error: any) {
             // console.log("ERRO NA REQUEST", error.response)
+            console.log(error.response.data)
             throw new Error(error)
         }
     }
@@ -23,8 +24,10 @@ export class ReviewRepositoryHttp {
         try {
             const idToken = await AsyncStorage.getItem('idToken') || '';
             if (idToken === '') return;
-            const response = await http.get(`/get-all-reviews-by-event?eventId=${eventId}`, {
-                headers: {'Authorization': `Bearer ${idToken}`}
+            const response = await httpEvent.get(`/get-all-reviews-by-event?eventId=${eventId}`, {
+                headers: {
+                    Authorization: `Bearer ${idToken}`
+                }
             })
             return response.data as getAllReviewsByEventResponseDTO[]
         } catch (error: any) {
