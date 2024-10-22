@@ -35,7 +35,6 @@ export default function Packages() {
 
     const partnerType = "PROMOTER_PARTNER"
 
-
     const handleSelect = (id: number) => {
         setSelected(prevSelected => (prevSelected === id ? null : id));
     };
@@ -44,11 +43,11 @@ export default function Packages() {
         setSelectedCard(prevSelectedCard => (prevSelectedCard === id ? null : id));
     }
 
-
-    
     function handleClosePicker() {
         setShowPicker(false)
     }
+
+    const allSelected = selected !== null && selectedCard !== null && dateSelected;
 
     const handleDateChange = (event: any, selectedDate: Date | undefined) => {
         const currentDate = selectedDate || date
@@ -191,7 +190,7 @@ export default function Packages() {
                             </View>
                         </View>
                         <View className="w-[100%] px-4 mt-10">
-                            <RoleMainButton type="gradient" buttonFunction={handleWhatsAppRedirect} >
+                            <RoleMainButton type="gradient" buttonFunction={handleWhatsAppRedirect} disabled={!allSelected}>
                                 <View className="flex flex-row items-center gap-3">
                                     <FontAwesome6 name="whatsapp" size={24} color="white" />
                                     <Text className="text-white">Fale com o estabelecimento</Text>
