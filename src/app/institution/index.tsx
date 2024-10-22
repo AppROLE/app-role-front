@@ -221,11 +221,6 @@ export default function institutionScreen({instituteId}: intutionScreenProps) {
   const [instituteA, setInstituteA] = useState<getInstituteByIdResponseDTO>()
   const { updateFavoriteInstitute, getInstituteById } = useContext(InstituteContext)
 
-  async function updateInstitute() { 
-    const instituteIdee = '2f3073ac-3633-4fc7-9cfe-c2084399bbc3'
-    const response = await updateFavoriteInstitute(instituteIdee)
-    console.log('RESPOSTA DA UPDATE', response)
-  }
 
   async function getInstitute() { 
     const instituteIde = '2f3073ac-3633-4fc7-9cfe-c2084399bbc3'
@@ -244,7 +239,7 @@ export default function institutionScreen({instituteId}: intutionScreenProps) {
   return (
     <Background scrollable lockScroll={scrollDisabled} function1={loadMoreRoles}>
       <View className="flex w-full flex-col items-center justify-center">
-        <SocialCard title={instituteA?.name} image={instituteA?.logo_photo} bookMarkerFunction={updateInstitute}/>
+        <SocialCard title={instituteA?.name} image={instituteA?.logo_photo}/>
         <View className="flex w-full flex-col items-center justify-center border-b-2 border-[#1c1c1c] pb-6">
           <View className="mt-6 flex w-[90%] flex-row items-center">
             <TouchableOpacity
