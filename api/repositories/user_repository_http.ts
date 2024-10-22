@@ -65,6 +65,5 @@ export class UserRepositoryHttp {
         }
         return error.response.data;
       }
-      
     }
 }

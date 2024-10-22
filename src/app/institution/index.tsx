@@ -222,7 +222,8 @@ export default function institutionScreen({instituteId}: intutionScreenProps) {
   const { updateFavoriteInstitute, getInstituteById } = useContext(InstituteContext)
 
   async function updateInstitute() { 
-    const response = await updateFavoriteInstitute(instituteId)
+    const instituteIdee = '2f3073ac-3633-4fc7-9cfe-c2084399bbc3'
+    const response = await updateFavoriteInstitute(instituteIdee)
     console.log('RESPOSTA DA UPDATE', response)
   }
 
@@ -239,6 +240,7 @@ export default function institutionScreen({instituteId}: intutionScreenProps) {
   useEffect(() => { 
     getInstitute()
   }, [])
+
   return (
     <Background scrollable lockScroll={scrollDisabled} function1={loadMoreRoles}>
       <View className="flex w-full flex-col items-center justify-center">
@@ -252,7 +254,7 @@ export default function institutionScreen({instituteId}: intutionScreenProps) {
               <FontAwesome6 name="arrow-left" size={18} color="white" />
             </TouchableOpacity>
             <View className="w-68 flex flex-col pr-4">
-              <Text className="text-wrap text-sm text-white">{institute.descriptions}</Text>
+              <Text className="text-wrap font-nunito text-sm text-white">{institute.descriptions}</Text>
             </View>
           </View>
         </View>

@@ -180,7 +180,7 @@ export default function Packages() {
                             <Text className="text-2xl font-nunitoBold text-white">Data</Text>
                         </View>
                         <View
-                            className={` mb-8 flex flex-col gap-2  pb-2 pt-5`}
+                            className={` mb-8 flex flex-col gap-2 pb-2 pt-5`}
                         >
                             <View className="mx-2 mt-2 flex flex-row flex-wrap">
                                 <AnimatedOption

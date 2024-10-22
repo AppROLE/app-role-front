@@ -17,7 +17,7 @@ export class PresenceRepositoryHttp {
             console.log("RESPOSTA DA REQUEST", response.data)
             return response.data
         } catch (error: any) {
-            console.log("ERRO NA REQUEST", error.response.data.message)
+            // console.log("ERRO NA REQUEST", error.response.data.message)
             return error.response.data.message
         }
     }
@@ -46,7 +46,7 @@ export class PresenceRepositoryHttp {
         try {
             const idToken = await AsyncStorage.getItem('idToken') || ''
             if (idToken === '') return
-            const response = await http.get(`/get-all-confirmed-events-by-profile`, {
+            const response = await http.get(`/get-all-confirmed-events`, {
                 headers: {
                     Authorization: `Bearer ${idToken}`
                 }
@@ -54,7 +54,7 @@ export class PresenceRepositoryHttp {
             console.log("RESPOSTA DA REQUEST", response.data)
             return response.data as getAllConfirmedEventsResponseDTO
         } catch (error: any) {
-            console.log("ERRO NA REQUEST", error.response.data)
+            // console.log("ERRO NA REQUEST", error.response.data)
             return error.response.data.message
         }
     }
