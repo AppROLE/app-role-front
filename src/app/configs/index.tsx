@@ -13,62 +13,58 @@ export default function Configs() {
     // Carrega o tema salvo do AsyncStorage quando a tela é montada
     useEffect(() => {
         const loadTheme = async () => {
-          const savedTheme = await AsyncStorage.getItem('themeMode');
-          if (savedTheme) {
-            setThemeModeS(savedTheme);
-          }
+            const savedTheme = await AsyncStorage.getItem('themeMode');
+            if (savedTheme) {
+                setThemeModeS(savedTheme);
+            }
         };
         loadTheme();
-      }, []);
+    }, []);
 
     function handleVoltar() {
         navigation.back();
     }
 
     function handlePrivacidade() {
-        // navigation.push('/configs/privacy'); 
+        navigation.push('/privacy');
     }
 
     function handleConta() {
-        // navigation.push('/configs/account'); 
+        navigation.push('/account');
     }
 
     function handleExcluir() {
-        navigation.push('/configs/delete'); 
+        navigation.push('/configs/delete');
     }
 
-    // Função chamada quando o switch de tema é alterado
-    
-  const toggleTheme = async (isDark: boolean) => {
-    const newTheme = isDark ? 'dark' : 'light';
-    setThemeModeS(newTheme);
-    await AsyncStorage.setItem('themeMode', newTheme);
-  };
 
     return (
         <Background>
-            <View className="flex flex-row items-center justify-center">
+            <View className="flex flex-row items-center justify-center relative w-full">
                 <TouchableOpacity
                     onPress={() => handleVoltar()}
-                    className={`absolute right-64 ml-5 flex h-12 w-12 items-center justify-center rounded-full ${themeModeS === 'dark' ? 'bg-[#1C1C1C]' : 'bg-[#C9C9C9]'}`}
+                    className={`absolute left-5 bottom-1 h-12 w-12 items-center justify-center rounded-full ${themeModeS === 'dark' ? 'bg-[#1C1C1C]' : 'bg-[#C9C9C9]'}`}
                 >
-                    <SvgUri 
+                    <SvgUri
                         uri={process.env.EXPO_PUBLIC_URL_S3 + '/left_arrow.svg'}
                         width={20}
                         height={20}
-                        fill={themeModeS === 'dark' ? '#FFFFFF' : '#000000'}
                     />
                 </TouchableOpacity>
-                <Text className={`text-3xl ${themeModeS === 'dark' ? 'text-white' : 'text-black'} font-nunitoBold`}>Configurações</Text>
+                {/* Título centralizado */}
+                <Text className="text-white text-4xl font-nunitoBold flex-1 text-center bottom-1">
+                    Configurações
+                </Text>
             </View>
-            <View className={`mt-10 h-[1px] w-full ${themeModeS === 'dark' ? 'bg-[#615b5b]' : 'bg-[#D0D0D0]'}`} />
+
+            <View className={`mt-6 h-[1px] w-full ${themeModeS === 'dark' ? 'bg-[#2C2B2B]' : 'bg-[#D0D0D0]'}`} />
 
             {/* Privacidade */}
             <TouchableOpacity className="w-full pl-10 py-3" onPress={handlePrivacidade}>
                 <View className="flex flex-row">
                     <Text className={`text-xl mt-4 ${themeModeS === 'dark' ? 'text-white' : 'text-black'} font-nunitoBold`}>Privacidade</Text>
                     <View className={`absolute ml-[300px] mt-1 flex h-12 w-12 items-center justify-center rounded-full ${themeModeS === 'dark' ? 'bg-[#1C1C1C]' : 'bg-[#C9C9C9]'}`}>
-                        <SvgUri 
+                        <SvgUri
                             uri={process.env.EXPO_PUBLIC_URL_S3 + '/right_arrow.svg'}
                             width={20}
                             height={20}
@@ -77,14 +73,14 @@ export default function Configs() {
                     </View>
                 </View>
             </TouchableOpacity>
-            <View className={`mt-4 h-[1px] w-full ${themeModeS === 'dark' ? 'bg-[#615b5b]' : 'bg-[#D0D0D0]'}`} />
+            <View className={`mt-4 h-[1px] w-full ${themeModeS === 'dark' ? 'bg-[#2C2B2B]' : 'bg-[#D0D0D0]'}`} />
 
             {/* Conta */}
             <TouchableOpacity className="w-full pl-10 py-3" onPress={handleConta}>
                 <View className="flex flex-row">
                     <Text className={`text-xl mt-4 ${themeModeS === 'dark' ? 'text-white' : 'text-black'} font-nunitoBold`}>Conta</Text>
                     <View className={`absolute ml-[300px] mt-1 flex h-12 w-12 items-center justify-center rounded-full ${themeModeS === 'dark' ? 'bg-[#1C1C1C]' : 'bg-[#C9C9C9]'}`}>
-                        <SvgUri 
+                        <SvgUri
                             uri={process.env.EXPO_PUBLIC_URL_S3 + '/right_arrow.svg'}
                             width={20}
                             height={20}
@@ -93,40 +89,14 @@ export default function Configs() {
                     </View>
                 </View>
             </TouchableOpacity>
-            <View className={`mt-4 h-[1px] w-full ${themeModeS === 'dark' ? 'bg-[#615b5b]' : 'bg-[#D0D0D0]'}`} />
-
-            {/* Aparência */}
-            <View className="w-full pl-10 py-3">
-                <View className="flex flex-row">
-                    <Text className={`text-xl mt-4 ${themeModeS === 'dark' ? 'text-white' : 'text-black'} font-nunitoBold`}>Aparência</Text>
-                    <View className="absolute ml-[250px] mt-1 flex flex-row h-12 w-12 items-center justify-center gap-3">
-                        <SvgUri 
-                            uri={process.env.EXPO_PUBLIC_URL_S3 + '/sun.svg'}
-                            width={20}
-                            height={20}
-                            fill={themeModeS === 'dark' ? '#FFFFFF' : '#000000'}
-                        />
-                        <CustomToggleSwitch
-                             themeMode={themeModeS} // Passa o tema atual
-                             onValueChange={toggleTheme}
-                        />
-                        <SvgUri 
-                            uri={process.env.EXPO_PUBLIC_URL_S3 + '/moon.svg'}
-                            width={20}
-                            height={20}
-                            fill={themeModeS === 'dark' ? '#FFFFFF' : '#000000'}
-                        />
-                    </View>
-                </View>
-            </View>
-            <View className={`mt-4 h-[1px] w-full ${themeModeS === 'dark' ? 'bg-[#615b5b]' : 'bg-[#D0D0D0]'}`} />
+            <View className={`mt-4 h-[1px] w-full ${themeModeS === 'dark' ? 'bg-[#2C2B2B]' : 'bg-[#D0D0D0]'}`} />
 
             {/* Excluir */}
             <TouchableOpacity className="w-full pl-10 py-3" onPress={handleExcluir}>
                 <View className="flex flex-row">
                     <Text className={`text-xl mt-4 ${themeModeS === 'dark' ? 'text-white' : 'text-black'} font-nunitoBold`}>Excluir Conta</Text>
                     <View className={`absolute ml-[300px] mt-1 flex h-12 w-12 items-center justify-center rounded-full ${themeModeS === 'dark' ? 'bg-[#1C1C1C]' : 'bg-[#C9C9C9]'}`}>
-                        <SvgUri 
+                        <SvgUri
                             uri={process.env.EXPO_PUBLIC_URL_S3 + '/right_arrow.svg'}
                             width={20}
                             height={20}
@@ -135,7 +105,7 @@ export default function Configs() {
                     </View>
                 </View>
             </TouchableOpacity>
-            <View className={`mt-4 h-[1px] w-full ${themeModeS === 'dark' ? 'bg-[#615b5b]' : 'bg-[#D0D0D0]'}`} />
+            <View className={`mt-4 h-[1px] w-full ${themeModeS === 'dark' ? 'bg-[#2C2B2B]' : 'bg-[#D0D0D0]'}`} />
         </Background>
     );
 }

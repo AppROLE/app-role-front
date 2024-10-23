@@ -1,13 +1,14 @@
 import { UserRepositoryHttp } from "@/api/repositories/user_repository_http"
-import { findPersonResponseDTO, getFriendsResponseDTO, getPhraseResponseDTO, getProfileResponseDTO } from "@/api/types/user_dto"
+import { findPersonResponseDTO, getFriendsResponseDTO, getPhraseResponseDTO, getProfileResponseDTO, getProfileToFollowResponseDTO } from "@/api/types/user_dto"
 import { createContext, PropsWithChildren } from "react"
 
 
 type UserContextType = {
-    getPhrase: () => Promise<getPhraseResponseDTO>
-    getFriends: () => Promise<getFriendsResponseDTO>
-    getProfile: () => Promise<getProfileResponseDTO>
-    findPerson: (searchTerm: string) => Promise<findPersonResponseDTO>
+    getPhrase: () => Promise<getPhraseResponseDTO>;
+    getFriends: () => Promise<getFriendsResponseDTO>;
+    getProfile: () => Promise<getProfileResponseDTO>;
+    getProfileToFollow: (personUsername: string) => Promise<getProfileToFollowResponseDTO>;
+    findPerson: (searchTerm: string) => Promise<findPersonResponseDTO>;
 }
 
 const defaultUserContext = {
@@ -23,6 +24,17 @@ const defaultUserContext = {
         }
     },
     getProfile: async () => {
+        return {
+            user_id: '',
+            name: '',
+            username: '',
+            nickname: '',
+            profilePhoto: '',
+            followers: 0,
+            following: 0
+        }
+    },
+    getProfileToFollow: async (_personUsername: string) => {
         return {
             user_id: '',
             name: '',
@@ -84,8 +96,17 @@ export default function UserContextProvider({ children }: PropsWithChildren) {
 
     }
 
+    async function getProfileToFollow(personUsername: string) {
+        try {
+            const response =  await userRepository.getProfileToFollow(personUsername);
+            return response as getProfileToFollowResponseDTO;
+        } catch (error: any) {
+            return error
+        }
+    }
+
     return (
-        <UserContext.Provider value={{ getPhrase, getFriends, getProfile, findPerson }}>
+        <UserContext.Provider value={{ getPhrase, getFriends, getProfile, findPerson, getProfileToFollow }}>
             {children}
         </UserContext.Provider>
     )

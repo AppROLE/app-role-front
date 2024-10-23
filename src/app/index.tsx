@@ -76,6 +76,7 @@ export default function Index() {
       <Link href={'/privacy'}>Privacy</Link>
       <Link href={'/account'}>Account</Link>
       <Link href={'/event-description'}>Event Description</Link>
+      <Link href={'/follow-user'}>Follow User</Link>
       {/* View para testar os components */}
       <View className="my-5 w-full bg-[#121212]">
         {/* <RoleMainButton type='gradient' buttonFunction={teste} disabled={buttonDisabled}>

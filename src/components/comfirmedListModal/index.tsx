@@ -39,7 +39,7 @@ export default function ComfirmedListModal({ visible, onClose }: ModalReviewProp
             const response = await getAllPresence(eventId);
             console.log("RESPOSTA DA GET ALL PRECENSE", response)
             if (response) {
-                setPresence(response.users); 
+                setPresence(response.users);
             }
         } catch (error) {
             console.error("Erro ao buscar presenças: ", error);
@@ -55,6 +55,7 @@ export default function ComfirmedListModal({ visible, onClose }: ModalReviewProp
         }
         fetchData();
     }, []);
+
 
     if (loading) {
         return (
@@ -74,6 +75,7 @@ export default function ComfirmedListModal({ visible, onClose }: ModalReviewProp
             isFriend,
         };
     });
+
 
     return (
         <Modal transparent={true} visible={visible} animationType="fade" onRequestClose={onClose}>
