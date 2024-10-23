@@ -4,6 +4,7 @@ import {
   confirmForgotPasswordRequestDTO, deleteAccountResponseDTO,
   updateProfileRequestDTO,
   updateProfileResponseDTO,
+  followResponseDTO,
 } from '@/api/types/auth_dto'
 import { createContext, PropsWithChildren } from 'react'
 import { AuthRepositoryHttp } from '@/api/repositories/auth_repository_http'
@@ -21,7 +22,7 @@ type AuthContextType = {
   confirmCode: (email: string, code: string) => Promise<confirmCodeResponseDTO>
   deleteAccount: () => Promise<deleteAccountResponseDTO>
   updateProfile: (data: updateProfileRequestDTO) => Promise<updateProfileResponseDTO>
-
+  followUser: (followedUsername: string) => Promise<followResponseDTO>
 }
 
 const defaultAuthContext = {
@@ -69,6 +70,11 @@ const defaultAuthContext = {
     }
   },
   updateProfile: async (_data: updateProfileRequestDTO) => {
+    return {
+      message: ''
+    }
+  },
+  followUser: async (_followedUsername: string) => {
     return {
       message: ''
     }
@@ -191,10 +197,18 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
     }
   }
 
+  async function followUser(followedUsername: string) { 
+    try {
+      const response = await authRepository.follow(followedUsername)
+      return response
+    } catch (error: any) {
+      return error
+    }
+  }
+
   return (
 
-    <AuthContext.Provider value={{ signIn, signUp, forgotPassword, confirmCode, finishSignUp, uploadImageProfile, confirmForgotPassword, resendCode, deleteAccount, updateProfile }}>
-
+    <AuthContext.Provider value={{ signIn, signUp, forgotPassword, confirmCode, finishSignUp, uploadImageProfile, confirmForgotPassword, resendCode, deleteAccount, updateProfile, followUser }}>
       {children}
     </AuthContext.Provider>
   )
