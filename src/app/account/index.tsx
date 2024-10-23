@@ -12,10 +12,12 @@ import BigButton from "@/src/components/bigButton";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import AnimatedOption from "@/src/components/selectedCard";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { useRouter } from 'expo-router';
 
 export default function Account() {
   const [phone, setPhone] = React.useState('');
   const [cpf, setCpf] = React.useState('');
+  const navigation = useRouter();
 
   const insets = useSafeAreaInsets(); // Obtem as margens seguras do dispositivo
   const [viewHeight, setViewHeight] = useState(0);
@@ -63,6 +65,11 @@ export default function Account() {
     setCpf(text);
   }
 
+  function handleVoltar() {
+    console.log('voltando...')
+    navigation.push('/configs');
+}
+
   function openChange(){
     //go to confirm code screen
   }
@@ -74,23 +81,26 @@ export default function Account() {
   return (
     <Background>
       <View className="w-full flex-1">
-        <View className="relative flex flex-row h-12 w-full items-center gap-3 border-b-2 border-b-line_gray">
+        <View className="relative flex flex-row h-12 w-full items-center gap-3 pt-3 ">
           <TouchableOpacity
               className="absolute flex h-12 w-12 items-center justify-center rounded-full bg-button_color bottom-4 left-6"
+              onPress={() => handleVoltar()}
           >
             <Svg
                 uri={process.env.EXPO_PUBLIC_URL_S3 + "/left_arrow.svg"}
+                width={20}
+                height={20}
             />
           </TouchableOpacity>
           <View className="flex-1 h-full mb-8 justify-center">
-            <Text className="absolute left-1/2 transform -translate-x-1/2 text-white text-3xl font-nunitoBold">
+            <Text className="absolute left-1/2 transform -translate-x-1/2 text-white text-4xl font-nunitoBold">
               Conta
             </Text>
           </View>
         </View>
-
+        <View className='bg-[#2C2B2B] h-[1px] mt-4'/>
         <ScrollView style={{marginBottom: tabBarHeight + 96}}>
-          <View className="pl-6 gap-6 pt-6 items-start border-b-2 border-b-line_gray">
+          <View className="pl-6 gap-6 pt-6 items-start ">
             <Text className="text-white text-lg font-nunitoBold">
               Data de nascimento
             </Text>
@@ -101,21 +111,23 @@ export default function Account() {
                   onPress={() => setShowPicker(true)}
               />
             </View>
-
           </View>
-          <View className="px-6 gap-6 pt-6 items-start border-b-2 border-b-line_gray">
+          <View className='bg-[#2C2B2B] h-[1px]'/>
+          <View className="px-6 gap-6 py-6 items-start">
             <Text className="text-white text-lg font-nunitoBold">
               Telefone
             </Text>
             <RoleInput type="none" placeholder="(00) 0 0000-0000" value={phone} onChangeText={handlePhoneChange}/>
           </View>
-          <View className="px-6 gap-6 pt-6 items-start border-b-2 border-b-line_gray">
+          <View className='bg-[#2C2B2B] h-[1px]'/>
+          <View className="px-6 gap-6 py-6 items-start">
             <Text className="text-white text-lg font-nunitoBold">
               CPF
             </Text>
             <RoleInput type="none" placeholder="000.000.000-00" value={cpf} onChangeText={handleCpfChange}/>
           </View>
-          <View className="px-6 gap-6 pt-6 items-start border-b-2 border-b-line_gray">
+          <View className='bg-[#2C2B2B] h-[1px]'/>
+          <View className="px-6 gap-6 pt-6 items-start ">
             <Text className="text-white text-lg font-nunitoBold">
               Gênero
             </Text>
@@ -137,7 +149,8 @@ export default function Account() {
               />
             </View>
           </View>
-          <View className="gap-6 pt-6 items-start border-b-2 border-b-line_gray">
+          <View className='bg-[#2C2B2B] h-[1px]'/>
+          <View className="gap-6 pt-6 items-start ">
             <Text className="ml-6 text-white text-lg font-nunitoBold">
               E-mail
             </Text>
@@ -147,7 +160,8 @@ export default function Account() {
               </Text>
             </TouchableOpacity>
           </View>
-          <View className="gap-6 pt-6 items-start">
+          <View className='bg-[#2C2B2B] h-[1px]'/>
+          <View className="gap-6 py-6 items-start">
             <Text className="ml-6 text-white text-lg font-nunitoBold">
               Senha
             </Text>
@@ -157,6 +171,7 @@ export default function Account() {
               </Text>
             </TouchableOpacity>
           </View>
+          <View className='bg-[#2C2B2B] h-[1px]'/>
         </ScrollView>
         <View onLayout={handleLayout} className="absolute flex justify-end items-center py-4 bg-button_color w-full" style={{bottom: tabBarHeight}}>
           <BigButton buttonFunction={onSave}>
