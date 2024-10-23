@@ -1,6 +1,6 @@
 import Background from "@/src/components/background";
-import { Text, TouchableOpacity, View, Keyboard } from "react-native";
-import { useContext, useState } from "react";
+import {Text, TouchableOpacity, View, Keyboard, ActivityIndicator} from "react-native";
+import React, { useContext, useState } from "react";
 import { Link, useRouter } from "expo-router";
 import RoleInput from "@/src/components/input";
 import Toast from 'react-native-toast-message';
@@ -11,6 +11,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function ForgotPassword() {
     const [email, setEmail] = useState("");
     const [emailError, setEmailError] = useState("");
+    const [buttonDebounce, setButtonDebounce] = useState(false);
     const { forgotPassword } = useContext(AuthContext);
     const router = useRouter(); 
 
@@ -21,6 +22,7 @@ export default function ForgotPassword() {
 
     const handlePress = async (router : any) => {
         if (validateEmail(email)) {
+            setButtonDebounce(true);
             try {
                 const response = await forgotPassword(email);
                 if (typeof response === 'string' && response === 'Nenhum item foi encontrado para this email') {
@@ -32,6 +34,7 @@ export default function ForgotPassword() {
                         visibilityTime: 3000,
                         topOffset: 0,
                     })
+                    setButtonDebounce(false);
                     return;
                 }
                 Keyboard.dismiss();
@@ -42,12 +45,13 @@ export default function ForgotPassword() {
                     visibilityTime: 3000,
                     topOffset: 0,
                 });
+                setButtonDebounce(false);
                 setTimeout(async () => {
                     await AsyncStorage.setItem('user_email', email)
                     await AsyncStorage.setItem('ScreenRequestToCode', 'forgot-password');
                     router.push('/recovery-code');
                     setEmail(""); 
-                }, 3000);
+                }, 2000);
             } catch (error : any) {
                 Toast.show({    
                     type: 'error',
@@ -57,6 +61,7 @@ export default function ForgotPassword() {
                     topOffset: 0,
                 });
             }
+            setButtonDebounce(false);
         } else {
             setEmailError("Por favor, insira um e-mail válido.");
         }
@@ -86,8 +91,12 @@ export default function ForgotPassword() {
                         />
                     </View>
                     <View className="pt-16">
-                        <RoleMainButton type='gradient' buttonFunction={() => handlePress(router)}>
-                            <Text className="text-white font-nunito">Enviar</Text>
+                        <RoleMainButton type='gradient' buttonFunction={() => handlePress(router)} disabled={buttonDebounce}>
+                            {buttonDebounce ?
+                                <ActivityIndicator color={'white'}/>
+                                :
+                                <Text className="text-white font-nunito">Enviar</Text>
+                            }
                         </RoleMainButton>
                         <Link href={'/sign-in'} className="mt-8" asChild>
                             <TouchableOpacity className=" bg-[#1C1C1C] w-96 rounded-2xl h-10 justify-center items-center">
