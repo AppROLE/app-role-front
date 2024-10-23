@@ -103,11 +103,7 @@ export default function RoleDescription() {
                             </View>
                         </View>
                     </TouchableOpacity>
-                    <ComfirmedListModal
-                        visible={comfirmedListModalVisible}
-                        onClose={() => setConfirmedListModalVisible(false)}
-                        // eventId={"d942a349-f74a-4d94-b591-ffb1fd143ad8"}
-                    />
+                 
 
                     <ModalReview
                         visible={modalVisible}
