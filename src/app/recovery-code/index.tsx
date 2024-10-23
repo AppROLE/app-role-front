@@ -2,7 +2,7 @@ import {
   Text,
   View,
   TextInput,
-  TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native'
 import {Link, router, useRouter} from 'expo-router'
 import { RecoveryCodeInput } from '@/src/components/OTPInput'
@@ -12,7 +12,7 @@ import RoleMainButton from '@/src/components/roleMainButton'
 import { AuthContext } from '@/context/auth_context'
 import React from 'react'
 import { resendCodeResponseDTO } from '@/api/types/auth_dto'
-import Toast from 'react-native-toast-message'
+import Toast, {ErrorToast} from 'react-native-toast-message'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // const styles = StyleSheet.create({
@@ -39,6 +39,7 @@ export default function RecoveryCode() {
   const navigation = useRouter()
   const [codes, setCodes] = useState<string[]>(Array(6).fill(''))
   const [incorrectMessage, setIncorrectMessage] = useState('');
+  const [buttonDebounce, setButtonDebounce] = useState(false)
   const {confirmCode} = useContext(AuthContext);
 
   // const windowWidth = Dimensions.get('window').width
@@ -88,30 +89,36 @@ export default function RecoveryCode() {
   const handlePost = async () => {
     if(codes.includes("")){
       setIncorrectMessage("*Código incompleto")
+      return
     }
     else{
+      setButtonDebounce(true)
       try{
         const code = codes.join("")
         const email = await AsyncStorage.getItem('user_email')
-        console.log(email)
         if (email == null){
-            setIncorrectMessage("*Email não encontrado no sistema, tente novamente")
+          setIncorrectMessage("*Email não encontrado no sistema, tente novamente")
+          setButtonDebounce(false)
             return
         }
         const response = await confirmCode(email, code );
         if(response.message != "Código validado com sucesso!"){
           setIncorrectMessage("*Código incorreto")
+            setButtonDebounce(false)
             return
         }
         setIncorrectMessage("")
         AsyncStorage.getItem('ScreenRequestToCode').then((value) => {
           if(value == 'sign-up'){
+            setButtonDebounce(false)
             navigation.push({ pathname: '/almost-there' })
           }
           else if(value == 'forgot-password'){
+            setButtonDebounce(false)
             navigation.push({ pathname: '/confirm-forgot-password' })
           }
           else{
+            setButtonDebounce(false)
             navigation.push({ pathname: '/' })
           }
         }) 
@@ -119,6 +126,7 @@ export default function RecoveryCode() {
       catch (error){
         console.log(error)
         setIncorrectMessage("*Erro no sistema, tente novamente")
+        setButtonDebounce(false)
       }
     }
   }
@@ -158,13 +166,37 @@ export default function RecoveryCode() {
         </View>
 
         <View className='w-[100vw] gap-12 px-[8%]'>
-          <RoleMainButton type="gradient" buttonFunction={() => handlePost()}>
-            <Text className="text-white font-nunito">Continuar</Text>
+          <RoleMainButton type="gradient" buttonFunction={() => handlePost()} disabled={buttonDebounce}>
+            {buttonDebounce ?
+                <ActivityIndicator color={'white'}/>
+                :
+                <Text className="text-white font-nunito">Continuar</Text>
+            }
           </RoleMainButton>
           <RoleMainButton type="simple" buttonFunction={() => handleVoltar()}>
             <Text className="text-white font-nunito">Voltar</Text>
           </RoleMainButton>
         </View>
+        <Toast config={{
+          error: (props) => (
+              <ErrorToast
+                  {...props}
+                  style={{
+                    backgroundColor: '#240046',
+                  }}
+                  text1Style={{
+                    fontSize: 17,
+                    color: 'white',
+                    fontFamily: 'NunitoBold',
+                  }}
+                  text2Style={{
+                    fontSize: 15,
+                    color: 'white',
+                    fontFamily: 'Nunito',
+                  }}
+              />
+          ),
+        }}/>
       </View>
     </Background>
   )
