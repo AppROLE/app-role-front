@@ -11,11 +11,11 @@ import Svg from "@/src/components/svg";
 import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import RoleMainButton from '@/src/components/roleMainButton';
-import { useNavigation } from 'expo-router';
+import { useNavigation, useRouter } from 'expo-router';
 
 export default function Privacy() {
     const [isPrivate, setIsPrivate] = React.useState(false);
-    const navigation = useNavigation();
+    const navigation = useRouter();
     const insets = useSafeAreaInsets();
     const [viewHeight, setViewHeight] = useState(0);
 
@@ -23,9 +23,12 @@ export default function Privacy() {
         const { height } = event.nativeEvent.layout;
         setViewHeight(height);
     };
+    const tabBarHeightWithSafeArea = viewHeight - 20;
+    const tabBarHeightWithoutSafeArea = 0;
+    const tabBarHeight = insets.bottom > 0 ? tabBarHeightWithoutSafeArea : tabBarHeightWithSafeArea;
 
     function handleGoBack() {
-        navigation.goBack();  // Função para voltar para a tela anterior
+        navigation.push('/configs');  // Função para voltar para a tela anterior
     }
 
     function onSave() {
@@ -35,22 +38,25 @@ export default function Privacy() {
         <Background>
             <SafeAreaView style={{ flex: 1, paddingBottom: insets.bottom }}>
                 <View className="w-full flex-1 relative">
-                    <View className="relative flex flex-row h-12 w-full items-center gap-3 border-b-2 border-b-line_gray">
+                    <View className="relative flex flex-row h-16 w-full items-center gap-3 ">
                         <TouchableOpacity
-                            onPress={handleGoBack}
-                            className="absolute flex h-12 w-12 items-center justify-center rounded-full bg-button_color bottom-4 left-6"
+                            onPress={() => handleGoBack()}
+                            className="absolute flex h-12 w-12 items-center justify-center rounded-full bg-button_color bottom-8 left-6"
                         >
                             <Svg
                                 uri={process.env.EXPO_PUBLIC_URL_S3 + "/left_arrow.svg"}
+                                width={20}
+                                height={20}
                             />
                         </TouchableOpacity>
                         <View className="flex-1 justify-center h-full mb-8">
-                            <Text className="absolute left-1/2 transform -translate-x-1/2 text-white text-3xl font-nunitoBold">
+                            <Text className="absolute left-1/2 transform -translate-x-1/2 text-white text-3xl font-nunitoBold bottom-4">
                                 Privacidade
                             </Text>
                         </View>
                     </View>
-                    <View className="px-6 gap-3 pt-6 items-start border-b-2 border-b-line_gray">
+                    <View className='bg-[#2C2B2B] h-[1px]'/>
+                    <View className="px-6 gap-3 pt-6 items-start">
                         <Text className="text-white text-lg font-nunitoBold">
                             Público
                         </Text>
@@ -68,8 +74,8 @@ export default function Privacy() {
                             </TouchableOpacity>
                         </View>
                     </View>
-
-                    <View className="px-6 gap-3 pt-6 items-start border-b-2 border-b-line_gray">
+                    <View className='bg-[#2C2B2B] h-[1px]'/>
+                    <View className="px-6 gap-3 pt-6 items-start">
                         <Text className="text-white text-lg font-nunitoBold">
                             Privado
                         </Text>
@@ -87,8 +93,8 @@ export default function Privacy() {
                             </TouchableOpacity>
                         </View>
                     </View>
-
-                    <View onLayout={handleLayout} className="absolute flex bottom-0 justify-end items-center py-4 bg-button_color w-full" style={{ paddingBottom: insets.bottom }}>
+                    <View className='bg-[#2C2B2B] h-[1px]'/>
+                    <View onLayout={handleLayout} className="absolute flex justify-end items-center py-4 bg-button_color w-full" style={{bottom: tabBarHeight}}>
                         <BigButton buttonFunction={onSave}>
                             <Text className="text-white text-lg">
                                 Salvar
