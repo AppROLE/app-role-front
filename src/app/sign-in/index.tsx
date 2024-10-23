@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Text,
   View,
 } from 'react-native'
@@ -7,7 +8,7 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import Background from '@/src/components/background'
 import RoleMainButton from '@/src/components/roleMainButton'
 import RoleInput from '@/src/components/input'
-import { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import * as WebBrowser from 'expo-web-browser'
 import * as Google from 'expo-auth-session/providers/google'
 
@@ -21,6 +22,7 @@ export default function Index() {
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
   const { signIn } = useContext(AuthContext)
+    const [buttonDebounce, setButtonDebounce] = useState(false)
   // const [disabledB, setDisabledB] = useState(true)
 
   const [request, responseGoogle, promptAsyncGoogle] = Google.useIdTokenAuthRequest({
@@ -49,7 +51,7 @@ export default function Index() {
   }, [responseGoogle])
 
   function handleEmailChange(text: string) {
-    setEmail(text)
+    setEmail(text.trimStart())
     if (emailError) setEmailError('') // Reseta o erro ao digitar
   }
 
@@ -59,14 +61,17 @@ export default function Index() {
   }
 
   async function Login() {
+    setButtonDebounce(true)
     if (!email || !password) {
       if (!email) setEmailError('Email obrigatório')
       if (!password) setPasswordError('Senha obrigatória')
+      setButtonDebounce(false)
       return
     }
 
     const response = await signIn({ email, password })
     setEmailError(response.toString())
+    setButtonDebounce(false)
   }
 
   return (
@@ -103,8 +108,12 @@ export default function Index() {
           </View>
         </View>
         <View className="gap-12 px-[8%]">
-          <RoleMainButton type="gradient" buttonFunction={Login}>
-            <Text className="text-white font-nunito">Entrar</Text>
+          <RoleMainButton type="gradient" buttonFunction={Login} disabled={buttonDebounce}>
+            {buttonDebounce ?
+                <ActivityIndicator color={'white'}/>
+                :
+                <Text className="text-white font-nunito">Entrar</Text>
+            }
           </RoleMainButton>
           <RoleMainButton type="simple" buttonFunction={() => promptAsyncGoogle()}>
             <FontAwesome6 name="google" size={24} color="white" />

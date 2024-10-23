@@ -1,17 +1,19 @@
 import Background from '@/src/components/background'
-import { Text, View } from 'react-native'
+import {ActivityIndicator, Text, View} from 'react-native'
 import RoleInput from '@/src/components/input'
 import RoleMainButton from '@/src/components/roleMainButton'
-import { useState, useContext } from 'react'
+import React, { useState, useContext } from 'react'
 import { AuthContext } from '@/context/auth_context'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { router } from 'expo-router'
+import Toast, {ErrorToast} from "react-native-toast-message";
 
 export default function ConfirmForgotPassword() {
   const [password, setPassword] = useState('')
   const [passwordError, setPasswordError] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [confirmPasswordError, setConfirmPasswordError] = useState('')
+  const [buttonDebounce, setButtonDebounce] = useState(false)
   const {confirmForgotPassword} = useContext(AuthContext)
 
   function verifyPassword() {
@@ -29,13 +31,25 @@ export default function ConfirmForgotPassword() {
   }
 
   async function changePassword() {
+    setButtonDebounce(true)
     if(verifyPassword()){
       const email = (await AsyncStorage.getItem('user_email')) || ''
       const response = await confirmForgotPassword({email: email, newPassword: password})
-      if(response.message === 'Senha alterada com sucesso!'){
+      if(response.message === 'Redefinição de senha realizada com sucesso!'){
+        setButtonDebounce(false)
         router.push('/sign-in')
       }
+      else{
+        Toast.show({
+          type: 'error',
+          text1: 'Erro',
+          text2: response.message || 'Ocorreu um erro ao trocar a senha.',
+          visibilityTime: 3000,
+          topOffset: 0,
+        });
+      }
     }
+    setButtonDebounce(false)
   }
 
   function handlePasswordChange(text: string) {
@@ -72,10 +86,34 @@ export default function ConfirmForgotPassword() {
             />
           </View>
           <View className="px-[8%]">
-            <RoleMainButton type="gradient" buttonFunction={changePassword}>
-              <Text className="text-white font-nunito">Trocar Senha</Text>
+            <RoleMainButton type="gradient" buttonFunction={changePassword} disabled={buttonDebounce}>
+              {buttonDebounce ?
+                  <ActivityIndicator color={'white'}/>
+                  :
+                  <Text className="text-white font-nunito">Trocar Senha</Text>
+              }
             </RoleMainButton>
           </View>
+          <Toast config={{
+            error: (props) => (
+                <ErrorToast
+                    {...props}
+                    style={{
+                      backgroundColor: '#240046',
+                    }}
+                    text1Style={{
+                      fontSize: 17,
+                      color: 'white',
+                      fontFamily: 'NunitoBold',
+                    }}
+                    text2Style={{
+                      fontSize: 15,
+                      color: 'white',
+                      fontFamily: 'Nunito',
+                    }}
+                />
+            ),
+          }}/>
         </View>
       </Background>
     </>

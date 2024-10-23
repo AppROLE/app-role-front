@@ -4,7 +4,7 @@ import RoleMainButton from '@/src/components/roleMainButton'
 import * as ImagePicker from 'expo-image-picker'
 import { FontAwesome6 } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
-import { useContext, useEffect, useState } from 'react'
+import {useContext, useEffect, useState} from 'react'
 import {
   TouchableOpacity,
   View,
@@ -132,7 +132,6 @@ export default function EditingPerfil() {
               <FontAwesome6 name="arrow-left" size={18} color="white" />
             </TouchableOpacity>
           </View>
-
             <View className="flex w-[100%] h-10 items-center justify-center">
               <Text className="flex items-center  text-3xl text-white font-nunitoBold">
                 Editar Perfil

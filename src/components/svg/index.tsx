@@ -7,16 +7,20 @@ type SvgAddedProps = SvgProps & {
     color?: ColorValue;
     width?: number;
     height?: number;
+    fill?: string;
 }
 
-export default function Svg({uri, color, width, height, ...rest} : SvgAddedProps) {
+export default function Svg({uri, color, width, height, fill, ...rest} : SvgAddedProps) {
     const [imgXml, setImgXml] = useState('<svg></svg>');
 
     const getImgXml = async () => {
         const xml = await (await fetch(uri)).text();
-        const xmlFormat = color 
+        let xmlFormat = color
         ? xml.replace(/stroke=".*?"/g, `stroke="${color.toString()}"`)
         : xml;
+        if (fill){
+            xmlFormat = xmlFormat.replace(/fill=".*?"/g, `fill="${fill.toString()}"`)
+        }
         setImgXml(xmlFormat);
         //.replace(/fill=".*?"/g, `fill="${color.toString()}"`)
     };
