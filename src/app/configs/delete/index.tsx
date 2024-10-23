@@ -15,7 +15,7 @@ export default function Delete() {
     const { deleteAccount } = useContext(AuthContext); // Use o AuthContext
 
     function handleVoltar() {
-        navigation.back();
+        navigation.push('/configs');
     }
 
     async function handleButton() {
@@ -26,8 +26,8 @@ export default function Delete() {
                     type: 'success',
                     text1: 'Conta deletada com sucesso',
                     visibilityTime: 3000,
-                    position: 'top', 
-                    topOffset: 10,   
+                    position: 'top',
+                    topOffset: 10,
                     onHide: () => {
                         AsyncStorage.removeItem('idToken'); // Remove o idToken do AsyncStorage
                         AsyncStorage.removeItem('accessToken'); // Remove o accessToken do AsyncStorage
@@ -35,14 +35,14 @@ export default function Delete() {
                         navigation.replace('/first-page'); // Redireciona após sucesso
                     } // Redireciona após sucesso
                 });
-                
+
             } else {
                 Toast.show({
                     type: 'error',
                     text1: 'Erro ao deletar conta',
                     text2: 'Tente novamente mais tarde.',
                     visibilityTime: 3000,
-                    position: 'top', 
+                    position: 'top',
                     topOffset: 10,
                 });
             }
@@ -52,7 +52,7 @@ export default function Delete() {
                 text1: 'Erro',
                 text2: 'Falha ao deletar conta',
                 visibilityTime: 3000,
-                position: 'top', 
+                position: 'top',
                 topOffset: 10,
             });
         }
@@ -60,30 +60,32 @@ export default function Delete() {
     return (
         <>
             <Background>
-                <Toast/>
+                <Toast />
                 <View className="justify-between h-[95%] w-full">
                     <View>
-                        <View className="flex flex-row items-center px-5">
+                        <View className="flex flex-row items-center justify-center relative w-full">
                             <TouchableOpacity
                                 onPress={() => handleVoltar()}
-                                className={`flex h-12 w-12 items-center justify-center rounded-full ${themeModeS === 'dark' ? 'bg-[#1C1C1C]' : 'bg-[#C9C9C9]'}`}
+                                className={`absolute left-5 bottom-1 h-12 w-12 items-center justify-center rounded-full ${themeModeS === 'dark' ? 'bg-[#1C1C1C]' : 'bg-[#C9C9C9]'}`}
                             >
                                 <SvgUri
                                     uri={process.env.EXPO_PUBLIC_URL_S3 + '/left_arrow.svg'}
                                     width={20}
                                     height={20}
-                                    fill={themeModeS === 'dark' ? '#FFFFFF' : '#000000'}
                                 />
                             </TouchableOpacity>
-                            <Text className="text-white text-3xl font-nunitoBold ml-20">Excluir Conta</Text>
+                            {/* Título centralizado */}
+                            <Text className="text-white text-4xl font-nunitoBold flex-1 text-center bottom-1">
+                                Excluir Conta
+                            </Text>
                         </View>
 
                         <View>
-                            <View className={`mt-6 h-[1px] w-full ${themeModeS === 'dark' ? 'bg-[#615b5b]' : 'bg-[#D0D0D0]'}`} />
-                            <Text className="text-white text-xl font-nunito py-8 px-10 text-center">
+                            <View className={`mt-6 h-[1px] w-full ${themeModeS === 'dark' ? 'bg-[#2C2B2B]' : 'bg-[#D0D0D0]'}`} />
+                            <Text className="text-white text-lg font-nunito font-bold pt-8 px-8 text-center">
                                 Atenção! O ROLE irá excluir todas as informações de sua conta e removê-lá de nosso banco de dados.
-                                Você tem certeza que deseja continuar?
                             </Text>
+                            <Text className="text-white text-lg font-nunito font-bold text-center pb-12">Você tem certeza que deseja continuar?</Text>
 
                             {/* Custom Checkbox View */}
                             {/* Custom Checkbox View */}
