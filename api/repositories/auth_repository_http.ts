@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import { http } from '../http'
-import { deleteAccountResponseDTO, signInRequestDTO, signInResponseDTO, updateProfileRequestDTO, updateProfileResponseDTO } from '../types/auth_dto'
+import { deleteAccountResponseDTO, followResponseDTO, signInRequestDTO, signInResponseDTO, updateProfileRequestDTO, updateProfileResponseDTO } from '../types/auth_dto'
 import { finishSignUpRequestDTO } from '../types/auth_dto'
 import { confirmForgotPasswordRequestDTO, confirmForgotPasswordResponseDTO } from '../types/auth_dto'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -109,6 +109,20 @@ export class AuthRepositoryHttp {
     } catch (error: any) {
       return error.response.data
     } 
+  }
+
+  async follow(followedUsername: string) {
+    try {
+      const idToken = await AsyncStorage.getItem('idToken') || ''
+      if (idToken === '') return 
+      const response = await http.put(`/follow-user?followedUsername${followedUsername}`, { 
+        headers: {
+          Authorization: `Bearer ${idToken}`
+        }})
+      return response.data as followResponseDTO;
+    } catch (error: any) { 
+      return error.response.data
+    }
   }
 }
 

@@ -81,6 +81,9 @@ export default function RootLayout() {
                     <Stack.Screen
                       name="event-description/index"
                       options={{ headerShown: false }} />
+                    <Stack.Screen
+                      name="follow-user/index"
+                      options={{ headerShown: false }} />
                   </Stack>
                 </GestureHandlerRootView>
               </InstituteContextProvider>
