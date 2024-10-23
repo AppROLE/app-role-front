@@ -1,7 +1,6 @@
 import Background from '@/src/components/background'
-import Ionicons from '@expo/vector-icons/Ionicons'
 import { LinearGradient } from 'expo-linear-gradient'
-import { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {
     Image,
     Text,
@@ -9,16 +8,16 @@ import {
     View,
     StyleSheet,
     SafeAreaView,
-    ScrollView
+    ScrollView, ActivityIndicator
 } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import RoleMainButton from '@/src/components/roleMainButton'
 import RoleInput from '@/src/components/input'
 import { AuthContext } from '@/context/auth_context'
-import { finishSignUpRequestDTO } from '@/api/types/auth_dto'
+import {finishSignUpRequestDTO, updateImageProfileResponseDTO} from '@/api/types/auth_dto'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { router } from 'expo-router'
 import Svg from '@/src/components/svg'
+import Toast, {ErrorToast} from "react-native-toast-message";
 
 export default function AlmostThere() {
     const [files, setFiles] = useState<any>(null)
@@ -29,6 +28,7 @@ export default function AlmostThere() {
     const [usernameError, setUsernameError] = useState<string>('')
     const [nicknameError, setNicknameError] = useState<string>('')
     const [isInputFocused, setIsInputFocused] = useState<boolean>(false)
+    const [buttonDebounce, setButtonDebounce] = useState<boolean>(false)
     const { finishSignUp, signIn, uploadImageProfile } = useContext(AuthContext)
 
     const pickImage = async () => {
@@ -57,42 +57,80 @@ export default function AlmostThere() {
     }
 
     function handleUsernameChange(text: string) {
-        setUsername(text)
-        if (username) setUsernameError('') // Reseta o erro ao digitar
+        const trimmedText = text.trimStart();
+        setUsername(trimmedText);
+        if (trimmedText !== '') setUsernameError(''); // Limpa o erro imediatamente
     }
 
     function handleNicknameChange(text: string) {
-        setNickname(text)
-        if (nickname) setNicknameError('') // Reseta o erro ao digitar
+        const trimmedText = text.trimStart();
+        setNickname(trimmedText);
+        if (trimmedText !== '') setNicknameError(''); // Limpa o erro imediatamente
+    }
+
+    function verifyCredentials(){
+        var isValid = true
+
+        setUsername(username.trim())
+        setNickname(nickname.trim())
+
+        if (username === '') {
+            setUsernameError('Campo obrigatório')
+            isValid = false
+        }
+
+        if (nickname === '') {
+            setNicknameError('Campo obrigatório')
+            isValid = false
+        }
+
+        return isValid
     }
 
     useEffect(() => {
         async function loginVerify() {
             const response = await AsyncStorage.getItem('token')
-            if (response) {
-                console.log('TOKEN NO STORAGE ', response)
-            }
         }
         loginVerify()
     }, [])
-    
+
     async function handleFinishSignUp() {
-        if (username === '') {
-            setUsernameError('Campo obrigatório')
+        setButtonDebounce(true)
+
+        if (!verifyCredentials()){
+            setButtonDebounce(false)
             return
         }
+
+        const trimUser = username.trim()
+        const trimNick = nickname.trim()
 
         const data: finishSignUpRequestDTO = {
             email: (await AsyncStorage.getItem('email')) ?? '',
             password: (await AsyncStorage.getItem('password')) ?? '',
-            username: username,
-            nickname: nickname
+            username: trimUser,
+            nickname: trimNick
         }
 
         const email = await AsyncStorage.getItem('email')
         const password = await AsyncStorage.getItem('password')
-        if (!email) throw new Error('Email não encontrado no AsyncStorage')
-        if (!password) throw new Error('Senha não encontrada no AsyncStorage')
+        if (!email || !password) {
+            Toast.show({
+                text1: 'Erro',
+                text2: ("Email ou senha não encontrado no sistema"),
+                position: 'top',
+                visibilityTime: 3000,
+                type: 'error',
+                props: {
+                    style: { backgroundColor: 'black' },
+                    text1Style: { color: 'white', fontSize: 18, fontFamily: "nunito" },
+                    text2Style: { color: 'white', fontFamily: "nunito" },
+                    contentContainerStyle: { backgroundColor: 'white' }
+                },
+            });
+            setButtonDebounce(false)
+            throw new Error(!email ? 'Email não encontrado no AsyncStorage' : 'Senha não encontrada no AsyncStorage')
+        }
 
         const dataSignIn = {
             email,
@@ -100,6 +138,25 @@ export default function AlmostThere() {
         }
 
         const response = await finishSignUp(data)
+
+        if(!(response.message == "Seu cadastro foi finalizado com sucesso!")){
+            Toast.show({
+                text1: 'Erro',
+                text2: response.message,
+                position: 'top',
+                visibilityTime: 3000,
+                type: 'error',
+                props: {
+                    style: { backgroundColor: 'black' },
+                    text1Style: { color: 'white', fontSize: 18, fontFamily: "nunito" },
+                    text2Style: { color: 'white', fontFamily: "nunito" },
+                    contentContainerStyle: { backgroundColor: 'white' }
+                },
+            });
+            setButtonDebounce(false)
+            return
+        }
+
         const formData = new FormData()
         if (files) {
             formData.append('files', {
@@ -109,14 +166,32 @@ export default function AlmostThere() {
             })
         }
 
-        formData.append('username', username)
-        formData.append('email', email)
+        formData.append('username', trimUser)
+        formData.append('email', "mzoletti@yahoo.com.br")
         formData.append('typePhoto', '.jpeg')
 
-        const uploadResponse = await uploadImageProfile(formData)
+        const uploadResponse: updateImageProfileResponseDTO = await uploadImageProfile(formData)
+        if(!(uploadResponse.message == "A foto de perfil foi adicionada com sucesso!")){
+            Toast.show({
+                text1: 'Erro',
+                text2: uploadResponse.message,
+                position: 'top',
+                visibilityTime: 3000,
+                type: 'error',
+                props: {
+                    style: { backgroundColor: 'black' },
+                    text1Style: { color: 'white', fontSize: 18, fontFamily: "nunito" },
+                    text2Style: { color: 'white', fontFamily: "nunito" },
+                    contentContainerStyle: { backgroundColor: 'white' }
+                },
+            });
+            setButtonDebounce(false)
+        }
         const result = await signIn(dataSignIn)
+        // guardar tokens
 
-        router.replace('/home')
+        setButtonDebounce(false)
+        // router.replace('/home')
     }
 
     return (
@@ -205,12 +280,39 @@ export default function AlmostThere() {
                                 <RoleMainButton
                                     type="gradient"
                                     buttonFunction={handleFinishSignUp}
+                                    disabled={buttonDebounce}
                                 >
-                                    <Text className="text-white font-nunito">BORA</Text>
+                                    {buttonDebounce ?
+                                        <ActivityIndicator color={'white'} />
+                                        :
+                                        <Text className="text-white font-nunito">BORA</Text>
+                                    }
                                 </RoleMainButton>
                             </View>
                         </View>
                     </ScrollView>
+                    <Toast config={{
+                        error: (props) => (
+                            <ErrorToast
+                                {...props}
+                                style={{
+                                    backgroundColor: '#240046',
+                                }}
+                                text1Style={{
+                                    fontSize: 17,
+                                    color: 'white',
+                                    fontFamily: 'NunitoBold',
+                                }}
+                                text2Style={{
+                                    fontSize: 15,
+                                    color: 'white',
+                                    fontFamily: 'Nunito',
+                                    overflow: 'hidden',
+                                    flexWrap: 'wrap', // Permite a quebra de linha
+                                }}
+                            />
+                        ),
+                    }}/>
                 </SafeAreaView>
             </Background>
         </>
