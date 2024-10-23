@@ -9,7 +9,7 @@ export type getFriendsResponseDTO = {
     friends: Friends[];
 }
 
-type personResponseDTO = {
+export type personResponseDTO = {
     username: string;
     profilePhoto: string;
     nickname: string;
@@ -38,4 +38,27 @@ export type getProfileResponseDTO = {
     nickname: string;
     followers: number;
     following: number;
+}
+
+export type getProfileToFollowResponseDTO = {
+    user_id: string;
+    name: string;
+    backgroundPhoto?: string;
+    username: string;
+    linkInstagram?: string;
+    linkTiktok?: string;
+    biography?: string;
+    profilePhoto?: string;
+    nickname: string;
+    followers: number;
+    following: number;
+}
+
+export type RefreshTokenResponse = {
+    tokens: {
+        access_token: string;
+        id_token: string;
+        refresh_token: string;
+    },
+    message: string;
 }
