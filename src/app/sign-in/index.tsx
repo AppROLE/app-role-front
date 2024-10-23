@@ -51,7 +51,7 @@ export default function Index() {
   }, [responseGoogle])
 
   function handleEmailChange(text: string) {
-    setEmail(text)
+    setEmail(text.trimStart())
     if (emailError) setEmailError('') // Reseta o erro ao digitar
   }
 
