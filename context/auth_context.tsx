@@ -3,7 +3,7 @@ import {
   signInRequestDTO, signInResponseDTO, confirmForgotPasswordResponseDTO, forgotPasswordResponseDTO,
   confirmForgotPasswordRequestDTO, deleteAccountResponseDTO,
   updateProfileRequestDTO,
-  updateProfileResponseDTO,
+  updateProfileResponseDTO, updateImageProfileResponseDTO,
 } from '@/api/types/auth_dto'
 import { createContext, PropsWithChildren } from 'react'
 import { AuthRepositoryHttp } from '@/api/repositories/auth_repository_http'
@@ -17,7 +17,7 @@ type AuthContextType = {
   confirmForgotPassword: (data: confirmForgotPasswordRequestDTO) => Promise<confirmForgotPasswordResponseDTO>
   forgotPassword: (email: string) => Promise<forgotPasswordResponseDTO>
   finishSignUp: (data: finishSignUpRequestDTO) => Promise<finishSignUpResponseDTO>
-  uploadImageProfile: (formData: FormData) => Promise<object>
+  uploadImageProfile: (formData: FormData) => Promise<updateImageProfileResponseDTO>
   confirmCode: (email: string, code: string) => Promise<confirmCodeResponseDTO>
   deleteAccount: () => Promise<deleteAccountResponseDTO>
   updateProfile: (data: updateProfileRequestDTO) => Promise<updateProfileResponseDTO>
@@ -51,7 +51,9 @@ const defaultAuthContext = {
     }
   },
   uploadImageProfile: async (_formData: FormData) => {
-    return {}
+    return {
+      message: ''
+    }
   },
   confirmCode: async (_email: string, _code: string) => {
     return {
@@ -126,7 +128,9 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
       await AsyncStorage.removeItem('email');
       return response
     } catch (error: any) {
-      return error
+      return {
+        message: error
+      }
     }
   }
 
@@ -134,10 +138,12 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
     try {
       const response = await authRepository.uploadImageProfile(formData);
       console.log("RESPOSTA DO UPLOAD IMAGE PROFILE CONTEXT ", response);
-      return response;
+      return response as updateImageProfileResponseDTO;
     } catch (error: any) {
       console.log(error);
-      return error;
+      return {
+        message: error
+      }
     }
   }
 
@@ -153,13 +159,11 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
   async function confirmForgotPassword(data: confirmForgotPasswordRequestDTO) {
     try {
       const response = await authRepository.confirmForgotPassword(data)
-      console.log('response')
-      console.log(response)
       return response as confirmForgotPasswordResponseDTO
     } catch (error: any) {
-      console.log('error')
-      console.log(error.reponse)
-      return error
+      return {
+        message: error
+      }
     }
   }
 
