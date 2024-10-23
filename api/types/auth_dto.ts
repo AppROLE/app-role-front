@@ -86,3 +86,7 @@ export type updateProfileRequestDTO = {
 export type updateProfileResponseDTO = {
   message: string
 }
+
+export type updateImageProfileResponseDTO = {
+  message: string
+}
