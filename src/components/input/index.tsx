@@ -44,43 +44,43 @@ export default function RoleInput({
         {type === 'email' ? (
           <Svg
             uri={process.env.EXPO_PUBLIC_URL_S3 + "/email.svg"}
-            color={error ? '#F87171' : '#BDBDBD'}
+            fill={error ? '#F87171' : '#BDBDBD'}
 
           />
         ) : type === 'password' ? (
           <Svg
             uri={process.env.EXPO_PUBLIC_URL_S3 + "/key.svg"}
-            color={error ? '#F87171' : '#BDBDBD'}
+            fill={error ? '#F87171' : '#BDBDBD'}
           />
         ) : type === 'confirm-password' ? (
           <Svg
             uri={process.env.EXPO_PUBLIC_URL_S3 + "/key.svg"}
-            color={error ? '#F87171' : '#BDBDBD'}
+            fill={error ? '#F87171' : '#BDBDBD'}
           />
         ) : type === 'user' ? (
           <Svg
             uri={process.env.EXPO_PUBLIC_URL_S3 + "/user.svg"}
-            color={error ? '#F87171' : '#BDBDBD'}
+            fill={error ? '#F87171' : '#BDBDBD'}
           />
         ) : type === 'at' ? (
           <Svg
             uri={process.env.EXPO_PUBLIC_URL_S3 + "/at.svg"}
-            color={error ? '#F87171' : '#BDBDBD'}
+            fill={error ? '#F87171' : '#BDBDBD'}
           />
         ) : type === 'hidden-password' ? (
           <Svg
             uri={process.env.EXPO_PUBLIC_URL_S3 + "/key.svg"}
-            color={error ? '#F87171' : '#BDBDBD'}
+            fill={error ? '#F87171' : '#BDBDBD'}
           />
         ) : type === 'hidden-confirm-password' ? (
           <Svg
             uri={process.env.EXPO_PUBLIC_URL_S3 + "/key.svg"}
-            color={error ? '#F87171' : '#BDBDBD'}
+            fill={error ? '#F87171' : '#BDBDBD'}
           />
         ) : type === 'nickname' ? (
           <Svg
             uri={process.env.EXPO_PUBLIC_URL_S3 + "/user.svg"}
-            color={error ? '#F87171' : '#BDBDBD'}
+            fill={error ? '#F87171' : '#BDBDBD'}
           />
         ) : null}
         <TextInput
@@ -122,13 +122,13 @@ export default function RoleInput({
           (hidden === true ? (
             <Svg
               uri={process.env.EXPO_PUBLIC_URL_S3 + "/eye.svg"}
-              color={'#BDBDBD'}
+              fill={'#BDBDBD'}
               onPress={hiddenToggle}
             />
           ) : (
             <Svg
               uri={process.env.EXPO_PUBLIC_URL_S3 + "/eye-slash.svg"}
-              color={'#BDBDBD'}
+              fill={'#BDBDBD'}
               onPress={hiddenToggle}
             />
           ))}
