@@ -226,7 +226,7 @@ export default function Home() {
   }, [])
 
   return (
-    <Background text={phrase} scrollable lockScroll={scrollDisabled} function1={loadMoreRoles}>
+    <Background text={phrase} scrollable lockScroll={scrollDisabled} function1={loadMoreRoles} centralize>
       <GradientText className="mb-4 text-center text-3xl font-nunitoBold">ROLE BOMBANDO</GradientText>
       {carrosselData.length > 1 ? (
         <View className="mx-auto">
@@ -272,27 +272,29 @@ export default function Home() {
           <Text className="text-xl font-bold text-white">Sem ROLE Bombando? Bora agitar ai!!!</Text>
         </View>
       )}
-      <View className="my-8 px-8">
-        <View className="flex flex-row items-center justify-center rounded-full bg-[#1C1C1C] px-4 py-2">
-          <TouchableOpacity className="w-[12%] flex items-start">
-            <FontAwesome6 name="magnifying-glass" size={24} color="#BEBEBE" solid />
-          </TouchableOpacity>
-          <View className="w-[78%]">
-            <TextInput
-              placeholder="Encontre o seu role"
-              className="text-white"
-              placeholderTextColor={'#BEBEBE'}
-              value={search}
-              onChangeText={(text) => handleChangeText(text)}
-            />
+      {roles &&
+        <View className="my-8 px-8">
+          <View className="flex flex-row items-center justify-center rounded-full bg-[#1C1C1C] px-4 py-2">
+            <TouchableOpacity className="w-[12%] flex items-start">
+              <FontAwesome6 name="magnifying-glass" size={24} color="#BEBEBE" solid />
+            </TouchableOpacity>
+            <View className="w-[78%]">
+              <TextInput
+                placeholder="Encontre o seu role"
+                className="text-white"
+                placeholderTextColor={'#BEBEBE'}
+                value={search}
+                onChangeText={(text) => handleChangeText(text)}
+              />
+            </View>
+            <TouchableOpacity className="w-[10%] flex items-end"
+              onPress={() => router.push('/searching-filters')}
+            >
+              <FontAwesome6 name="bars" size={24} color="#BEBEBE" solid />
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity className="w-[10%] flex items-end"
-            onPress={() => router.push('/searching-filters')}
-          >
-            <FontAwesome6 name="bars" size={24} color="#BEBEBE" solid />
-          </TouchableOpacity>
         </View>
-      </View>
+      }
       { searchResults == undefined ?
       <View>
         <Text className="text-lg text-center font-bold text-purple-500">Nehum <Text className='font-bold'>ROLE</Text> encontrado</Text>
@@ -306,75 +308,84 @@ export default function Home() {
         </View>
         :
         <View className="flex flex-col gap-4 px-8">
-          <Text className="text-3xl font-bold text-white">Explore</Text>
-          {roles.slice(0, 5).map((role, index) => (
-            <RoleCard key={`id${role.eventId}ind${index}`} {...role} />
-          ))}
-          <View>
-            <Text className="mb-2 mt-3 text-2xl font-bold text-white">Categorias</Text>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              style={{ marginBottom: 16 }}
-            >
-              {typesRole.map((type, index) => (
-                <View key={`viewtype-${type.name}-${index}`}>
-                  <CategoryMusicalCard key={`cardtype-${type.name}-${index}`} {...type} />
-                </View>
-              ))}
-            </ScrollView>
-          </View>
-          {roles.slice(5, 10).map((role, index) => (
-            <RoleCard key={`id${role.idRole}ind${index}`} {...role} />
-          ))}
-          <View>
-            <Text className="mb-2 mt-3 text-2xl font-bold text-white">Gênero Musical</Text>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              style={{ marginBottom: 16 }}
-            >
-              {musicRole.map((music, index) => (
-                <CategoryMusicalCard key={`music-${music.name}-${index}`} {...music} />
-              ))}
-            </ScrollView>
-          </View>
-          {roles.slice(10, rolesLoaded).map((role, index) => (
-            <RoleCard key={`id${role.idRole}ind${index}`} {...role} />
-          ))}
-          <View className="mt-8 pb-8">
-            <Text className="text-center text-lg text-[#BDBDBD]">Não encontrou o que procurava?</Text>
-            <Text className="text-center text-lg text-[#BDBDBD]">
-              Utilieze os nossos <Text className="font-bold text-white">Filtros!</Text>
-            </Text>
-            <TouchableOpacity className="flex w-full justify-center rounded-2xl py-4"
-              onPress={() => router.push('/searching-filters')}
-            >
-              <LinearGradient
-                colors={gradientColors}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }} // Gradiente diagonal suave
-                style={{
-                  width: '25%',
-                  marginHorizontal: 'auto',
-
-                  paddingVertical: 6,
-                  paddingHorizontal: 8,
-                  borderRadius: 20, // Bordas arredondadas
-                  alignItems: 'center',
-
-                  shadowColor: 'rgba(156, 78, 220, 1)', // Cor da sombra
-                  shadowOffset: { width: 0, height: 7 }, // Deslocamento da sombra
-                  shadowOpacity: 1, // Opacidade da sombra
-                  shadowRadius: 11, // Raio de desfoque
-                  elevation: 10
-                }}
+          {roles ? <>
+            <Text className="text-3xl font-bold text-white">Explore</Text>
+            {roles.slice(0, 5).map((role, index) => (
+              <RoleCard key={`id${role.eventId}ind${index}`} {...role} />
+            ))}
+            <View>
+              <Text className="mb-2 mt-3 text-2xl font-bold text-white">Categorias</Text>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                style={{ marginBottom: 16 }}
               >
-                <Text className="text-lg text-white">Filtrar</Text>
-              </LinearGradient>
-            </TouchableOpacity>
-            {loadLock && <View className="flex h-1 w-full justify-center bg-transparent"></View>}
-          </View>
+                {typesRole.map((type, index) => (
+                  <View key={`viewtype-${type.name}-${index}`}>
+                    <CategoryMusicalCard key={`cardtype-${type.name}-${index}`} {...type} />
+                  </View>
+                ))}
+              </ScrollView>
+            </View>
+            {roles.slice(5, 10).map((role, index) => (
+              <RoleCard key={`id${role.idRole}ind${index}`} {...role} />
+            ))}
+            <View>
+              <Text className="mb-2 mt-3 text-2xl font-bold text-white">Gênero Musical</Text>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                style={{ marginBottom: 16 }}
+              >
+                {musicRole.map((music, index) => (
+                  <CategoryMusicalCard key={`music-${music.name}-${index}`} {...music} />
+                ))}
+              </ScrollView>
+            </View>
+            {roles.slice(10, rolesLoaded).map((role, index) => (
+              <RoleCard key={`id${role.idRole}ind${index}`} {...role} />
+            ))}
+            <View className="mt-8 pb-8">
+              <Text className="text-center text-lg text-[#BDBDBD]">Não encontrou o que procurava?</Text>
+              <Text className="text-center text-lg text-[#BDBDBD]">
+                Utilieze os nossos <Text className="font-bold text-white">Filtros!</Text>
+              </Text>
+              <TouchableOpacity className="flex w-full justify-center rounded-2xl py-4"
+                onPress={() => router.push('/searching-filters')}
+              >
+                <LinearGradient
+                  colors={gradientColors}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }} // Gradiente diagonal suave
+                  style={{
+                    width: '25%',
+                    marginHorizontal: 'auto',
+
+                    paddingVertical: 6,
+                    paddingHorizontal: 8,
+                    borderRadius: 20, // Bordas arredondadas
+                    alignItems: 'center',
+
+                    shadowColor: 'rgba(156, 78, 220, 1)', // Cor da sombra
+                    shadowOffset: { width: 0, height: 7 }, // Deslocamento da sombra
+                    shadowOpacity: 1, // Opacidade da sombra
+                    shadowRadius: 11, // Raio de desfoque
+                    elevation: 10
+                  }}
+                >
+                  <Text className="text-lg text-white">Filtrar</Text>
+                </LinearGradient>
+              </TouchableOpacity>
+              {loadLock && <View className="flex h-1 w-full justify-center bg-transparent"></View>}
+            </View>
+          </>
+          :
+          <>
+            <View className='mt-12'>
+              <Text className='text-center text-purple-500 font-bold text-lg'>Estamos sem ROLES 😱</Text>
+            </View>
+          </>
+            }
         </View>
       }
     </Background>

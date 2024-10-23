@@ -10,6 +10,7 @@ import { SvgUri } from 'react-native-svg';
 import { TextInput } from 'react-native-gesture-handler';
 import RoleMainButton from '../roleMainButton';
 import Toast from 'react-native-toast-message';
+import { GradientText } from '../gradientText';
 
 const statusBarHeight = Constants.statusBarHeight;
 
@@ -21,9 +22,10 @@ interface BackgroundProps {
   lockScroll?: boolean
   function1?: any
   centralize?: boolean;
+  scrollable2?: boolean;
 }
 
-export default function Background({ children, text, scrollable, themeMode, lockScroll, function1, centralize }: BackgroundProps) {
+export default function Background({ children, text, scrollable, scrollable2, themeMode, lockScroll, function1, centralize }: BackgroundProps) {
   const [scrolled, setScrolled] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false); // Controle do modal original
   const [isSecondModalVisible, setSecondModalVisible] = useState(false); // Controle do segundo modal
@@ -37,6 +39,7 @@ export default function Background({ children, text, scrollable, themeMode, lock
   const navigation = useRouter();
   const [promoterCode, setPromoterCode] = useState(''); // Estado para armazenar o código do promoter
   const [buttonText, setButtonText] = useState('Suporte um promoter');
+  const scrollRef = useRef();
 
   useEffect(() => {
     if (scrolled) {
@@ -119,7 +122,7 @@ export default function Background({ children, text, scrollable, themeMode, lock
         navigation.push('/sign-in'); // Redireciona para a tela de login
         return;
       }
-      
+
       setModalVisible(false); // Fecha o primeiro modal
       setSecondModalVisible(true); // Abre o segundo modal
       setPromoterCode(inputValue); // Armazena o valor do inputValue
@@ -178,9 +181,9 @@ export default function Background({ children, text, scrollable, themeMode, lock
       start={{ x: 0.1, y: 0.1 }}
       end={{ x: 1, y: 1 }}
     >
-      <Toast/>
+      <Toast />
       <View style={{ marginTop: statusBarHeight }} className="flex h-full w-full flex-col justify-between">
-        <View style={{ flexDirection: 'row', alignItems: centralize ? 'center' : 'start', justifyContent: centralize ? 'center' : 'left', marginTop: 32, paddingHorizontal: 20 }}>
+        <View className='flex flex-rwo items-center' style={{ flexDirection: 'row', justifyContent: centralize ? 'center' : 'flex-start', marginTop: 32, paddingHorizontal: 20 }}>
           <Animated.View style={{ transform: [{ translateX: slideAnim }] }}>
             <Image style={{ width: 140, height: 70 }} source={require('../../../assets/images/ROLE.png')} />
           </Animated.View>
@@ -198,8 +201,8 @@ export default function Background({ children, text, scrollable, themeMode, lock
                   }
                 }} // Abre o modal ao clicar
               >
-                <Entypo name="rocket" size={24} color={buttonText !== 'Suporte um promoter' ? "#DFA9FD" : "#FFFFFF"} />
-                <Text className={`text-sm pt-1 ${buttonText !== 'Suporte um promoter' ? 'text-[#DFA9FD]' : 'text-white'}`}>
+                <Entypo name="rocket" size={24} color={buttonText !== 'Suporte um promoter' ? "#a855f7" : "#FFFFFF"} />
+                <Text className={`text-sm pt-1 ${buttonText !== 'Suporte um promoter' ? 'text-purple-500' : 'text-white'}`}>
                   {buttonText}
                 </Text>
               </TouchableOpacity>
@@ -213,23 +216,44 @@ export default function Background({ children, text, scrollable, themeMode, lock
             </Animated.Text>
           </Animated.View>
         )}
-        {!scrollable ? (
-          <View className="flex h-[89%] flex-col items-center rounded-t-[54px] pt-12" style={{ backgroundColor }}>
-            {children}
-          </View>
-        ) : (
-          <ScrollView
-            onScroll={handleScroll}
-            scrollEventThrottle={16}
-            className="bg-background rounded-t-[54px] pt-12 flex-grow"
-            contentContainerStyle={{ justifyContent: 'flex-start', paddingBottom: 60 }}
-            nestedScrollEnabled={true}
-            scrollEnabled={!lockScroll}
-            bounces={false}
-          >
-            {children}
-          </ScrollView>
-        )}
+
+        {scrollable2 ?
+          <>
+            <View className="flex h-[89%] flex-col items-center rounded-t-[54px] pt-5" style={{ backgroundColor }}>
+              <View className='w-full'>
+                <Text className="text-3xl text-center font-nunitoBold text-white">Pacotes</Text>
+              </View>
+              <View className="w-full mt-5">
+                <View className="border border-['#2C2B2B'] w-full"></View>
+              </View>
+              <ScrollView
+                onScroll={handleScroll}
+                scrollEventThrottle={16}
+                className="rounded-t-[54px] pt-12 flex-grow w-[100%]"
+                contentContainerStyle={{ justifyContent: 'flex-start', paddingBottom: 60 }}
+                nestedScrollEnabled={true}
+              >
+                {children}
+              </ScrollView>
+            </View>
+          </>
+          :
+          !scrollable ? (
+            <View className="flex h-[89%] flex-col items-center rounded-t-[54px] pt-12" style={{ backgroundColor }}>
+              {children}
+            </View>
+          ) : (
+            <ScrollView
+              onScroll={handleScroll}
+              scrollEventThrottle={16}
+              className="bg-background rounded-t-[54px] pt-12 flex-grow"
+              contentContainerStyle={{ justifyContent: 'flex-start', paddingBottom: 60 }}
+              nestedScrollEnabled={true}
+              scrollEnabled={!lockScroll}
+            >
+              {children}
+            </ScrollView>
+          )}
 
         {/* Modal original */}
 
@@ -256,9 +280,12 @@ export default function Background({ children, text, scrollable, themeMode, lock
                       height={20}
                     />
                   </TouchableOpacity>
-                  <Text adjustsFontSizeToFit className="text-white text-2xl text-center">
-                    Indique um <Text className="text-[#DFA9FD]">Promoter</Text>
-                  </Text>
+                  <View className="flex-row justify-center items-center">
+                    <Text className="text-white text-2xl">
+                      Indique um
+                    </Text>
+                    <GradientText className="text-2xl mt-2"> Promoter</GradientText>
+                </View>
                 </View>
                 <Text className="text-[#BDBDBD] text-center mt-10 text-base max-w-[265px] mx-auto">
                   Alguém te convidou para o ROLE? Digite o código da pessoa que te chamou para conhecer o paraíso dos ROLEs!
@@ -304,15 +331,20 @@ export default function Background({ children, text, scrollable, themeMode, lock
                     height={20}
                   />
                 </TouchableOpacity>
-                <Text className="text-white text-2xl text-center">
-                  Indique um <Text className="text-[#DFA9FD]">Promoter</Text>
-                </Text>
+                <View className="flex-row justify-center items-center">
+                  <Text className="text-white text-2xl">
+                    Indique um
+                  </Text>
+                  <GradientText className="text-2xl mt-2"> Promoter</GradientText>
+                </View>
               </View>
               <Text className='text-[#BDBDBD] text-base text-center mt-14'>Você está apoiando:</Text>
               <View className='justify-center items-center mt-6'>
                 <View className='bg-[#1C1C1C] w-[330px] items-center h-10 rounded-2xl justify-center flex flex-row gap-1'>
-                  <Entypo name="rocket" size={22} color="#DFA9FD" />
-                  <Text className='text-[#DFA9FD]'>{promoterCode}</Text>
+                  <GradientText className='py-2 pr-1'>
+                    <Entypo name="rocket" size={22} />
+                  </GradientText>
+                  <GradientText className='py-3'>{promoterCode}</GradientText>
                 </View>
               </View>
               <Text className='text-[#B4B4B4] text-xs ml-8 mt-1'>*Este código ficará salvo por 1 mês após sua ativação.</Text>
@@ -320,7 +352,7 @@ export default function Background({ children, text, scrollable, themeMode, lock
                 <RoleMainButton type={''} buttonFunction={handleRemovePromoter}>
                   <Text className='text-white'>Remover Promoter</Text>
                 </RoleMainButton>
-              </View> 
+              </View>
             </View>
           </View>
         </Modal>

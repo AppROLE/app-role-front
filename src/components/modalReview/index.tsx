@@ -32,7 +32,8 @@ export default function ModalReview({ visible, onClose }: ModalReviewProps) {
 
     async function create() {
         const data: createReviewRequestDTO = {
-            eventId: await AsyncStorage.getItem('eventId') ?? '',
+            // eventId: await AsyncStorage.getItem('eventId') ?? '',
+            eventId: "d942a349-f74a-4d94-b591-ffb1fd143ad8",
             reviewedAt: new Date().getTime(),
             star: selectedStars,
             review: reviewText,

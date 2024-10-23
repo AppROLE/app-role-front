@@ -13,16 +13,16 @@ interface ModalReviewProps {
 
 export default function ModalReviewList({ visible, onClose }: ModalReviewProps) {
     const { getAllReviewsByEvent } = useContext(ReviewContext);
-    const [review, setReview] = useState<(Reviews)[]>([]);
+    const [review, setReview] = useState<Reviews[]>([]);
 
 
     async function fetchGetReviews() {
         try {
             const eventId = "d942a349-f74a-4d94-b591-ffb1fd143ad8";
             const response = await getAllReviewsByEvent(eventId);
-            console.log("RESPOSTA DO GET REVIEWS ", response);
+            console.log("RESPOSTA DO GET ALL REVIEWS ", response);
             if (response) {
-                setReview(response.reviews || []); // Garantir que seja um array
+                setReview(response.reviews); 
                 return response;
             }
         } catch (error: any) {
@@ -40,11 +40,11 @@ export default function ModalReviewList({ visible, onClose }: ModalReviewProps) 
         <Modal
             transparent={true}
             visible={visible}
-            animationType="slide"
+            animationType="fade"
             onRequestClose={onClose}
         >
             <View className="flex-1 justify-end items-center bg-black/70">
-                <View className="flex-end bg-background rounded-t-3xl p-3 h-[80%] w-full">
+                <View className="flex-end bg-background rounded-t-[50px] p-3 h-[695px] w-full">
                     <View className="relative flex flex-row h-24 w-full items-center gap-3 mb-3">
                         <TouchableOpacity
                             onPress={onClose}
@@ -55,7 +55,7 @@ export default function ModalReviewList({ visible, onClose }: ModalReviewProps) 
                             />
                         </TouchableOpacity>
                         <View className="flex-1 justify-center">
-                            <Text className="absolute left-1/2 transform -translate-x-1/2 text-white text-3xl font-bold">
+                            <Text className="absolute left-1/2 transform -translate-x-1/2 text-white text-3xl font-nunitoBold">
                                 Reviews
                             </Text>
                         </View>

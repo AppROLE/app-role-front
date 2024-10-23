@@ -75,12 +75,12 @@ export default function Delete() {
                                     fill={themeModeS === 'dark' ? '#FFFFFF' : '#000000'}
                                 />
                             </TouchableOpacity>
-                            <Text className="text-white text-3xl ml-20">Excluir Conta</Text>
+                            <Text className="text-white text-3xl font-nunitoBold ml-20">Excluir Conta</Text>
                         </View>
 
                         <View>
                             <View className={`mt-6 h-[1px] w-full ${themeModeS === 'dark' ? 'bg-[#615b5b]' : 'bg-[#D0D0D0]'}`} />
-                            <Text className="text-white text-xl py-8 px-10 text-center">
+                            <Text className="text-white text-xl font-nunito py-8 px-10 text-center">
                                 Atenção! O ROLE irá excluir todas as informações de sua conta e removê-lá de nosso banco de dados.
                                 Você tem certeza que deseja continuar?
                             </Text>
@@ -116,6 +116,7 @@ export default function Delete() {
                                         color: themeModeS === 'dark' ? '#BDBDBD' : '#000000', // Estilo condicional aplicado aqui
                                         width: 300,
                                     }}
+                                    className="font-nunito"
                                 >
                                     Estou ciente que está ação é irreversível e quero excluir minha conta.
                                 </Text>

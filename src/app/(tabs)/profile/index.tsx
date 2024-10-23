@@ -3,39 +3,30 @@ import { View, Text, Image, TouchableOpacity, Linking, Alert } from "react-nativ
 import { SvgUri } from "react-native-svg";
 import MenuHamburguer from "@/src/components/menuHamburguer";
 import RoleMainButton from "@/src/components/roleMainButton";
-import { useRouter } from "expo-router";
-import { UserRepositoryHttp } from "@/api/repositories/user_repository_http"; // ajuste o caminho conforme necessário
+import { useRouter } from "expo-router"; // ajuste o caminho conforme necessário
 import RoleCard from "@/src/components/roleCard";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { PresenceContext } from "@/context/presence_context";
 import { Events } from "@/api/types/presence_dto";
+import { UserContext } from "@/context/user_context";
+import { getProfileResponseDTO } from "@/api/types/user_dto";
 
 export default function Profile() {
   const navigation = useRouter();
-
+  const [roles, setRoles] = useState<Events[]>([]);
+  const { getAllConfirmedEvents } = useContext(PresenceContext);
+  const { getProfile } = useContext(UserContext);
   // Instanciar a classe UserRepositoryHttp
-  const userRepository = new UserRepositoryHttp();
+  
 
   // Estados para armazenar os dados do perfil
-  const [profileData, setProfileData] = useState({
-    user_id: '',
-    nickname: '',
-    username: '',
-    biography: '',
-    profilePhoto: '',
-    backgroundPhoto: '',
-    linkInstagram: '',
-    linkTiktok: '',
-    followers: 0,
-    following: 0
-  });
+  const [profileData, setProfileData] = useState<getProfileResponseDTO>();
 
   // Função para buscar o perfil
   async function fetchProfile() {
     try {
-      const profile = await userRepository.getProfile();
-      if (profile) {
-        setProfileData(profile);
+      const response = await getProfile();
+      if (response) {
+        setProfileData(response);
       }
     } catch (error) {
       console.error("Erro ao buscar perfil:", error);
@@ -63,9 +54,6 @@ export default function Profile() {
     }
   }
 
-  const [roles, setRoles] = useState<Events[] | undefined>([]);
-  const { getAllConfirmedEvents } = useContext(PresenceContext);
-
   async function fetchRoles() {
     const response = await getAllConfirmedEvents();
     console.log('RESPOSTA DA GET ALL ROLES', response);
@@ -82,28 +70,28 @@ export default function Profile() {
   return (
     <View className="bg-[#999999] h-full">
       <Image
-        source={{ uri: profileData.backgroundPhoto || process.env.EXPO_PUBLIC_URL_S3 + '/images/background_default.png' }}
+        source={{ uri: profileData?.backgroundPhoto || process.env.EXPO_PUBLIC_URL_S3 + '/images/background_default.png' }}
         className="h-[215px] w-full" />
       <MenuHamburguer />
       <View className="absolute bottom-0 bg-[#121212] h-[75%] w-full flex flex-col items-center rounded-t-[54px] pt-12">
         <View className="absolute -top-10 bg-[#121212] w-28 h-28 rounded-full overflow-hidden items-center justify-center">
           <Image
-            source={{ uri: profileData.profilePhoto || process.env.EXPO_PUBLIC_URL_S3 + '/images/profile_default.png' }}
+            source={{ uri: profileData?.profilePhoto || process.env.EXPO_PUBLIC_URL_S3 + '/images/profile_default.png' }}
             className="rounded-full w-[85%] h-[85%]"
           />
         </View>
-        <View className="absolute left-8 top-0 m-4 items-center">
-          <Text className="text-white text-2xl">{profileData.followers}</Text>
+        <TouchableOpacity className="absolute left-8 top-0 m-4 items-center">
+          <Text className="text-white text-2xl">{profileData?.followers}</Text>
           <Text className="text-white text-lg">Seguidores</Text>
-        </View>
-        <View className="absolute right-8 top-0 m-4 items-center">
-          <Text className="text-white text-2xl">{profileData.following}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity className="absolute right-8 top-0 m-4 items-center">
+          <Text className="text-white text-2xl">{profileData?.following}</Text>
           <Text className="text-white text-lg">Seguindo</Text>
-        </View>
+        </TouchableOpacity>
         <View className="">
-          <Text className="text-white text-center text-3xl mt-10">{profileData.nickname}</Text>
-          <Text className="text-[#BDBDBD] mt-1 text-center">@{profileData.username}</Text>
-          <Text className="text-center text-[#BDBDBD] mt-8 w-72">{profileData.biography}</Text>
+          <Text className="text-white text-center text-3xl mt-10">{profileData?.nickname}</Text>
+          <Text className="text-[#BDBDBD] mt-1 text-center">@{profileData?.username}</Text>
+          <Text className="text-center text-[#BDBDBD] mt-8 w-72">{profileData?.biography}</Text>
         </View>
         <View className="flex-row space-x-4 mt-8 gap-5 justify-center items-center">
           <RoleMainButton type="simple" buttonFunction={handleEditProfile}>
@@ -115,12 +103,12 @@ export default function Profile() {
             <Text className="text-white">Editar Perfil</Text>
           </RoleMainButton>
           {/* Renderizar botões de redes sociais apenas se os links estiverem presentes */}
-          { (profileData.linkTiktok || profileData.linkInstagram) && (
+          { (profileData?.linkTiktok || profileData?.linkInstagram) && (
             <View
               className="bg-[#1C1C1C] flex flex-row gap-6"
               style={{ paddingVertical: 8, paddingHorizontal: 30, borderRadius: 20 }}>
               {profileData.linkTiktok && (
-                <TouchableOpacity onPress={() => openLink(profileData.linkTiktok)}>
+                <TouchableOpacity onPress={() => openLink(profileData?.linkTiktok ?? '')}>
                   <SvgUri
                     uri={process.env.EXPO_PUBLIC_URL_S3 + '/tiktok.svg'}
                     width={30}
@@ -129,7 +117,7 @@ export default function Profile() {
                 </TouchableOpacity>
               )}
               {profileData.linkInstagram && (
-                <TouchableOpacity className="top-[2px]" onPress={() => openLink(profileData.linkInstagram)}>
+                <TouchableOpacity className="top-[2px]" onPress={() => openLink(profileData?.linkInstagram ?? '')}>
                   <SvgUri
                     uri={process.env.EXPO_PUBLIC_URL_S3 + '/instagram.svg'}
                     width={26}

@@ -221,10 +221,6 @@ export default function institutionScreen({instituteId}: intutionScreenProps) {
   const [instituteA, setInstituteA] = useState<getInstituteByIdResponseDTO>()
   const { updateFavoriteInstitute, getInstituteById } = useContext(InstituteContext)
 
-  async function updateInstitute() { 
-    const response = await updateFavoriteInstitute(instituteId)
-    console.log('RESPOSTA DA UPDATE', response)
-  }
 
   async function getInstitute() { 
     const instituteIde = '2f3073ac-3633-4fc7-9cfe-c2084399bbc3'
@@ -239,10 +235,11 @@ export default function institutionScreen({instituteId}: intutionScreenProps) {
   useEffect(() => { 
     getInstitute()
   }, [])
+
   return (
     <Background scrollable lockScroll={scrollDisabled} function1={loadMoreRoles}>
       <View className="flex w-full flex-col items-center justify-center">
-        <SocialCard title={instituteA?.name} image={instituteA?.logo_photo} bookMarkerFunction={updateInstitute}/>
+        <SocialCard title={instituteA?.name} image={instituteA?.logo_photo}/>
         <View className="flex w-full flex-col items-center justify-center border-b-2 border-[#1c1c1c] pb-6">
           <View className="mt-6 flex w-[90%] flex-row items-center">
             <TouchableOpacity
@@ -252,7 +249,7 @@ export default function institutionScreen({instituteId}: intutionScreenProps) {
               <FontAwesome6 name="arrow-left" size={18} color="white" />
             </TouchableOpacity>
             <View className="w-68 flex flex-col pr-4">
-              <Text className="text-wrap text-sm text-white">{institute.descriptions}</Text>
+              <Text className="text-wrap font-nunito text-sm text-white">{institute.descriptions}</Text>
             </View>
           </View>
         </View>

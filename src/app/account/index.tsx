@@ -82,7 +82,7 @@ export default function Account() {
                 uri={process.env.EXPO_PUBLIC_URL_S3 + "/left_arrow.svg"}
             />
           </TouchableOpacity>
-          <View className="flex-1 h-full mb-8">
+          <View className="flex-1 h-full mb-8 justify-center">
             <Text className="absolute left-1/2 transform -translate-x-1/2 text-white text-3xl font-nunitoBold">
               Conta
             </Text>

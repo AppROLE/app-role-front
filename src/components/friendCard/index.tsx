@@ -20,7 +20,7 @@ export default function FriendCard({image, nickname, user} : FriendCardProps) {
                     className="rounded-full"
                 />
                 <View>
-                    <Text className="text-2xl font-bold text-white flex-1 line-clamp-1">{nickname}</Text>
+                    <Text className="text-2xl font-bold text-white flex-1 line-clamp-1 pb-2">{nickname}</Text>
                     <Text className="text-md flex-1 line-clamp-1 text-sub_text">@{user}</Text>
                 </View>
 
