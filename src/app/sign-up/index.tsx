@@ -135,12 +135,12 @@ export default function SignUp() {
   }
 
   function handleUserChange(text: string) {
-    setUser(text)
+    setUser(text.trimStart())
     if (userError) setUserError('') // Reseta o erro ao digitar
   }
 
   function handleEmailChange(text: string) {
-    setEmail(text)
+    setEmail(text.trimStart())
     if (emailError) setEmailError('') // Reseta o erro ao digitar
   }
 
