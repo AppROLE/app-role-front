@@ -14,11 +14,13 @@ import { AuthContext } from "@/context/auth_context";
 export default function FollowUser() {
   const navigation = useRouter();
   const [roles, setRoles] = useState<Events[]>([]);
-  const { getAllConfirmedEvents } = useContext(PresenceContext);
+  const { getAllConfirmedEventsByUserToFollow } = useContext(PresenceContext);
   const { getProfileToFollow } = useContext(UserContext);
   const { followUser } = useContext(AuthContext);
   // Instanciar a classe UserRepositoryHttp
-  
+
+  const [follow, setFollow] = useState<'FRIENDS' | 'NOT_FOLLOWING' | 'FOLLOWING'>('NOT_FOLLOWING');
+
 
   // Estados para armazenar os dados do perfil
   const [profileData, setProfileData] = useState<getProfileToFollowResponseDTO>();
@@ -48,7 +50,7 @@ export default function FollowUser() {
     } catch (error: any) {
       throw new Error()
     }
-   }
+  }
 
   function handleProcurar() {
     navigation.push('/home');
@@ -67,7 +69,8 @@ export default function FollowUser() {
   }
 
   async function fetchRoles() {
-    const response = await getAllConfirmedEvents();
+    const personUsername = 'titans69'
+    const response = await getAllConfirmedEventsByUserToFollow(personUsername);
     console.log('RESPOSTA DA GET ALL ROLES', response);
     if (response) {
       setRoles(response.events);
@@ -106,13 +109,29 @@ export default function FollowUser() {
           <Text className="text-center text-[#BDBDBD] mt-8 w-72">{profileData?.biography}</Text>
         </View>
         <View className="flex-row space-x-4 mt-8 gap-5 justify-center items-center w-full">
-          <View className="w-[30%]">
-            <RoleMainButton type="following" buttonFunction={handleFollow}>
-              <Text className="text-white">Seguir</Text>
-            </RoleMainButton>
-          </View>
+          {follow.some(f => f.status === 'FOLLOWING') && (
+            <View className="w-[31%]">
+              <RoleMainButton type="following" buttonFunction={handleFollow}>
+                <Text className="text-white">Seguindo</Text>
+              </RoleMainButton>
+            </View>
+          )}
+          {follow.some(f => f.status === 'NOT_FOLLOWING') && (
+            <View className="w-[30%]">
+              <RoleMainButton type="gradient" buttonFunction={handleFollow}>
+                <Text className="text-white">Seguir</Text>
+              </RoleMainButton>
+            </View>
+          )}
+          {follow.some(f => f.status === 'FRIENDS') && (
+            <View className="w-[30%]">
+              <RoleMainButton type="friends" buttonFunction={handleFollow}>
+                <Text className="text-white">Amigos</Text>
+              </RoleMainButton>
+            </View>
+          )}
           {/* Renderizar botões de redes sociais apenas se os links estiverem presentes */}
-          { (profileData?.linkTiktok || profileData?.linkInstagram) && (
+          {(profileData?.linkTiktok || profileData?.linkInstagram) && (
             <View
               className="bg-[#1C1C1C] flex flex-row gap-6"
               style={{ paddingVertical: 8, paddingHorizontal: 30, borderRadius: 20 }}>
