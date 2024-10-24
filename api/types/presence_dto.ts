@@ -52,3 +52,8 @@ export type getAllConfirmedEventsResponseDTO = {
     events: Events[];
     message: string;
 }
+
+export type getAllConfirmedEventsByUserToFollowResponseDTO = { 
+    events: Events[];
+    message: string;
+}
