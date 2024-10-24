@@ -1,7 +1,9 @@
 import { Reviews } from "@/api/types/review_dto";
 import { EventContext } from "@/context/event_context";
 import { InstituteContext } from "@/context/institute_context";
+import { PresenceContext } from "@/context/presence_context";
 import { ReviewContext } from "@/context/review_context";
+import { UserContext } from "@/context/user_context";
 import ComfirmedListModal from "@/src/components/comfirmedListModal";
 import ModalListaConfirmados from "@/src/components/modalListaConfirmados";
 import ModalReview from "@/src/components/modalReview";
@@ -188,12 +190,53 @@ export default function EventDescription(eventId: string) {
         }
     }
 
+    const [profilePhoto, setProfilePhoto] = useState<string | undefined>();
+    const { confirmEvent } = useContext(PresenceContext);
+    const {getProfile} = useContext(UserContext);
+    
+    async function fetchGetProfile() {
+        try {
+            const response = await getProfile();
+            if (response) {
+                setProfilePhoto(response.profilePhoto);
+                return response;
+            }
+        } catch (error: any) {
+            console.error("Erro ao buscar perfil: ", error);
+            throw new Error("Erro ao buscar perfil: ", error);
+        }
+    }
+
+    async function fetchConfirmEvent() {
+        try {
+            const promoterCode = await AsyncStorage.getItem('promoterCode') || '';
+            const eventIde = "50a7a9cb-ac7b-4c97-b987-47113ecbaf2b";
+
+            if (profilePhoto === "") {
+                setProfilePhoto(process.env.EXPO_PUBLIC_URL_S3 + "/images/profile_default.png");
+            }
+            const response = await confirmEvent(eventIde, profilePhoto, promoterCode);
+            console.log("RESPOSTA DA CONFIRM EVENT ", response);
+            if (response) {
+                return response;
+            }
+        } catch (error: any) {
+            console.error("Erro ao confirmar presença: ", error);
+            throw new Error("Erro ao confirmar presença: ", error);
+        }
+
+    }
+
     useEffect(() => {
         getInfosEvent();
     }, []);
 
     useEffect(() => {
         getInstituteEvent();
+    }, []);
+
+    useEffect(() => {
+        fetchGetProfile();
     }, []);
 
     useEffect(() => {
@@ -270,16 +313,16 @@ export default function EventDescription(eventId: string) {
                 <View className="flex flex-row justify-between">
                     <View className="flex flex-col gap-2 w-1/2">
                         <View>
-                            <Text className="text-white text-2xl font-bold">Detalhes</Text>
+                            <Text className="text-white text-2xl font-nunitoBold">Detalhes</Text>
                         </View>
                         <View className="flex flex-row gap-2 items-center bg-[#1C1C1C] rounded-full px-2 py-1 self-start">
                             <FontAwesome name="question" size={20} color="white" />
-                            <Text className="text-[#BDBDBD] text-base">{category}</Text>
+                            <Text className="text-[#BDBDBD] text-base font-nunito">{category}</Text>
                         </View>
                         <View className="flex flex-row gap-2 items-center bg-[#1C1C1C] rounded-full px-2 py-1 self-start">
                             <FontAwesome name="question" size={20} color="white" />
                             <Text className="text-[#BDBDBD] text-base">
-                                <Text className="text-purple-500">{price}</Text>
+                                <Text className="text-purple-500 font-nunito">{price}</Text>
                                 {blanckPrice}
                             </Text>
                         </View>
@@ -287,22 +330,22 @@ export default function EventDescription(eventId: string) {
                             {musicsTypes ? musicsTypes.map((type, index) => (
                                 <View key={`viewtype-${type}-${index}`} className="flex flex-row gap-2 items-center bg-[#1C1C1C] rounded-full px-2 py-1 self-start">
                                     <FontAwesome name="question" size={20} color="white" />
-                                    <Text className="text-[#BDBDBD] text-base">{type}</Text>
+                                    <Text className="text-[#BDBDBD] font-nunito text-base">{type}</Text>
                                 </View>
                             )) : (
                                 <View key={`viewtype-`} className="flex flex-row gap-2 items-center bg-[#1C1C1C] rounded-full px-2 py-1 self-start">
                                     <FontAwesome name="question" size={20} color="white" />
-                                    <Text className="text-[#BDBDBD] text-base">Não Definido</Text>
+                                    <Text className="text-[#BDBDBD] font-nunito text-base">Não Definido</Text>
                                 </View>
                             )}
                         </View>
                         <View className="flex flex-row gap-2 items-center bg-[#1C1C1C] rounded-full px-2 py-1 self-start">
                             <FontAwesome name="star" size={20} color="white" />
-                            <Text className="text-[#BDBDBD] text-base">{roleStars}</Text>
+                            <Text className="text-[#BDBDBD] text-base font-nunito">{roleStars}</Text>
                         </View>
                         <View className="flex flex-row gap-2 items-center bg-[#1C1C1C] rounded-full px-2 py-1 self-start">
                             <FontAwesome name="question" size={20} color="white" />
-                            <Text className="text-[#BDBDBD] text-base">{ageRange}</Text>
+                            <Text className="text-[#BDBDBD] text-base font-nunito">{ageRange}</Text>
                         </View>
                     </View>
                     <View className="flex flex-col gap-4 w-1/2 items-end">
@@ -315,7 +358,7 @@ export default function EventDescription(eventId: string) {
                                                 <Image source={{ uri: person.image }} style={{ width: '100%', height: '100%', borderRadius: 9999 }} />
                                             </TouchableOpacity>
                                             <TouchableOpacity onPress={() => setModalList(true)}>
-                                                <Text className="text-purple-500 text-lg">Lista de confirmados</Text>
+                                                <Text className="text-purple-500 text-lg font-nunitoBold">Lista de confirmados</Text>
                                             </TouchableOpacity>
                                         </>
                                     ))
@@ -336,7 +379,7 @@ export default function EventDescription(eventId: string) {
                                                 </TouchableOpacity>
                                             </View>
                                             <TouchableOpacity onPress={() => setModalList(true)}>
-                                                <Text className="text-purple-500 text-sm">Lista de confirmados</Text>
+                                                <Text className="text-purple-500 font-nunitoBold text-sm">Lista de confirmados</Text>
                                             </TouchableOpacity>
                                         </View>
                                     )}
@@ -345,15 +388,15 @@ export default function EventDescription(eventId: string) {
                         <View className="w-36 py-3 bg-[#1C1C1C] rounded-xl items-center">
                             <View className="flex flex-row gap-2">
                                 <FontAwesome name="calendar" size={24} color="white" />
-                                <Text className="text-white text-lg">{date}</Text>
+                                <Text className="text-white text-lg font-nunito">{date}</Text>
                             </View>
                             <View>
-                                <Text className="text-white text-lg">{weekDay}</Text>
+                                <Text className="text-white text-lg font-nunito">{weekDay}</Text>
                             </View>
                         </View>
                         <View className="flex flex-row gap-2 bg-[#1C1C1C] justify-center w-36 py-3 rounded-xl">
                             <FontAwesome name="clock-o" size={24} color="white" />
-                            <Text className="text-white text-lg">{hour}</Text>
+                            <Text className="text-white text-lg font-nunito">{hour}</Text>
                         </View>
                     </View>
                     <ComfirmedListModal
@@ -364,27 +407,27 @@ export default function EventDescription(eventId: string) {
                 </View>
                 {/* Description */}
                 <View>
-                    <Text className="text-white text-2xl font-bold mt-8">Descrição</Text>
+                    <Text className="text-white text-2xl font-bold mt-8 font-nunitoBold">Descrição</Text>
                     <Text className={`text-white text-base mt-2 ${descriptionHeight ? '' : 'max-h-[200px]'}`}>
                         {description}
                     </Text>
                     {description.length > 200 && (
                         <TouchableOpacity className="mt-4" onPress={() => setDescriptionHeight(!descriptionHeight)}>
-                            <Text className="text-purple-500 text-base text-center">{descriptionHeight ? 'Ler menos' : 'Ler mais'}</Text>
+                            <Text className="text-purple-500 text-base font-nunito text-center">{descriptionHeight ? 'Ler menos' : 'Ler mais'}</Text>
                         </TouchableOpacity>
                     )}
                 </View>
                 {/* Adress */}
                 <View className="mt-8">
-                    <Text className="text-white text-2xl font-bold">Endereço</Text>
+                    <Text className="text-white text-2xl font-nunitoBold">Endereço</Text>
                     <View className="flex flex-row gap-2 mt-2">
                         <></>
                     </View>
-                    <Text className="text-white text-base">{address}</Text>
+                    <Text className="text-white text-base font-nunito">{address}</Text>
                 </View>
                 {/* Features */}
                 <View className="mt-8">
-                    <Text className="text-white text-2xl font-bold">Features</Text>
+                    <Text className="text-white text-2xl font-nunitoBold">Features</Text>
                     <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 16, marginTop: 8 }}>
                         {features.map((type, index) => (
                             <View key={`viewtype-${type}-${index}`} className="mx-2">
@@ -401,7 +444,7 @@ export default function EventDescription(eventId: string) {
                                                                         type == 'AFTER' ? 'question' : 'question'
                                     }
                                         size={20} color="purple" />
-                                    <Text className="text-purple-500 text-base">{type}</Text>
+                                    <Text className="text-purple-500 text-base font-nunito">{type}</Text>
                                 </View>
                             </View>
                         ))}
@@ -409,18 +452,18 @@ export default function EventDescription(eventId: string) {
                 </View>
                 {/* Menu */}
                 <View className="mt-8">
-                    <Text className="text-white text-2xl font-bold mb-2">Cardápio</Text>
+                    <Text className="text-white text-2xl font-nunitoBold mb-2">Cardápio</Text>
                     <TouchableOpacity className="flex flex-row bg-[#1C1C1C] items-center justify-center gap-2 py-2 rounded-lg" onPress={() => {
                         openURL(menuLink)
                     }}>
-                        <Text className="text-[#BDBDBD] text-lg mt-2" style={{ lineHeight: 16 }}>Acesse o cadápio digital</Text>
+                        <Text className="text-[#BDBDBD] text-lg mt-2 font-nunito" style={{ lineHeight: 16 }}>Acesse o cadápio digital</Text>
                         <FontAwesome name="question" size={24} color="white" />
                     </TouchableOpacity>
                 </View>
                 {/* Packages */}
                 {typePartner === 'GLOBAL_PARTNER' && (
                     <View className="mt-8">
-                        <Text className="text-white text-2xl font-bold mb-2">Pacotes</Text>
+                        <Text className="text-white text-2xl font-nunitoBold mb-2">Pacotes</Text>
                         <View className="flex flex-row gap-2">
                             {packages.map((packageE, index) => (
                                 <TouchableOpacity key={`viewpackage-${index}`} className="w-[32%] h-20 bg-[#1C1C1C] rounded-xl">
@@ -433,17 +476,17 @@ export default function EventDescription(eventId: string) {
                             ))}
                         </View>
                         <TouchableOpacity className="flex flex-row bg-[#1C1C1C] items-center justify-center gap-2 py-2 rounded-lg mt-3">
-                            <Text className="text-[#BDBDBD] text-lg mt-2" style={{ lineHeight: 16 }}>Ver pacotes</Text>
+                            <Text className="text-[#BDBDBD] text-lg mt-2 font-nunito" style={{ lineHeight: 16 }}>Ver pacotes</Text>
                             <FontAwesome name="question" size={24} color="white" />
                         </TouchableOpacity>
                     </View>
                 )}
                 {/* Gallery */}
                 <View className="mt-8">
-                    <Text className="text-white text-2xl font-bold mb-2">Galeria</Text>
+                    <Text className="text-white text-2xl font-nunitoBold mb-2">Galeria</Text>
                     <View className="mt-2 flex flex-row gap-2">
                         {gallery.length === 0 ? (
-                            <Text className="text-white text-base">Nenhuma imagem disponível</Text>
+                            <Text className="text-white text-base font-nunito">Nenhuma imagem disponível</Text>
                         ) : gallery.length < 5 ? (
                             gallery.map((image, index) => (
                                 <TouchableOpacity key={`viewimage-${image.id}-${index}`} className="w-[5.6em] h-36 bg-[#1C1C1C] rounded-xl"
@@ -481,7 +524,7 @@ export default function EventDescription(eventId: string) {
                     <Text className="text-white text-2xl font-nunitoBold mt-8">Reviews</Text>
                     <View>
                         {reviews.length === 0 ? (
-                            <Text className="text-white text-base text-center mt-2">Nenhuma avaliação disponível</Text>
+                            <Text className="text-white text-base text-center font-nunito mt-2">Nenhuma avaliação disponível</Text>
                         ) :
                             showAllReviews ? (
                                 reviews.map((review, index) => (
@@ -529,8 +572,8 @@ export default function EventDescription(eventId: string) {
                                                         <Image source={{ uri: review['photoUrl'] }} style={{ width: '100%', height: '100%', borderRadius: 9999 }} />
                                                     </View>
                                                     <View className="h-full flex flex-col">
-                                                        <Text className="text-white text-lg font-bold" style={{ lineHeight: 18 }}>{review['name']}</Text>
-                                                        <Text className="text-[#BDBDBD] text-sm" style={{ lineHeight: 14 }}>@{review['username']}</Text>
+                                                        <Text className="text-white text-lg font-nunitoBold" style={{ lineHeight: 18 }}>{review['name']}</Text>
+                                                        <Text className="text-[#BDBDBD] text-sm font-nunitoBold" style={{ lineHeight: 14 }}>@{review['username']}</Text>
                                                     </View>
                                                 </View>
                                                 <View className="flex flex-row gap-1 items-start w-2/5 justify-end">
@@ -553,7 +596,7 @@ export default function EventDescription(eventId: string) {
                                                 </View>
                                             </View>
                                             <View className="flex flex-col">
-                                                <Text className="text-[#BDBDBD] text-xs text-center">{review['review']}</Text>
+                                                <Text className="text-[#BDBDBD] text-xs font-nunito text-center">{review['review']}</Text>
                                             </View>
                                         </View>
                                     ))
@@ -579,7 +622,7 @@ export default function EventDescription(eventId: string) {
                                 ))}
                             </View>
                             <View className="w-px h-6 bg-white mx-3"></View>
-                            <Text className="text-sm text-white">
+                            <Text className="text-sm text-white font-nunito">
                                 Deixe sua Avaliação
                             </Text>
                         </TouchableOpacity>
@@ -596,6 +639,7 @@ export default function EventDescription(eventId: string) {
                     disabled={buttonCondition}
                     className="drop-shadow-2xl shadow-[#9C4EDC4D] text-white text-[16px] w-10/12 self-center p-0"
                     activeOpacity={0.9}
+                    onPress={fetchConfirmEvent}
                 >
                     <LinearGradient
                         colors={gradientColors}
@@ -612,7 +656,7 @@ export default function EventDescription(eventId: string) {
                             elevation: 10,
                         }}
                     >
-                        <Text className="text-center text-white">{typePartner === 'GLOBAL_PARTNER' ? 'CONFIRMAR ROLE' : typePartner === 'PROMOTER_PARTNER' ? 'POR NOME NA LISTA' : 'EU VOU'}</Text>
+                        <Text className="font-nunito text-center text-white">{typePartner === 'GLOBAL_PARTNER' ? 'CONFIRMAR ROLE' : typePartner === 'PROMOTER_PARTNER' ? 'POR NOME NA LISTA' : 'EU VOU'}</Text>
                     </LinearGradient>
                 </TouchableOpacity>
             </View>
