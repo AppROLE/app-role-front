@@ -1,5 +1,5 @@
 import { PresenceRepositoryHttp } from "@/api/repositories/presence_repository_http"
-import { confirmEventResponseDTO, getAllConfirmedEventsResponseDTO, getAllConfirmedUsersResponseDTO } from "@/api/types/presence_dto"
+import { confirmEventResponseDTO, getAllConfirmedEventsByUserToFollowResponseDTO, getAllConfirmedEventsResponseDTO, getAllConfirmedUsersResponseDTO } from "@/api/types/presence_dto"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { createContext } from "react"
 import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry"
@@ -9,6 +9,7 @@ type PresenceContextType = {
     getAllPresence: (eventId: string) => Promise<getAllConfirmedUsersResponseDTO>
     confirmEvent: (eventId: string, profilePhoto?: string, promoterCode?: string) => Promise<confirmEventResponseDTO>
     getAllConfirmedEvents: () => Promise<getAllConfirmedEventsResponseDTO>
+    getAllConfirmedEventsByUserToFollow: (personUsername: string) => Promise<getAllConfirmedEventsByUserToFollowResponseDTO>
 }
 
 const defaultPresenceContext = { 
@@ -24,6 +25,12 @@ const defaultPresenceContext = {
         }
     },
     getAllConfirmedEvents: async () => {
+        return {
+            events: [],
+            message: ''
+        }
+    }, 
+    getAllConfirmedEventsByUserToFollow: async (_personUsername: string) => {
         return {
             events: [],
             message: ''
@@ -64,8 +71,17 @@ export function PresenceContextProvider({ children }: any) {
         }
     }
 
+    async function getAllConfirmedEventsByUserToFollow(personUsername: string) { 
+        try {
+            const response = await presenceRepository.getAllConfirmedEventsByUserToFollow(personUsername)
+            return response
+        } catch (error: any) { 
+            return error
+        }
+    }
+
     return (
-        <PresenceContext.Provider value={{ getAllPresence, confirmEvent, getAllConfirmedEvents }}>
+        <PresenceContext.Provider value={{ getAllPresence, confirmEvent, getAllConfirmedEvents, getAllConfirmedEventsByUserToFollow }}>
             {children}
         </PresenceContext.Provider>
     )
