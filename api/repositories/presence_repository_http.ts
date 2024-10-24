@@ -1,7 +1,7 @@
 import Toast from "react-native-toast-message";
 import { http, httpEvent } from "../http";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getAllConfirmedEventsResponseDTO } from "../types/presence_dto";
+import { getAllConfirmedEventsByUserToFollowResponseDTO, getAllConfirmedEventsResponseDTO } from "../types/presence_dto";
 
 
 export class PresenceRepositoryHttp {
@@ -42,7 +42,7 @@ export class PresenceRepositoryHttp {
         }
     }
 
-    async getAllConfirmedEvents() { 
+    async getAllConfirmedEvents() {
         try {
             const idToken = await AsyncStorage.getItem('idToken') || ''
             if (idToken === '') return
@@ -55,6 +55,22 @@ export class PresenceRepositoryHttp {
             return response.data as getAllConfirmedEventsResponseDTO
         } catch (error: any) {
             // console.log("ERRO NA REQUEST", error.response.data)
+            return error.response.data.message
+        }
+    }
+
+    async getAllConfirmedEventsByUserToFollow(personUsername: string) {
+        try {
+            const idToken = await AsyncStorage.getItem('idToken') || '';
+            if (idToken) return
+            const response = await http.get(`/get-all-confirmed-events?personUsername${personUsername}`, {
+                headers: {
+                    Authorization: `Bearer ${idToken}`
+                }
+            })
+            console.log("RESPOSTA DA REQUEST ", response.data)
+            return response.data as getAllConfirmedEventsByUserToFollowResponseDTO
+        } catch (error: any) {
             return error.response.data.message
         }
     }
