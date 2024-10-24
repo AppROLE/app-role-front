@@ -107,10 +107,10 @@ export default function RoleMainButton({ children, buttonFunction, type, disable
                 </View>
             ) 
             }
-            { type === "friends" && (
+            {type === "friends" && (
                 <View 
-                className="bg-['rgba(28, 209, 79, 0.250)'] border-2 border-['rgba(28, 209, 79, 1)'] items-center flex flex-row gap-4 justify-center" 
-                style={{paddingVertical: 12, paddingHorizontal: 30, borderRadius: 20}}
+                className="bg-['#0c5822'] border-2 border-green-500 items-center flex flex-row gap-4 justify-center" 
+                style={{paddingVertical: 10, paddingHorizontal: 30, borderRadius: 20}}
             >
                 {children}
             </View> 
